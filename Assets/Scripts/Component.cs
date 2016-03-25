@@ -28,9 +28,13 @@ public abstract class Component : MonoBehaviour {
 	void Awake () {
         assetManager = AssetManager.Instance;
         connectedComponents = new List<Component>();
-        setState(State.Unconnectable);
         init();
 	}
+
+    void Start()
+    {
+        setState(State.Unconnectable);
+    }
 
     public bool connectable()
     {
@@ -42,9 +46,9 @@ public abstract class Component : MonoBehaviour {
         
     }
 
-    private void setState(State state)
+    private void setState(State newState)
     {
-        switch (state)
+        switch (newState)
         {
             case State.Deployed:
                 state = State.Deployed;
@@ -66,17 +70,31 @@ public abstract class Component : MonoBehaviour {
         update();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
-        
-        otherCollider = other;
-        setState(State.Connectable);
+        if (!state.Equals(State.Deployed) && other.gameObject.tag == Constants.LAYER_COMPONENT)
+        {
+            Component otherComponent = other.GetComponent<Component>();
+            if (otherComponent == null)
+            {
+                otherComponent = other.GetComponentInParent<Component>();
+            } 
+            
+            if (otherComponent != null) 
+            {
+                otherCollider = other;
+                setState(State.Connectable);
+            } 
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         otherCollider = null;
-        setState(State.Unconnectable);
+        if (!state.Equals(State.Deployed))
+        {
+            setState(State.Unconnectable);
+        }
     }
 
     protected abstract void update();
