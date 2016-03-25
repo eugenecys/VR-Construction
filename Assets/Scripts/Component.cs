@@ -15,7 +15,8 @@ public abstract class Component : MonoBehaviour {
 
     public Material defaultMaterial;
     public State state;
-    public Renderer rend;
+    public Renderer[] renderers;
+    public GameObject parent;
     List<Component> connectedComponents;
     List<Component> touchingComponents;
     public bool movable { get; protected set; }
@@ -44,7 +45,6 @@ public abstract class Component : MonoBehaviour {
         assetManager = AssetManager.Instance;
         connectedComponents = new List<Component>();
         touchingComponents = new List<Component>();
-        init();
 	}
 
     void Start()
@@ -77,6 +77,28 @@ public abstract class Component : MonoBehaviour {
                 }
             }
             deploy();
+
+            if (parent != null)
+            {
+                Component[] allComponents = parent.GetComponentsInChildren<Component>();
+                foreach (Component component in allComponents)
+                {
+                    if (!component.deployed)
+                    {
+                        component.connect();
+                        component.deploy();
+                    }
+                }
+            }
+            Component[] childComponents = GetComponentsInChildren<Component>();
+            foreach (Component component in childComponents)
+            {
+                if (!component.deployed)
+                {
+                    component.connect();
+                    component.deploy();
+                }
+            }
         }
     }
 
@@ -98,22 +120,31 @@ public abstract class Component : MonoBehaviour {
         {
             case State.Deployed:
                 state = State.Deployed;
-                rend.material = defaultMaterial;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = defaultMaterial;
+                }
                 break;
             case State.Connectable:
-                state = State.Connectable;
-                rend.material = assetManager.connectableMaterial;
+                state = State.Connectable; 
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = assetManager.connectableMaterial;
+                }
                 break;
             case State.Unconnectable:
                 state = State.Unconnectable;
-                rend.material = assetManager.unconnectableMaterial;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = assetManager.unconnectableMaterial;
+                }
                 break;
         }
     }
 
     void Update()
     {
-        update();
+
     }
 
     void OnTriggerStay(Collider other)
@@ -154,8 +185,5 @@ public abstract class Component : MonoBehaviour {
             setState(State.Unconnectable);
         }
     }
-
-    protected abstract void update();
-    protected abstract void init();
 
 }
