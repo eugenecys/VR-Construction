@@ -4,6 +4,7 @@ using System.Collections;
 public class Builder : Singleton<Builder> {
 
     public Component activeComponent;
+    public Vector3 spawnposition;
 
     public void connectActiveComponent()
     {
@@ -47,5 +48,19 @@ public class Builder : Singleton<Builder> {
         {
             connectActiveComponent();
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SpawnComponent("Cube", spawnposition);
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SpawnComponent("Cylinder", spawnposition);
+        }
 	}
+
+    public void SpawnComponent(string name, Vector3 position)
+    {
+        GameObject prefab = Resources.Load("Prefabs/" + name) as GameObject;
+        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;        
+    }
 }
