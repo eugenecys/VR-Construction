@@ -22,7 +22,15 @@ public abstract class Component : MonoBehaviour {
     public Collider trigger;
     public Rigidbody rb;
     
-    private Collider otherCollider;
+    private Component otherComponent;
+
+    public bool connectable
+    {
+        get 
+        {
+            return state.Equals(State.Connectable);
+        }
+    }
 
 	// Use this for initialization
 	void Awake () {
@@ -36,14 +44,32 @@ public abstract class Component : MonoBehaviour {
         setState(State.Unconnectable);
     }
 
-    public bool connectable()
+    public void deploy()
     {
-        return otherCollider != null;
+        rb.useGravity = true;
+        setState(State.Deployed);
     }
 
     public void connect()
     {
-        
+        if (connectable)
+        {
+            FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
+            fJoint.connectedBody = otherComponent.rb;
+            deploy();
+        }
+    }
+
+    public bool isConnected(Component other)
+    {
+        foreach (Component connectedComponnet in connectedComponents) 
+        {
+            if (this.Equals(connectedComponnet))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setState(State newState)
@@ -74,15 +100,15 @@ public abstract class Component : MonoBehaviour {
     {
         if (!state.Equals(State.Deployed) && other.gameObject.tag == Constants.LAYER_COMPONENT)
         {
-            Component otherComponent = other.GetComponent<Component>();
-            if (otherComponent == null)
+            Component component = other.GetComponent<Component>();
+            if (component == null)
             {
-                otherComponent = other.GetComponentInParent<Component>();
+                component = other.GetComponentInParent<Component>();
             } 
             
-            if (otherComponent != null) 
+            if (component != null) 
             {
-                otherCollider = other;
+                otherComponent = component;
                 setState(State.Connectable);
             } 
         }
@@ -90,7 +116,7 @@ public abstract class Component : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
-        otherCollider = null;
+        otherComponent = null;
         if (!state.Equals(State.Deployed))
         {
             setState(State.Unconnectable);
