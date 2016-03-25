@@ -56,6 +56,10 @@ public class Builder : Singleton<Builder> {
         {
             SpawnComponent("Cylinder", spawnposition);
         }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            SpawnComponent("Wheel", spawnposition);
+        }
 	}
 
     public void SpawnComponent(string name, Vector3 position)
