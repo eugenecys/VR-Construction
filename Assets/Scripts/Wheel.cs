@@ -3,13 +3,28 @@ using System.Collections;
 
 public class Wheel : Component {
 
-    protected override void update()
+    public HingeJoint wheel;
+
+    public void setAngularVelocity(float vel)
     {
-        
+        JointMotor motor = wheel.motor;
+        motor.targetVelocity = vel;
     }
 
-    protected override void init()
+    public void setAngularForce(float force)
     {
-        movable = true;
+        JointMotor motor = wheel.motor;
+        motor.force = force;
     }
+
+    public void on()
+    {
+        wheel.useMotor = false;
+    }
+
+    public void off()
+    {
+        wheel.useMotor = true;
+    }
+
 }
