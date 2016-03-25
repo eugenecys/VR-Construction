@@ -17,12 +17,19 @@ public abstract class Component : MonoBehaviour {
     public State state;
     public Renderer rend;
     List<Component> connectedComponents;
+    List<Component> touchingComponents;
     public bool movable { get; protected set; }
     public Collider collider;
     public Collider trigger;
     public Rigidbody rb;
-    
-    private Component otherComponent;
+
+    public bool deployed
+    {
+        get
+        {
+            return state.Equals(State.Deployed);
+        }
+    }
 
     public bool connectable
     {
@@ -36,6 +43,7 @@ public abstract class Component : MonoBehaviour {
 	void Awake () {
         assetManager = AssetManager.Instance;
         connectedComponents = new List<Component>();
+        touchingComponents = new List<Component>();
         init();
 	}
 
@@ -54,17 +62,29 @@ public abstract class Component : MonoBehaviour {
     {
         if (connectable)
         {
-            FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
-            fJoint.connectedBody = otherComponent.rb;
+            foreach (Component touchingComponent in touchingComponents)
+            {
+                if (!touchingComponent.isConnected(this))
+                {
+                    FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
+                    fJoint.connectedBody = touchingComponent.rb;
+                    connectedComponents.Add(touchingComponent);
+                    touchingComponent.connectedComponents.Add(this);
+                    if (!touchingComponent.deployed)
+                    {
+                        touchingComponent.connect();
+                    }
+                }
+            }
             deploy();
         }
     }
 
     public bool isConnected(Component other)
     {
-        foreach (Component connectedComponnet in connectedComponents) 
+        foreach (Component connectedComponent in connectedComponents) 
         {
-            if (this.Equals(connectedComponnet))
+            if (other.Equals(connectedComponent))
             {
                 return true;
             }
@@ -108,15 +128,27 @@ public abstract class Component : MonoBehaviour {
             
             if (component != null) 
             {
-                otherComponent = component;
+                bool listed = false;
+                foreach (Component touchingComponent in touchingComponents)
+                {
+                    if (touchingComponent.Equals(component))
+                    {
+                        listed = true;
+                    }
+                }
+                if (!listed)
+                {
+                    touchingComponents.Add(component);
+                }
                 setState(State.Connectable);
+                Debug.Log(touchingComponents.Count);
             } 
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        otherComponent = null;
+        touchingComponents = new List<Component>();
         if (!state.Equals(State.Deployed))
         {
             setState(State.Unconnectable);
