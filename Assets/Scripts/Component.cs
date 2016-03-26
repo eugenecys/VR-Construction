@@ -10,7 +10,8 @@ public abstract class Component : MonoBehaviour {
     {
         Deployed,
         Connectable,
-        Unconnectable
+        Unconnectable,
+        Free
     }
 
     public Material defaultMaterial;
@@ -23,6 +24,14 @@ public abstract class Component : MonoBehaviour {
     public Collider collider;
     public Collider trigger;
     public Rigidbody rb;
+
+    public bool free
+    {
+        get
+        {
+            return state.Equals(State.Free);
+        }
+    }
 
     public bool deployed
     {
@@ -49,7 +58,7 @@ public abstract class Component : MonoBehaviour {
 
     void Start()
     {
-        setState(State.Unconnectable);
+        setState(State.Free);
     }
 
     public void deploy()
@@ -62,34 +71,16 @@ public abstract class Component : MonoBehaviour {
     {
         if (connectable)
         {
-            foreach (Component touchingComponent in touchingComponents)
-            {
-                if (!touchingComponent.isConnected(this))
-                {
-                    FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
-                    fJoint.connectedBody = touchingComponent.rb;
-                    connectedComponents.Add(touchingComponent);
-                    touchingComponent.connectedComponents.Add(this);
-                    if (!touchingComponent.deployed)
-                    {
-                        touchingComponent.connect();
-                    }
-                }
-            }
+            connectTouchingComponents();
             deploy();
+            propagateConnection();
+        }
+    }
 
-            if (parent != null)
-            {
-                Component[] allComponents = parent.GetComponentsInChildren<Component>();
-                foreach (Component component in allComponents)
-                {
-                    if (!component.deployed)
-                    {
-                        component.connect();
-                        component.deploy();
-                    }
-                }
-            }
+    void propagateConnection()
+    {
+        if (parent == null)
+        {
             Component[] childComponents = GetComponentsInChildren<Component>();
             foreach (Component component in childComponents)
             {
@@ -97,6 +88,36 @@ public abstract class Component : MonoBehaviour {
                 {
                     component.connect();
                     component.deploy();
+                }
+            }
+        }
+        else
+        {
+            Component[] allComponents = parent.GetComponentsInChildren<Component>();
+            foreach (Component component in allComponents)
+            {
+                if (!component.deployed)
+                {
+                    component.connect();
+                    component.deploy();
+                }
+            }
+        }
+    }
+
+    void connectTouchingComponents()
+    {
+        foreach (Component touchingComponent in touchingComponents)
+        {
+            if (!touchingComponent.isConnected(this))
+            {
+                FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
+                fJoint.connectedBody = touchingComponent.rb;
+                connectedComponents.Add(touchingComponent);
+                touchingComponent.connectedComponents.Add(this);
+                if (!touchingComponent.deployed)
+                {
+                    touchingComponent.connect();
                 }
             }
         }
@@ -139,6 +160,13 @@ public abstract class Component : MonoBehaviour {
                     rend.material = assetManager.unconnectableMaterial;
                 }
                 break;
+            case State.Free:
+                state = State.Free;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = assetManager.freeMaterial;
+                }
+                break;
         }
     }
 
@@ -171,10 +199,70 @@ public abstract class Component : MonoBehaviour {
                 {
                     touchingComponents.Add(component);
                 }
-                setState(State.Connectable);
-                Debug.Log(touchingComponents.Count);
-            } 
+            }
+
+            if (touchingComponents.Count > 0)
+            {
+                if (!hasComponentOverlap())
+                {
+                    setState(State.Connectable);
+                }
+                else
+                {
+                    setState(State.Unconnectable);
+                }
+            }
+            else
+            {
+                setState(State.Free);
+            }
         }
+    }
+
+    bool hasComponentOverlap()
+    {
+        bool overlap = false;
+        Component[] allComponents;
+        if (parent == null)
+        {
+            allComponents = GetComponentsInChildren<Component>();
+        }
+        else 
+        {
+            allComponents = parent.GetComponentsInChildren<Component>();
+        }
+        if (allComponents != null && allComponents.Length > 1)
+        {
+            for (int i = 0; i < allComponents.Length - 1; i++)
+            {
+                for (int j = 1; j < allComponents.Length; j++)
+                {
+                    if (i != j)
+                    {
+                        if (hasTouchingComponentOverlap(allComponents[i], allComponents[j]))
+                        {
+                            overlap = true;
+                        }
+                    }
+                }
+            }
+        } 
+        return overlap;
+    }
+
+    bool hasTouchingComponentOverlap(Component a, Component b) 
+    {
+        foreach (Component aC in a.touchingComponents)
+        {
+            foreach (Component bC in b.touchingComponents) 
+            {
+                if (aC.Equals(bC))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     void OnTriggerExit(Collider other)
@@ -182,7 +270,7 @@ public abstract class Component : MonoBehaviour {
         touchingComponents = new List<Component>();
         if (!state.Equals(State.Deployed))
         {
-            setState(State.Unconnectable);
+            setState(State.Free);
         }
     }
 
