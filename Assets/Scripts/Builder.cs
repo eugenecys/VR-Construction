@@ -8,12 +8,12 @@ public class Builder : Singleton<Builder> {
 
     public void connectActiveComponent()
     {
-        activeComponent.connect();
+        activeComponent.parent.connect();
     }
 
     public void deployActiveComponent()
     {
-        activeComponent.deploy();
+        activeComponent.parent.deploy();
     }
 
 	// Use this for initialization
