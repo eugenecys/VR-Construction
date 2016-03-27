@@ -8,10 +8,14 @@ public abstract class Component : MonoBehaviour {
 
     public enum State
     {
-        Deployed,
-        Connectable,
+        Conflict,
         Unconnectable,
-        Free
+        Connectable,
+        Available,
+        Free,
+        Inactive,
+        Active,
+        Deployed
     }
 
     public Material defaultMaterial;
@@ -49,6 +53,62 @@ public abstract class Component : MonoBehaviour {
         }
     }
 
+    public bool unconnectable
+    {
+        get
+        {
+            return state.Equals(State.Unconnectable);
+        }
+    }
+
+    public bool conflict
+    {
+        get
+        {
+            return state.Equals(State.Conflict);
+        }
+    }
+
+    public bool inactive
+    {
+        get
+        {
+            return state.Equals(State.Inactive);
+        }
+    }
+
+    public bool active
+    {
+        get
+        {
+            return state.Equals(State.Active);
+        }
+    }
+
+    public bool available
+    {
+        get
+        {
+            return state.Equals(State.Available);
+        }
+    }
+
+    public bool placed
+    {
+        get
+        {
+            return (state.Equals(State.Active) || state.Equals(State.Deployed) || state.Equals(State.Inactive));
+        }
+    }
+
+    public bool isAComponent
+    {
+        get
+        {
+            return (gameObject.tag == Constants.LAYER_COMPONENT);
+        }
+    }
+
 	// Use this for initialization
 	void Awake () {
         assetManager = AssetManager.Instance;
@@ -67,40 +127,35 @@ public abstract class Component : MonoBehaviour {
         setState(State.Deployed);
     }
 
+    public void place()
+    {
+        rb.useGravity = false;
+        setState(State.Inactive);
+    }
+
     public void connect()
     {
-        if (connectable)
+        Component[] others = getAllComponents();
+        foreach (Component cpt in others)
         {
-            connectTouchingComponents();
-            deploy();
-            propagateConnection();
+            if (cpt.connectable)
+            {
+                connectTouchingComponents();
+                deploy();
+                propagateConnection();
+            }
         }
     }
 
     void propagateConnection()
     {
-        if (parent == null)
+        Component[] components = getAllComponents();
+        foreach (Component component in components)
         {
-            Component[] childComponents = GetComponentsInChildren<Component>();
-            foreach (Component component in childComponents)
+            if (!component.placed)
             {
-                if (!component.deployed)
-                {
-                    component.connect();
-                    component.deploy();
-                }
-            }
-        }
-        else
-        {
-            Component[] allComponents = parent.GetComponentsInChildren<Component>();
-            foreach (Component component in allComponents)
-            {
-                if (!component.deployed)
-                {
-                    component.connect();
-                    component.deploy();
-                }
+                component.connect();
+                component.deploy();
             }
         }
     }
@@ -135,10 +190,84 @@ public abstract class Component : MonoBehaviour {
         return false;
     }
 
+    private void evaluateState()
+    {
+        bool conflict = hasComponentOverlap();
+        Component[] others = getAllComponents();
+        //Check if conflict
+        if (conflict)
+        {
+            setState(State.Conflict);
+            foreach (Component cpt in others)
+            {
+                if (!cpt.conflict && !cpt.unconnectable)
+                {
+                    cpt.setState(State.Unconnectable);
+                }
+            }
+        }
+        else
+        {
+            //If no conflict, check if others have conflict
+            bool hasConflictElsewhere = false;
+            foreach (Component cpt in others)
+            {
+                if (cpt.conflict)
+                {
+                    hasConflictElsewhere = true;
+                }
+            }
+
+            if (hasConflictElsewhere)
+            {
+                setState(State.Unconnectable);
+            }
+            else
+            {
+                //If others have no conflict, check if there's touching components
+                if (touchingComponents.Count > 0)
+                {
+                    setState(State.Connectable);
+                    foreach (Component cpt in others)
+                    {
+                        if (!cpt.connectable && !cpt.available)
+                        {
+                            cpt.setState(State.Available);
+                        }
+                    }
+                }
+                else
+                {
+                    //If no touching components, check if others have touching components
+                    bool hasTouchingComponentsElsewhere = false;
+                    foreach (Component cpt in others)
+                    {
+                        if (cpt.touchingComponents.Count > 0)
+                        {
+                            hasTouchingComponentsElsewhere = true;
+                        }
+                    }
+
+                    if (hasTouchingComponentsElsewhere)
+                    {
+                        setState(State.Available);
+                    }
+                    else
+                    {
+                        //If others have no touching components, set free.
+                        setState(State.Free);
+                    }
+                }
+            }
+        }
+    }
+
     private void setState(State newState)
     {
         switch (newState)
         {
+            case State.Inactive:
+            case State.Active:
             case State.Deployed:
                 state = State.Deployed;
                 foreach (Renderer rend in renderers)
@@ -147,7 +276,7 @@ public abstract class Component : MonoBehaviour {
                 }
                 break;
             case State.Connectable:
-                state = State.Connectable; 
+                state = State.Connectable;
                 foreach (Renderer rend in renderers)
                 {
                     rend.material = assetManager.connectableMaterial;
@@ -167,6 +296,20 @@ public abstract class Component : MonoBehaviour {
                     rend.material = assetManager.freeMaterial;
                 }
                 break;
+            case State.Conflict:
+                state = State.Conflict;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = assetManager.conflictMaterial;
+                }
+                break;
+            case State.Available:
+                state = State.Available;
+                foreach (Renderer rend in renderers)
+                {
+                    rend.material = assetManager.availableMaterial;
+                }
+                break;
         }
     }
 
@@ -175,62 +318,43 @@ public abstract class Component : MonoBehaviour {
 
     }
 
+    void updateTouchingComponents(Component component)
+    {
+        if (component != null)
+        {
+            bool listed = false;
+            foreach (Component touchingComponent in touchingComponents)
+            {
+                if (touchingComponent.Equals(component))
+                {
+                    listed = true;
+                }
+            }
+            if (!listed)
+            {
+                touchingComponents.Add(component);
+            }
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
-        if (!state.Equals(State.Deployed) && other.gameObject.tag == Constants.LAYER_COMPONENT)
+        if (!placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
         {
             Component component = other.GetComponent<Component>();
             if (component == null)
             {
                 component = other.GetComponentInParent<Component>();
-            } 
-            
-            if (component != null) 
-            {
-                bool listed = false;
-                foreach (Component touchingComponent in touchingComponents)
-                {
-                    if (touchingComponent.Equals(component))
-                    {
-                        listed = true;
-                    }
-                }
-                if (!listed)
-                {
-                    touchingComponents.Add(component);
-                }
             }
-
-            if (touchingComponents.Count > 0)
-            {
-                if (!hasComponentOverlap())
-                {
-                    setState(State.Connectable);
-                }
-                else
-                {
-                    setState(State.Unconnectable);
-                }
-            }
-            else
-            {
-                setState(State.Free);
-            }
+            updateTouchingComponents(component);
+            evaluateState();
         }
     }
 
     bool hasComponentOverlap()
     {
         bool overlap = false;
-        Component[] allComponents;
-        if (parent == null)
-        {
-            allComponents = GetComponentsInChildren<Component>();
-        }
-        else 
-        {
-            allComponents = parent.GetComponentsInChildren<Component>();
-        }
+        Component[] allComponents = getAllComponents();
         if (allComponents != null && allComponents.Length > 1)
         {
             for (int i = 0; i < allComponents.Length - 1; i++)
@@ -271,6 +395,18 @@ public abstract class Component : MonoBehaviour {
         if (!state.Equals(State.Deployed))
         {
             setState(State.Free);
+        }
+    }
+
+    Component[] getAllComponents()
+    {
+        if (parent == null)
+        {
+            return GetComponentsInChildren<Component>();
+        }
+        else
+        {
+            return parent.GetComponentsInChildren<Component>();
         }
     }
 
