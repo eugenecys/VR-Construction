@@ -15,6 +15,17 @@ public class Robot : Singleton<Robot> {
 
     public State state;
 
+    public void trigger()
+    {
+        foreach (Part part in parts)
+        {
+            if (part.triggerable)
+            {
+                part.trigger();
+            }
+        }
+    }
+
     public void deploy()
     {
         state = State.Deployed;

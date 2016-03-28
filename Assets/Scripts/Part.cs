@@ -14,7 +14,10 @@ public class Part : MonoBehaviour
         Placed,
     }
 
+    public bool triggerable;
+
     Segment[] segments;
+    Weapon[] weapons;
 
     public State state;
 
@@ -54,6 +57,7 @@ public class Part : MonoBehaviour
     {
         assetManager = AssetManager.Instance;
         segments = GetComponentsInChildren<Segment>();
+        weapons = GetComponentsInChildren<Weapon>();
         foreach (Segment cpt in segments)
         {
             cpt.parent = this;
@@ -94,6 +98,14 @@ public class Part : MonoBehaviour
         foreach (Segment cpt in segments)
         {
             cpt.reset();
+        }
+    }
+
+    public void trigger()
+    {
+        foreach (Weapon weapon in weapons)
+        {
+            weapon.fire();
         }
     }
 

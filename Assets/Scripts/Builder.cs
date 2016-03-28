@@ -27,6 +27,11 @@ public class Builder : Singleton<Builder> {
         robot.deploy();
     }
 
+    public void triggerRobot()
+    {
+        robot.trigger();
+    }
+
     void Awake()
     {
         robot = Robot.Instance;
@@ -71,6 +76,10 @@ public class Builder : Singleton<Builder> {
         if (Input.GetKeyDown(KeyCode.C))
         {
             connectPart();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            triggerRobot();
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
