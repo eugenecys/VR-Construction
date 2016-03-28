@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Part : MonoBehaviour
 {
-
     AssetManager assetManager;
 
     public enum State
@@ -71,8 +70,44 @@ public class Part : MonoBehaviour
             {
                 component.connect();
             }
-            deploy();
+            place();
         }
+    }
+
+    public void deploy()
+    {
+        foreach (Component cpt in components)
+        {
+            cpt.deploy();
+        }
+        setState(State.Deployed);
+    }
+
+    public void place()
+    {
+        foreach (Component cpt in components)
+        {
+            cpt.place();
+        }
+        setState(State.Inactive);
+    }
+
+    public void activate()
+    {
+        foreach (Component cpt in components)
+        {
+            cpt.activate();
+        }
+        setState(State.Active);
+    }
+
+    public void reset()
+    {
+        foreach (Component cpt in components)
+        {
+            cpt.reset();
+        }
+        setState(State.Inactive);
     }
 
     public void setState(State _state)
@@ -137,15 +172,6 @@ public class Part : MonoBehaviour
             }
             setState(State.Free);
         }
-    }
-
-    public void deploy()
-    {
-        foreach (Component cpt in components)
-        {
-            cpt.deploy();
-        }
-        setState(State.Deployed);
     }
 
 	// Use this for initialization

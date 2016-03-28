@@ -15,6 +15,8 @@ public class Component : MonoBehaviour {
     public Collider collider;
     public Collider trigger;
     public Rigidbody rb;
+
+    protected bool active;
     
 	// Use this for initialization
 	void Awake () {
@@ -25,19 +27,35 @@ public class Component : MonoBehaviour {
 
     void Start()
     {
-        //setState(State.Free);
+        active = false;
     }
 
     public void deploy()
     {
         rb.useGravity = true;
-        //setState(State.Deployed);
+        resetPhysics(); 
+        active = true;
     }
 
     public void place()
     {
         rb.useGravity = false;
-        //setState(State.Inactive);
+        resetPhysics(); 
+        active = false;
+    }
+
+    public void activate()
+    {
+        rb.useGravity = false;
+        resetPhysics(); 
+        active = false;
+    }
+
+    public void reset()
+    {
+        rb.useGravity = false;
+        resetPhysics(); 
+        active = false;
     }
 
     public void connect()
@@ -107,7 +125,6 @@ public class Component : MonoBehaviour {
             {
                 touchingComponents.Add(component);
             }
-            Debug.Log(touchingComponents.Count);
         }
     }
 
@@ -132,5 +149,11 @@ public class Component : MonoBehaviour {
         {
             parent.evaluateState();
         }
+    }
+
+    void resetPhysics()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 }

@@ -3,17 +3,38 @@ using System.Collections;
 
 public class Builder : Singleton<Builder> {
 
+    public Robot robot;
     public Component activeComponent;
     public Vector3 spawnposition;
 
-    public void connectActiveComponent()
+    public void connectPart()
     {
         activeComponent.parent.connect();
     }
 
-    public void deployActiveComponent()
+    public void placePart()
     {
-        activeComponent.parent.deploy();
+        activeComponent.parent.place();
+    }
+
+    public void deactivateRobot()
+    {
+        robot.reset();
+    }
+
+    public void activateRobot()
+    {
+        robot.activate();
+    }
+
+    public void deployRobot()
+    {
+        robot.deploy();
+    }
+
+    void Awake()
+    {
+        robot = Robot.Instance;
     }
 
 	// Use this for initialization
@@ -40,19 +61,31 @@ public class Builder : Singleton<Builder> {
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            deactivateRobot();
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            activateRobot();
+        }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            deployActiveComponent();
+            deployRobot();
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            placePart();
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            connectActiveComponent();
+            connectPart();
         }
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             SpawnComponent("Cube", spawnposition);
         }
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             SpawnComponent("Cylinder", spawnposition);
         }
@@ -65,6 +98,7 @@ public class Builder : Singleton<Builder> {
     public void SpawnComponent(string name, Vector3 position)
     {
         GameObject prefab = Resources.Load("Prefabs/" + name) as GameObject;
-        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;        
+        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
+        sObj.transform.parent = robot.transform;
     }
 }
