@@ -13,8 +13,8 @@ public abstract class Segment : MonoBehaviour {
     public List<Segment> connectedSegments;
     public List<Segment> touchingSegments;
     public Collider collider;
-    public Collider trigger;
-    public Rigidbody rb;
+    private Collider trigger;
+    private Rigidbody rb;
 
     protected bool active;
 
@@ -47,6 +47,8 @@ public abstract class Segment : MonoBehaviour {
         connectedSegments = new List<Segment>();
         touchingSegments = new List<Segment>();
         robot = Robot.Instance;
+        rb = GetComponent<Rigidbody>();
+        trigger = GetComponent<Collider>();
 	}
 
     void Start()
@@ -58,6 +60,7 @@ public abstract class Segment : MonoBehaviour {
 
     public void deploy()
     {
+        trigger.isTrigger = false;
         rb.useGravity = true;
         resetPhysics(); 
         active = true;
@@ -66,14 +69,16 @@ public abstract class Segment : MonoBehaviour {
 
     public void activate()
     {
+        trigger.isTrigger = false;
         rb.useGravity = false;
         resetPhysics(); 
-        active = false;
+        active = true;
         refresh();
     }
 
     public void reset()
     {
+        trigger.isTrigger = true;
         rb.useGravity = false;
         resetPhysics(); 
         active = false;
