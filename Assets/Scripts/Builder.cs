@@ -9,11 +9,6 @@ public class Builder : Singleton<Builder> {
 
     public void connectPart()
     {
-        activeComponent.parent.connect();
-    }
-
-    public void placePart()
-    {
         activeComponent.parent.place();
     }
 
@@ -72,10 +67,6 @@ public class Builder : Singleton<Builder> {
         if (Input.GetKeyDown(KeyCode.D))
         {
             deployRobot();
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            placePart();
         }
         if (Input.GetKeyDown(KeyCode.C))
         {

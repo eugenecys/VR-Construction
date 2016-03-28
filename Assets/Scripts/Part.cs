@@ -11,9 +11,7 @@ public class Part : MonoBehaviour
         Unconnectable,
         Connectable,
         Free,
-        Inactive,
-        Active,
-        Deployed
+        Placed,
     }
 
     Component[] components;
@@ -23,7 +21,7 @@ public class Part : MonoBehaviour
     {
         get
         {
-            return (state.Equals(State.Active) || state.Equals(State.Deployed) || state.Equals(State.Inactive));
+            return state.Equals(State.Placed);
         }
     }
 
@@ -62,15 +60,15 @@ public class Part : MonoBehaviour
         state = State.Free;
     }
 
-    public void connect()
+    public void place()
     {
         if (connectable)
         {
             foreach (Component component in components)
             {
                 component.connect();
-            }
-            place();
+            } 
+            setState(State.Placed);
         }
     }
 
@@ -80,25 +78,14 @@ public class Part : MonoBehaviour
         {
             cpt.deploy();
         }
-        setState(State.Deployed);
     }
-
-    public void place()
-    {
-        foreach (Component cpt in components)
-        {
-            cpt.place();
-        }
-        setState(State.Inactive);
-    }
-
+    
     public void activate()
     {
         foreach (Component cpt in components)
         {
             cpt.activate();
         }
-        setState(State.Active);
     }
 
     public void reset()
@@ -107,7 +94,6 @@ public class Part : MonoBehaviour
         {
             cpt.reset();
         }
-        setState(State.Inactive);
     }
 
     public void setState(State _state)
@@ -124,13 +110,7 @@ public class Part : MonoBehaviour
             case State.Free:
                 setComponentMaterials(assetManager.freeMaterial);
                 break;
-            case State.Active:
-                setComponentDefaultMaterials();
-                break;
-            case State.Inactive:
-                setComponentDefaultMaterials();
-                break;
-            case State.Deployed:
+            case State.Placed:
                 setComponentDefaultMaterials();
                 break;
         }

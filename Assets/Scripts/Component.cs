@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Component : MonoBehaviour {
+public abstract class Component : MonoBehaviour {
 
     AssetManager assetManager;
+    protected Robot robot;
 
     public Material defaultMaterial;
     public Renderer[] renderers;
@@ -23,11 +24,14 @@ public class Component : MonoBehaviour {
         assetManager = AssetManager.Instance;
         connectedComponents = new List<Component>();
         touchingComponents = new List<Component>();
+        robot = Robot.Instance;
 	}
 
     void Start()
     {
         active = false;
+        parent.evaluateState();
+        init();
     }
 
     public void deploy()
@@ -35,13 +39,7 @@ public class Component : MonoBehaviour {
         rb.useGravity = true;
         resetPhysics(); 
         active = true;
-    }
-
-    public void place()
-    {
-        rb.useGravity = false;
-        resetPhysics(); 
-        active = false;
+        refresh();
     }
 
     public void activate()
@@ -49,6 +47,7 @@ public class Component : MonoBehaviour {
         rb.useGravity = false;
         resetPhysics(); 
         active = false;
+        refresh();
     }
 
     public void reset()
@@ -56,6 +55,7 @@ public class Component : MonoBehaviour {
         rb.useGravity = false;
         resetPhysics(); 
         active = false;
+        refresh();
     }
 
     public void connect()
@@ -70,10 +70,15 @@ public class Component : MonoBehaviour {
                 touchingComponent.connectedComponents.Add(this);
                 if (!touchingComponent.parent.placed)
                 {
-                    touchingComponent.parent.connect();
+                    touchingComponent.parent.place();
                 }
             }
         }
+
+        rb.useGravity = false;
+        resetPhysics();
+        active = false;
+        refresh();
     }
 
     public bool isConnected(Component other)
@@ -106,7 +111,7 @@ public class Component : MonoBehaviour {
 
     void Update()
     {
-
+        update();
     }
 
     void updateTouchingComponents(Component component)
@@ -156,4 +161,8 @@ public class Component : MonoBehaviour {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
+
+    protected abstract void init();
+    protected abstract void update();
+    protected abstract void refresh();
 }
