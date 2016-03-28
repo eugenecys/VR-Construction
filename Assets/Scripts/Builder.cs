@@ -4,7 +4,7 @@ using System.Collections;
 public class Builder : Singleton<Builder> {
 
     public Robot robot;
-    public Component activeComponent;
+    public Segment activeComponent;
     public Vector3 spawnposition;
 
     public void connectPart()
@@ -45,10 +45,10 @@ public class Builder : Singleton<Builder> {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                Component component = hit.collider.gameObject.GetComponent<Component>();
+                Segment component = hit.collider.gameObject.GetComponent<Segment>();
                 if (component == null)
                 {
-                    component = hit.collider.gameObject.GetComponentInParent<Component>();
+                    component = hit.collider.gameObject.GetComponentInParent<Segment>();
                 }
                 if (component != null)
                 {

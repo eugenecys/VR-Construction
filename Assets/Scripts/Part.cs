@@ -14,7 +14,8 @@ public class Part : MonoBehaviour
         Placed,
     }
 
-    Component[] components;
+    Segment[] segments;
+
     public State state;
 
     public bool placed
@@ -52,8 +53,8 @@ public class Part : MonoBehaviour
     void Awake()
     {
         assetManager = AssetManager.Instance;
-        components = GetComponentsInChildren<Component>();
-        foreach (Component cpt in components)
+        segments = GetComponentsInChildren<Segment>();
+        foreach (Segment cpt in segments)
         {
             cpt.parent = this;
         }
@@ -64,9 +65,9 @@ public class Part : MonoBehaviour
     {
         if (connectable)
         {
-            foreach (Component component in components)
+            foreach (Segment segment in segments)
             {
-                component.connect();
+                segment.connect();
             } 
             setState(State.Placed);
         }
@@ -74,7 +75,7 @@ public class Part : MonoBehaviour
 
     public void deploy()
     {
-        foreach (Component cpt in components)
+        foreach (Segment cpt in segments)
         {
             cpt.deploy();
         }
@@ -82,7 +83,7 @@ public class Part : MonoBehaviour
     
     public void activate()
     {
-        foreach (Component cpt in components)
+        foreach (Segment cpt in segments)
         {
             cpt.activate();
         }
@@ -90,7 +91,7 @@ public class Part : MonoBehaviour
 
     public void reset()
     {
-        foreach (Component cpt in components)
+        foreach (Segment cpt in segments)
         {
             cpt.reset();
         }
@@ -102,31 +103,31 @@ public class Part : MonoBehaviour
         switch (_state)
         {
             case State.Connectable:
-                setComponentMaterials(assetManager.connectableMaterial);
+                setSegmentMaterials(assetManager.connectableMaterial);
                 break;
             case State.Unconnectable:
-                setComponentMaterials(assetManager.unconnectableMaterial);
+                setSegmentMaterials(assetManager.unconnectableMaterial);
                 break;
             case State.Free:
-                setComponentMaterials(assetManager.freeMaterial);
+                setSegmentMaterials(assetManager.freeMaterial);
                 break;
             case State.Placed:
-                setComponentDefaultMaterials();
+                setSegmentDefaultMaterials();
                 break;
         }
     }
 
-    public void setComponentMaterials(Material material)
+    public void setSegmentMaterials(Material material)
     {
-        foreach (Component cpt in components)
+        foreach (Segment cpt in segments)
         {
             cpt.setMaterial(material);
         }
     }
 
-    public void setComponentDefaultMaterials()
+    public void setSegmentDefaultMaterials()
     {
-        foreach (Component cpt in components)
+        foreach (Segment cpt in segments)
         {
             cpt.setDefaultMaterial();
         }
@@ -140,12 +141,12 @@ public class Part : MonoBehaviour
         }
         else
         {
-            if (hasComponentOverlap())
+            if (hasSegmentOverlap())
             {
                 setState(State.Unconnectable);
                 return;
             }
-            if (hasTouchingComponents())
+            if (hasTouchingSegments())
             {
                 setState(State.Connectable);
                 return;
@@ -163,16 +164,32 @@ public class Part : MonoBehaviour
 	void Update () {
 	
 	}
-
-    public bool hasTouchingComponents()
+    /*
+    public bool hasUnconnectableTouching()
     {
-        if (components == null)
+        if (segments == null)
         {
             return false;
         }
-        for (int i = 0; i < components.Length; i++)
+        for (int i = 0; i < segments.Length; i++)
         {
-            if (components[i].touchingComponents.Count > 0)
+            if (!segments[i].connectable && segments[i].touchingSegments.Count > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    */
+    public bool hasTouchingSegments()
+    {
+        if (segments == null)
+        {
+            return false;
+        }
+        for (int i = 0; i < segments.Length; i++)
+        {
+            if (segments[i].touchingSegments.Count > 0)
             {
                 return true;
             }
@@ -180,18 +197,18 @@ public class Part : MonoBehaviour
         return false;
     }
 
-    public bool hasComponentOverlap()
+    public bool hasSegmentOverlap()
     {
-        if (components == null)
+        if (segments == null)
         {
             return false;
         }
-        for (int i = 0; i < components.Length; i++)
+        for (int i = 0; i < segments.Length; i++)
         {
-            List<Component> tCpts = components[i].touchingComponents;
-            foreach (Component a in tCpts)
+            List<Segment> tCpts = segments[i].touchingSegments;
+            foreach (Segment a in tCpts)
             {
-                foreach (Component b in tCpts)
+                foreach (Segment b in tCpts)
                 {
                     if (!a.Equals(b) && a.parent.Equals(b.parent))
                     {
@@ -201,15 +218,15 @@ public class Part : MonoBehaviour
             }
         }
 
-        if (components.Length > 1)
+        if (segments.Length > 1)
         {
-            for (int i = 0; i < components.Length - 1; i++)
+            for (int i = 0; i < segments.Length - 1; i++)
             {
-                for (int j = 1; j < components.Length; j++)
+                for (int j = 1; j < segments.Length; j++)
                 {
                     if (i != j)
                     {
-                        if (hasTouchingComponentOverlap(components[i], components[j]))
+                        if (hasTouchingSegmentOverlap(segments[i], segments[j]))
                         {
                             return true;
                         }
@@ -221,11 +238,11 @@ public class Part : MonoBehaviour
         return false;
     }
 
-    bool hasTouchingComponentOverlap(Component a, Component b)
+    bool hasTouchingSegmentOverlap(Segment a, Segment b)
     {
-        foreach (Component aC in a.touchingComponents)
+        foreach (Segment aC in a.touchingSegments)
         {
-            foreach (Component bC in b.touchingComponents)
+            foreach (Segment bC in b.touchingSegments)
             {
                 if (aC.Equals(bC))
                 {

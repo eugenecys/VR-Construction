@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Component : MonoBehaviour {
+public abstract class Segment : MonoBehaviour {
 
     AssetManager assetManager;
     protected Robot robot;
@@ -10,20 +10,42 @@ public abstract class Component : MonoBehaviour {
     public Material defaultMaterial;
     public Renderer[] renderers;
     public Part parent;
-    public List<Component> connectedComponents;
-    public List<Component> touchingComponents;
-    public bool movable { get; protected set; }
+    public List<Segment> connectedSegments;
+    public List<Segment> touchingSegments;
     public Collider collider;
     public Collider trigger;
     public Rigidbody rb;
 
     protected bool active;
-    
+
+    public void connect()
+    {
+        foreach (Segment touchingSegment in touchingSegments)
+        {
+            if (!touchingSegment.isConnected(this) && !touchingSegment.parent.unconnectable)
+            {
+                FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
+                fJoint.connectedBody = touchingSegment.rb;
+                connectedSegments.Add(touchingSegment);
+                touchingSegment.connectedSegments.Add(this);
+                if (!touchingSegment.parent.placed)
+                {
+                    touchingSegment.parent.place();
+                }
+            }
+        }
+
+        rb.useGravity = false;
+        resetPhysics();
+        active = false;
+        refresh();
+    }
+
 	// Use this for initialization
 	void Awake () {
         assetManager = AssetManager.Instance;
-        connectedComponents = new List<Component>();
-        touchingComponents = new List<Component>();
+        connectedSegments = new List<Segment>();
+        touchingSegments = new List<Segment>();
         robot = Robot.Instance;
 	}
 
@@ -58,34 +80,11 @@ public abstract class Component : MonoBehaviour {
         refresh();
     }
 
-    public void connect()
+    public bool isConnected(Segment other)
     {
-        foreach (Component touchingComponent in touchingComponents)
+        foreach (Segment connectedSegment in connectedSegments) 
         {
-            if (!touchingComponent.isConnected(this) && !touchingComponent.parent.unconnectable)
-            {
-                FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
-                fJoint.connectedBody = touchingComponent.rb;
-                connectedComponents.Add(touchingComponent);
-                touchingComponent.connectedComponents.Add(this);
-                if (!touchingComponent.parent.placed)
-                {
-                    touchingComponent.parent.place();
-                }
-            }
-        }
-
-        rb.useGravity = false;
-        resetPhysics();
-        active = false;
-        refresh();
-    }
-
-    public bool isConnected(Component other)
-    {
-        foreach (Component connectedComponent in connectedComponents) 
-        {
-            if (other.Equals(connectedComponent))
+            if (other.Equals(connectedSegment))
             {
                 return true;
             }
@@ -114,21 +113,21 @@ public abstract class Component : MonoBehaviour {
         update();
     }
 
-    void updateTouchingComponents(Component component)
+    void updateTouchingSegments(Segment segment)
     {
-        if (component != null)
+        if (segment != null)
         {
             bool listed = false;
-            foreach (Component touchingComponent in touchingComponents)
+            foreach (Segment touchingSegment in touchingSegments)
             {
-                if (touchingComponent.Equals(component))
+                if (touchingSegment.Equals(segment))
                 {
                     listed = true;
                 }
             }
             if (!listed)
             {
-                touchingComponents.Add(component);
+                touchingSegments.Add(segment);
             }
         }
     }
@@ -137,26 +136,26 @@ public abstract class Component : MonoBehaviour {
     {
         if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
         {
-            Component component = other.GetComponent<Component>();
-            if (component == null)
+            Segment segment = other.GetComponent<Segment>();
+            if (segment == null)
             {
-                component = other.GetComponentInParent<Component>();
+                segment = other.GetComponentInParent<Segment>();
             }
-            updateTouchingComponents(component);
+            updateTouchingSegments(segment);
             parent.evaluateState();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        touchingComponents = new List<Component>();
+        touchingSegments = new List<Segment>();
         if (!parent.placed)
         {
             parent.evaluateState();
         }
     }
 
-    void resetPhysics()
+    protected void resetPhysics()
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;

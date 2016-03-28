@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Connector : Component {
+public class Connector : Segment {
 
 
     protected override void init()

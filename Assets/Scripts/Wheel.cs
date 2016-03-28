@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Wheel : Component {
+public class Wheel : Segment {
 
     public HingeJoint wheel;
 
@@ -54,14 +54,12 @@ public class Wheel : Component {
 
     public void on()
     {
-        Debug.Log("On");
         wheel.useMotor = true;
         initProperties();
     }
 
     public void off()
     {
-        Debug.Log("Off");
         wheel.useMotor = false;
         initProperties();
     }
