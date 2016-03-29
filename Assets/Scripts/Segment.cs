@@ -6,9 +6,7 @@ public abstract class Segment : MonoBehaviour {
 
     AssetManager assetManager;
     protected Robot robot;
-
-    public Material defaultMaterial;
-    public Renderer[] renderers;
+    
     public Part parent;
     public List<Segment> connectedSegments;
     public List<Segment> touchingSegments;
@@ -93,22 +91,6 @@ public abstract class Segment : MonoBehaviour {
             }
         }
         return false;
-    }
-
-    public void setMaterial(Material _material)
-    {
-        foreach (Renderer rend in renderers)
-        {
-            rend.material = _material;
-        }
-    }
-
-    public void setDefaultMaterial()
-    {
-        foreach (Renderer rend in renderers)
-        {
-            rend.material = defaultMaterial;
-        }
     }
 
     void Update()

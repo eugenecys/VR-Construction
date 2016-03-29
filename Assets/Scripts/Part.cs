@@ -18,6 +18,7 @@ public class Part : MonoBehaviour
 
     Segment[] segments;
     Weapon[] weapons;
+    MaterialHandler[] materialHandlers;
 
     public State state;
 
@@ -57,6 +58,7 @@ public class Part : MonoBehaviour
     {
         assetManager = AssetManager.Instance;
         segments = GetComponentsInChildren<Segment>();
+        materialHandlers = GetComponentsInChildren<MaterialHandler>();
         weapons = GetComponentsInChildren<Weapon>();
         foreach (Segment cpt in segments)
         {
@@ -83,6 +85,7 @@ public class Part : MonoBehaviour
         {
             cpt.deploy();
         }
+        setState(State.Placed);
     }
     
     public void activate()
@@ -91,6 +94,7 @@ public class Part : MonoBehaviour
         {
             cpt.activate();
         }
+        setState(State.Placed);
     }
 
     public void reset()
@@ -99,6 +103,7 @@ public class Part : MonoBehaviour
         {
             cpt.reset();
         }
+        setState(State.Placed);
     }
 
     public void trigger()
@@ -131,17 +136,18 @@ public class Part : MonoBehaviour
 
     public void setSegmentMaterials(Material material)
     {
-        foreach (Segment cpt in segments)
+        foreach (MaterialHandler materialHandler in materialHandlers)
         {
-            cpt.setMaterial(material);
+            materialHandler.loadMaterial(material);
         }
     }
 
     public void setSegmentDefaultMaterials()
     {
-        foreach (Segment cpt in segments)
+        Debug.Log(materialHandlers.Length);
+        foreach (MaterialHandler materialHandler in materialHandlers)
         {
-            cpt.setDefaultMaterial();
+            materialHandler.loadDefault();
         }
     }
 
@@ -176,23 +182,7 @@ public class Part : MonoBehaviour
 	void Update () {
 	
 	}
-    /*
-    public bool hasUnconnectableTouching()
-    {
-        if (segments == null)
-        {
-            return false;
-        }
-        for (int i = 0; i < segments.Length; i++)
-        {
-            if (!segments[i].connectable && segments[i].touchingSegments.Count > 0)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
+
     public bool hasTouchingSegments()
     {
         if (segments == null)
