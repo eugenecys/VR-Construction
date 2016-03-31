@@ -31,7 +31,7 @@ public class Part : MonoBehaviour
     public Segment[] segments;
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
-
+    
     public State state;
     public Name name;
     
@@ -74,7 +74,7 @@ public class Part : MonoBehaviour
         segments = GetComponentsInChildren<Segment>();
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
         weapons = GetComponentsInChildren<Weapon>();
-        
+
         foreach (Segment cpt in segments)
         {
             cpt.parent = this;

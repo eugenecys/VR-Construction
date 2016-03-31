@@ -57,7 +57,7 @@ public class OmniTool : MonoBehaviour {
                 break;
         }
     }
-
+    
 	// Use this for initialization
 	void Start () {
 	

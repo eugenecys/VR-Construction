@@ -74,6 +74,7 @@ public class Builder : MonoBehaviour {
     {
         if (highlightedPart != null)
         {
+            Debug.Log("Spawning: " + highlightedPart.name);
             SpawnComponent(highlightedPart.name, spawnPoint.position);
         }
     }
@@ -107,7 +108,7 @@ public class Builder : MonoBehaviour {
             spawnedPart.transform.position = spawnPoint.position;
             spawnedPart.transform.rotation = spawnPoint.rotation;
         }
-        
+
         //Delete - keyboard code
         if (Input.GetMouseButtonDown(0))
         {
