@@ -6,15 +6,13 @@ public abstract class Segment : MonoBehaviour {
 
     AssetManager assetManager;
     protected Robot robot;
-
-    public Material defaultMaterial;
-    public Renderer[] renderers;
+    
     public Part parent;
     public List<Segment> connectedSegments;
     public List<Segment> touchingSegments;
     public Collider collider;
-    private Collider trigger;
-    private Rigidbody rb;
+    public Rigidbody rigidbody;
+    public Collider trigger;
 
     protected bool active;
 
@@ -25,7 +23,7 @@ public abstract class Segment : MonoBehaviour {
             if (!touchingSegment.isConnected(this) && !touchingSegment.parent.unconnectable)
             {
                 FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
-                fJoint.connectedBody = touchingSegment.rb;
+                fJoint.connectedBody = touchingSegment.rigidbody;
                 connectedSegments.Add(touchingSegment);
                 touchingSegment.connectedSegments.Add(this);
                 if (!touchingSegment.parent.placed)
@@ -35,7 +33,7 @@ public abstract class Segment : MonoBehaviour {
             }
         }
 
-        rb.useGravity = false;
+        rigidbody.useGravity = false;
         resetPhysics();
         active = false;
         refresh();
@@ -47,8 +45,6 @@ public abstract class Segment : MonoBehaviour {
         connectedSegments = new List<Segment>();
         touchingSegments = new List<Segment>();
         robot = Robot.Instance;
-        rb = GetComponent<Rigidbody>();
-        trigger = GetComponent<Collider>();
 	}
 
     void Start()
@@ -61,7 +57,7 @@ public abstract class Segment : MonoBehaviour {
     public void deploy()
     {
         trigger.isTrigger = false;
-        rb.useGravity = true;
+        rigidbody.useGravity = true;
         resetPhysics(); 
         active = true;
         refresh();
@@ -70,7 +66,7 @@ public abstract class Segment : MonoBehaviour {
     public void activate()
     {
         trigger.isTrigger = false;
-        rb.useGravity = false;
+        rigidbody.useGravity = false;
         resetPhysics(); 
         active = true;
         refresh();
@@ -79,7 +75,7 @@ public abstract class Segment : MonoBehaviour {
     public void reset()
     {
         trigger.isTrigger = true;
-        rb.useGravity = false;
+        rigidbody.useGravity = false;
         resetPhysics(); 
         active = false;
         refresh();
@@ -95,22 +91,6 @@ public abstract class Segment : MonoBehaviour {
             }
         }
         return false;
-    }
-
-    public void setMaterial(Material _material)
-    {
-        foreach (Renderer rend in renderers)
-        {
-            rend.material = _material;
-        }
-    }
-
-    public void setDefaultMaterial()
-    {
-        foreach (Renderer rend in renderers)
-        {
-            rend.material = defaultMaterial;
-        }
     }
 
     void Update()
@@ -139,13 +119,18 @@ public abstract class Segment : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
+        if (parent.template)
+        {
+            parent.highlight();
+        } 
+        else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
         {
             Segment segment = other.GetComponent<Segment>();
             if (segment == null)
             {
                 segment = other.GetComponentInParent<Segment>();
             }
+
             updateTouchingSegments(segment);
             parent.evaluateState();
         }
@@ -154,16 +139,20 @@ public abstract class Segment : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         touchingSegments = new List<Segment>();
-        if (!parent.placed)
+        if (parent.template)
+        {
+            parent.unhighlight();
+        }
+        else
         {
             parent.evaluateState();
         }
     }
 
-    protected void resetPhysics()
+    public void resetPhysics()
     {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
     }
 
     protected abstract void init();

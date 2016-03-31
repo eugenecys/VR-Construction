@@ -5,19 +5,36 @@ using System.Collections.Generic;
 public class Part : MonoBehaviour
 {
     AssetManager assetManager;
+    Robot robot;
 
     public enum State
     {
         Unconnectable,
         Connectable,
         Free,
-        Placed,
+        Placed
     }
 
-    Segment[] segments;
+    public enum Name
+    {
+        Wheel,
+        Gun,
+        Chain,
+        Cube,
+        Rod,
+        Propeller
+    }
+
+    public bool triggerable;
+    public bool template;
+
+    public Segment[] segments;
+    Weapon[] weapons;
+    MaterialHandler[] materialHandlers;
 
     public State state;
-
+    public Name name;
+    
     public bool placed
     {
         get
@@ -53,12 +70,24 @@ public class Part : MonoBehaviour
     void Awake()
     {
         assetManager = AssetManager.Instance;
+        robot = Robot.Instance;
         segments = GetComponentsInChildren<Segment>();
+        materialHandlers = GetComponentsInChildren<MaterialHandler>();
+        weapons = GetComponentsInChildren<Weapon>();
+        
         foreach (Segment cpt in segments)
         {
             cpt.parent = this;
         }
         state = State.Free;
+    }
+
+    public void resetPhysics()
+    {
+        foreach (Segment segment in segments)
+        {
+            segment.resetPhysics();
+        }
     }
 
     public void place()
@@ -70,6 +99,8 @@ public class Part : MonoBehaviour
                 segment.connect();
             } 
             setState(State.Placed);
+            this.transform.parent = robot.transform;
+            resetPhysics();
         }
     }
 
@@ -79,6 +110,7 @@ public class Part : MonoBehaviour
         {
             cpt.deploy();
         }
+        setState(State.Placed);
     }
     
     public void activate()
@@ -87,6 +119,7 @@ public class Part : MonoBehaviour
         {
             cpt.activate();
         }
+        setState(State.Placed);
     }
 
     public void reset()
@@ -94,6 +127,15 @@ public class Part : MonoBehaviour
         foreach (Segment cpt in segments)
         {
             cpt.reset();
+        }
+        setState(State.Placed);
+    }
+
+    public void trigger()
+    {
+        foreach (Weapon weapon in weapons)
+        {
+            weapon.fire();
         }
     }
 
@@ -119,23 +161,38 @@ public class Part : MonoBehaviour
 
     public void setSegmentMaterials(Material material)
     {
-        foreach (Segment cpt in segments)
+        foreach (MaterialHandler materialHandler in materialHandlers)
         {
-            cpt.setMaterial(material);
+            materialHandler.loadMaterial(material);
         }
     }
 
     public void setSegmentDefaultMaterials()
     {
-        foreach (Segment cpt in segments)
+        Debug.Log(materialHandlers.Length);
+        foreach (MaterialHandler materialHandler in materialHandlers)
         {
-            cpt.setDefaultMaterial();
+            materialHandler.loadDefault();
         }
+    }
+
+    public void highlight()
+    {
+
+    }
+
+    public void unhighlight()
+    {
+
     }
 
     public void evaluateState()
     {
-        if (placed)
+        if (template)
+        {
+
+        } 
+        else if (placed)
         {
 
         }
@@ -164,23 +221,7 @@ public class Part : MonoBehaviour
 	void Update () {
 	
 	}
-    /*
-    public bool hasUnconnectableTouching()
-    {
-        if (segments == null)
-        {
-            return false;
-        }
-        for (int i = 0; i < segments.Length; i++)
-        {
-            if (!segments[i].connectable && segments[i].touchingSegments.Count > 0)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    */
+
     public bool hasTouchingSegments()
     {
         if (segments == null)
