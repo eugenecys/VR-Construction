@@ -11,17 +11,28 @@ public class Part : MonoBehaviour
         Unconnectable,
         Connectable,
         Free,
-        Placed,
+        Placed
+    }
+
+    public enum Name
+    {
+        Wheel,
+        Gun,
+        Chain,
+        Cube,
+        Rod
     }
 
     public bool triggerable;
+    public bool template;
 
     Segment[] segments;
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
 
     public State state;
-
+    public Name name;
+    
     public bool placed
     {
         get
@@ -65,6 +76,14 @@ public class Part : MonoBehaviour
             cpt.parent = this;
         }
         state = State.Free;
+    }
+
+    public void resetPhysics()
+    {
+        foreach (Segment segment in segments)
+        {
+            segment.resetPhysics();
+        }
     }
 
     public void place()
@@ -151,9 +170,23 @@ public class Part : MonoBehaviour
         }
     }
 
+    public void highlight()
+    {
+
+    }
+
+    public void unhighlight()
+    {
+
+    }
+
     public void evaluateState()
     {
-        if (placed)
+        if (template)
+        {
+
+        } 
+        else if (placed)
         {
 
         }

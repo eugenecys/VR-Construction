@@ -119,7 +119,11 @@ public abstract class Segment : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-        if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
+        if (parent.template)
+        {
+            parent.highlight();
+        } 
+        else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
         {
             Segment segment = other.GetComponent<Segment>();
             if (segment == null)
@@ -134,13 +138,17 @@ public abstract class Segment : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         touchingSegments = new List<Segment>();
-        if (!parent.placed)
+        if (parent.template)
+        {
+            parent.unhighlight();
+        }
+        else
         {
             parent.evaluateState();
         }
     }
 
-    protected void resetPhysics()
+    public void resetPhysics()
     {
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
