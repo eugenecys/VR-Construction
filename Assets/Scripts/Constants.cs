@@ -9,6 +9,12 @@ public static class Constants {
         public const float FORCE = 500f;
     }
 
+    public static class Propeller
+    {
+        public const float ANGULAR_VELOCITY = 200f;
+        public const float FORCE = 500f;
+    }
+
     public const string NAME_WHEEL = "Wheel";
     public const string NAME_ROD = "Rod";
     public const string NAME_CHAIN = "Chain";
