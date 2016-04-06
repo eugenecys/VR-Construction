@@ -6,7 +6,7 @@ public class Builder : MonoBehaviour {
 
     private Robot robot;
     private Segment activeComponent;
-    private Part highlightedPart;
+    private GameObject contactObject;
     public Vector3 spawnposition;
     public Transform spawnPoint;
     public Part[] childParts;
@@ -72,19 +72,28 @@ public class Builder : MonoBehaviour {
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            if (highlightedPart == null)
+            Part part = contactObject.GetComponentInParent<Part>();
+            if (part == null)
             {
-
-            }
-            else
-            {
-                if (highlightedPart.template)
+                Deployer deployer = contactObject.GetComponent<Deployer>();
+                if (deployer == null)
                 {
-                    SpawnComponent();
+
                 }
                 else
                 {
-                    MoveComponent();
+                    deployRobot();
+                }
+            }
+            else
+            {
+                if (part.template)
+                {
+                    SpawnComponent(part);
+                }
+                else
+                {
+                    MoveComponent(part);
                 }
             }
         }
@@ -99,39 +108,40 @@ public class Builder : MonoBehaviour {
         robot.destroy();
     }
 
-    public void MoveComponent()
+    public void MoveComponent(Part part)
     {
-        List<Part> parts = highlightedPart.getConnectedParts();
-        foreach(Part part in parts)
+        List<Part> parts = part.getConnectedParts();
+        foreach(Part child in parts)
         {
-            part.transform.parent = this.transform;
-            part.unplace();
-            part.setState(Part.State.Connectable);
+            child.transform.parent = this.transform;
+            child.unplace();
+            child.setState(Part.State.Connectable);
         }
     }
 
-    public void SpawnComponent()
+    public void SpawnComponent(Part part)
     {
-        if (highlightedPart != null)
-        {
-            SpawnComponent(highlightedPart.name, spawnPoint.position);
-        }
+        SpawnComponent(part.name, spawnPoint.position);
     }
 
     void OnTriggerStay(Collider other)
     {
-        Part highlight = other.GetComponent<Part>();
-        if (highlight == null)
+        contactObject = other.gameObject;
+        Interactable iObj = contactObject.GetComponent<Interactable>();
+        if (iObj != null)
         {
-            highlight = other.GetComponentInParent<Part>();
+            iObj.highlight();
         }
-        
-        highlightedPart = highlight;
     }
 
     void OnTriggerExit(Collider other)
     {
-        highlightedPart = null;
+        Interactable iObj = contactObject.GetComponent<Interactable>();
+        if (iObj != null)
+        {
+            iObj.unhighlight();
+        }
+        contactObject = null;
     }
     
 	// Update is called once per frame
