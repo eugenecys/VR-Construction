@@ -134,7 +134,7 @@ public abstract class Segment : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("building"))
         {
