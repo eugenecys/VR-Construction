@@ -72,28 +72,31 @@ public class Builder : MonoBehaviour {
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            Part part = contactObject.GetComponentInParent<Part>();
-            if (part == null)
+            if (contactObject != null)
             {
-                Deployer deployer = contactObject.GetComponent<Deployer>();
-                if (deployer == null)
+                Part part = contactObject.GetComponentInParent<Part>();
+                if (part == null)
                 {
+                    Deployer deployer = contactObject.GetComponent<Deployer>();
+                    if (deployer == null)
+                    {
 
+                    }
+                    else
+                    {
+                        deployRobot();
+                    }
                 }
                 else
                 {
-                    deployRobot();
-                }
-            }
-            else
-            {
-                if (part.template)
-                {
-                    SpawnComponent(part);
-                }
-                else
-                {
-                    MoveComponent(part);
+                    if (part.template)
+                    {
+                        SpawnComponent(part);
+                    }
+                    else
+                    {
+                        MoveComponent(part);
+                    }
                 }
             }
         }
