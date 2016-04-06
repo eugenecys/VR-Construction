@@ -6,6 +6,7 @@ public class AssetManager : Singleton<AssetManager> {
     public Material connectableMaterial;
     public Material unconnectableMaterial;
     public Material freeMaterial;
+    public Material highlightMaterial;
 
 	// Use this for initialization
 	void Start () {

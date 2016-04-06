@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Builder : MonoBehaviour {
 
     private Robot robot;
     private Segment activeComponent;
     private Part highlightedPart;
-    private Part spawnedPart;
     public Vector3 spawnposition;
     public Transform spawnPoint;
+    public Part[] childParts;
 
     private ViveInputManager inputManager;
 
@@ -18,12 +19,15 @@ public class Builder : MonoBehaviour {
         activeComponent.parent.place();
     }
 
-    public void placePart()
+    public void placeParts()
     {
-        spawnedPart.place();
-        if (spawnedPart.placed)
+        foreach (Part part in childParts)
         {
-            spawnedPart = null;
+            part.place();
+            if (part.placed)
+            {
+                part.transform.parent = robot.transform;
+            }
         }
     }
 
@@ -58,15 +62,51 @@ public class Builder : MonoBehaviour {
 	
 	}
 
+    public void menu()
+    {
+        DestroyRobot();
+    }
+
     public void trigger()
     {
-        if (spawnedPart == null)
+        childParts = GetComponentsInChildren<Part>();
+        if (childParts == null || childParts.Length == 0)
         {
-            SpawnComponent();
+            if (highlightedPart == null)
+            {
+
+            }
+            else
+            {
+                if (highlightedPart.template)
+                {
+                    SpawnComponent();
+                }
+                else
+                {
+                    MoveComponent();
+                }
+            }
         }
         else
         {
-            placePart();
+            placeParts();
+        }
+    }
+
+    public void DestroyRobot()
+    {
+        robot.destroy();
+    }
+
+    public void MoveComponent()
+    {
+        List<Part> parts = highlightedPart.getConnectedParts();
+        foreach(Part part in parts)
+        {
+            part.transform.parent = this.transform;
+            part.unplace();
+            part.setState(Part.State.Connectable);
         }
     }
 
@@ -74,41 +114,29 @@ public class Builder : MonoBehaviour {
     {
         if (highlightedPart != null)
         {
-            Debug.Log("Spawning: " + highlightedPart.name);
             SpawnComponent(highlightedPart.name, spawnPoint.position);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         Part highlight = other.GetComponent<Part>();
         if (highlight == null)
         {
             highlight = other.GetComponentInParent<Part>();
         }
-
-        if (highlight != null)
-        {
-            highlightedPart = highlight;
-            Debug.Log(highlightedPart);
-        }
+        
+        highlightedPart = highlight;
     }
 
     void OnTriggerExit(Collider other)
     {
         highlightedPart = null;
     }
-
+    
 	// Update is called once per frame
 	void Update () {
-
-        if (spawnedPart != null)
-        {
-            spawnedPart.resetPhysics();
-            spawnedPart.transform.position = spawnPoint.position;
-            spawnedPart.transform.rotation = spawnPoint.rotation;
-        }
-
+                
         //Delete - keyboard code
         if (Input.GetMouseButtonDown(0))
         {
@@ -181,10 +209,20 @@ public class Builder : MonoBehaviour {
             case Part.Name.Gun:
                 partName = Constants.NAME_GUN;
                 break;
+            case Part.Name.WheelR:
+                partName = Constants.NAME_WHEEL_REVERSE;
+                break;
+            case Part.Name.Propeller:
+                partName = Constants.NAME_PROPELLER;
+                break;
+            case Part.Name.Saw:
+                partName = Constants.NAME_SAW;
+                break;
         }
         GameObject prefab = Resources.Load("Prefabs/" + partName) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
         sObj.transform.parent = this.transform;
-        spawnedPart = sObj.GetComponent<Part>();
+        Part spawnedPart = sObj.GetComponent<Part>();
+        spawnedPart.template = false;
     }
 }

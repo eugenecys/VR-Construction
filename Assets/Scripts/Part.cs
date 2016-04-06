@@ -12,7 +12,8 @@ public class Part : MonoBehaviour
         Unconnectable,
         Connectable,
         Free,
-        Placed
+        Placed,
+        Template
     }
 
     public enum Name
@@ -22,16 +23,20 @@ public class Part : MonoBehaviour
         Chain,
         Cube,
         Rod,
-        Propeller
+        WheelR,
+        Propeller,
+        Saw
     }
 
     public bool triggerable;
     public bool template;
+    private bool highlighted;
 
     public Segment[] segments;
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
-    
+    List<Part> connectedParts;
+
     public State state;
     public Name name;
     
@@ -74,12 +79,61 @@ public class Part : MonoBehaviour
         segments = GetComponentsInChildren<Segment>();
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
         weapons = GetComponentsInChildren<Weapon>();
-
+        connectedParts = new List<Part>();
+        
         foreach (Segment cpt in segments)
         {
             cpt.parent = this;
         }
-        state = State.Free;
+        if (template)
+        {
+            setState(State.Template);
+            activate();
+        }
+        else
+        {
+            setState(State.Free);
+        }
+
+    }
+    
+    public void addConnectedPart(Part part)
+    {
+        foreach(Part storedPart in connectedParts)
+        {
+            if (part.Equals(storedPart))
+            {
+                return;
+            }
+        }
+        connectedParts.Add(part);
+    }
+
+    public List<Part> getConnectedParts()
+    {
+        List<Part> parts = new List<Part>();
+        parts.Add(this);
+        foreach (Part part in connectedParts)
+        {
+            part.retrieveConnectedParts(parts);
+        }
+        return parts;
+    }
+
+    protected void retrieveConnectedParts(List<Part> existingParts)
+    {
+        if (existingParts.Contains(this))
+        {
+            return;
+        }
+        else
+        {
+            existingParts.Add(this);
+        }
+        foreach (Part part in connectedParts)
+        {
+            part.retrieveConnectedParts(existingParts);
+        }
     }
 
     public void resetPhysics()
@@ -87,6 +141,22 @@ public class Part : MonoBehaviour
         foreach (Segment segment in segments)
         {
             segment.resetPhysics();
+        }
+    }
+
+    public void enablePhysics()
+    {
+        foreach(Segment segment in segments)
+        {
+            segment.enablePhysics();
+        }
+    }
+
+    public void disablePhysics()
+    {
+        foreach (Segment segment in segments)
+        {
+            segment.disablePhysics();
         }
     }
 
@@ -100,17 +170,36 @@ public class Part : MonoBehaviour
             } 
             setState(State.Placed);
             this.transform.parent = robot.transform;
+            enablePhysics();
             resetPhysics();
         }
+        else if (free)
+        {
+            setState(State.Placed);
+            this.transform.parent = robot.transform;
+            enablePhysics();
+            resetPhysics();
+        }
+        robot.updateParts();
+    }
+
+    public void unplace()
+    {
+        disablePhysics();
+        resetPhysics();
+        robot.updateParts();
     }
 
     public void deploy()
     {
-        foreach (Segment cpt in segments)
+        if (!template)
         {
-            cpt.deploy();
+            foreach (Segment cpt in segments)
+            {
+                cpt.deploy();
+            }
+            setState(State.Placed);
         }
-        setState(State.Placed);
     }
     
     public void activate()
@@ -156,6 +245,16 @@ public class Part : MonoBehaviour
             case State.Placed:
                 setSegmentDefaultMaterials();
                 break;
+            case State.Template:
+                if (highlighted)
+                {
+                    setSegmentMaterials(assetManager.highlightMaterial);
+                }
+                else
+                {
+                    setSegmentDefaultMaterials();
+                }
+                break;
         }
     }
 
@@ -169,28 +268,35 @@ public class Part : MonoBehaviour
 
     public void setSegmentDefaultMaterials()
     {
-        Debug.Log(materialHandlers.Length);
         foreach (MaterialHandler materialHandler in materialHandlers)
         {
             materialHandler.loadDefault();
         }
     }
-
+    
     public void highlight()
     {
-
+        if (template)
+        {
+            highlighted = true;
+            setSegmentMaterials(assetManager.highlightMaterial);
+        }
     }
 
     public void unhighlight()
     {
-
+        if (template)
+        {
+            highlighted = false;
+            setSegmentDefaultMaterials();
+        }
     }
 
     public void evaluateState()
     {
         if (template)
         {
-
+            setState(State.Template);
         } 
         else if (placed)
         {
@@ -219,7 +325,7 @@ public class Part : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     public bool hasTouchingSegments()

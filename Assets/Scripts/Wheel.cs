@@ -5,6 +5,8 @@ public class Wheel : Segment {
 
     public HingeJoint wheel;
 
+    public bool reverse;
+
     protected override void init()
     {
         wheel.useMotor = false;
@@ -24,24 +26,36 @@ public class Wheel : Segment {
 
     protected override void refresh()
     {
-        switch (robot.state)
+        if (parent.template)
         {
-            case Robot.State.Active:
+            if (active)
+            {
                 on();
-                break;
-            case Robot.State.Inactive:
+            } else
+            {
                 off();
-                break;
-            case Robot.State.Deployed:
-                on();
-                break;        
+            }
+        }
+        else {
+            switch (robot.state)
+            {
+                case Robot.State.Active:
+                    on();
+                    break;
+                case Robot.State.Inactive:
+                    off();
+                    break;
+                case Robot.State.Deployed:
+                    on();
+                    break;
+            }
         }
     }
 
     public void setAngularVelocity(float vel)
     {
         JointMotor motor = wheel.motor;
-        motor.targetVelocity = vel;
+        motor.targetVelocity = reverse ? -vel : vel;
         wheel.motor = motor;
     }
 

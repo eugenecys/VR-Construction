@@ -15,6 +15,14 @@ public class Robot : Singleton<Robot> {
 
     public State state;
 
+    public void destroy()
+    {
+        foreach (Transform child in transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
     public void trigger()
     {
         foreach (Part part in parts)
@@ -68,6 +76,11 @@ public class Robot : Singleton<Robot> {
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    
 	}
+
+    public void updateParts()
+    {
+        parts = GetComponentsInChildren<Part>();
+    }
 }

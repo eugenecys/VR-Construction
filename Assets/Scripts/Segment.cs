@@ -25,6 +25,8 @@ public abstract class Segment : MonoBehaviour {
                 FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
                 fJoint.connectedBody = touchingSegment.rigidbody;
                 connectedSegments.Add(touchingSegment);
+                parent.addConnectedPart(touchingSegment.parent);
+                touchingSegment.parent.addConnectedPart(parent);
                 touchingSegment.connectedSegments.Add(this);
                 if (!touchingSegment.parent.placed)
                 {
@@ -45,6 +47,7 @@ public abstract class Segment : MonoBehaviour {
         connectedSegments = new List<Segment>();
         touchingSegments = new List<Segment>();
         robot = Robot.Instance;
+        rigidbody.isKinematic = true;
 	}
 
     void Start()
@@ -54,10 +57,21 @@ public abstract class Segment : MonoBehaviour {
         init();
     }
 
+    public void enablePhysics()
+    {
+        rigidbody.isKinematic = false;
+    }
+
+    public void disablePhysics()
+    {
+        rigidbody.isKinematic = true;
+    }
+
     public void deploy()
     {
-        trigger.isTrigger = false;
+        //trigger.isTrigger = false;
         rigidbody.useGravity = true;
+        enablePhysics();
         resetPhysics(); 
         active = true;
         refresh();
@@ -65,8 +79,9 @@ public abstract class Segment : MonoBehaviour {
 
     public void activate()
     {
-        trigger.isTrigger = false;
+        //trigger.isTrigger = false;
         rigidbody.useGravity = false;
+        disablePhysics();
         resetPhysics(); 
         active = true;
         refresh();
@@ -74,8 +89,9 @@ public abstract class Segment : MonoBehaviour {
 
     public void reset()
     {
-        trigger.isTrigger = true;
+        //trigger.isTrigger = true;
         rigidbody.useGravity = false;
+        disablePhysics();
         resetPhysics(); 
         active = false;
         refresh();
@@ -100,7 +116,7 @@ public abstract class Segment : MonoBehaviour {
 
     void updateTouchingSegments(Segment segment)
     {
-        if (segment != null)
+        if (segment != null && !segment.parent.template)
         {
             bool listed = false;
             foreach (Segment touchingSegment in touchingSegments)
@@ -110,6 +126,7 @@ public abstract class Segment : MonoBehaviour {
                     listed = true;
                 }
             }
+            
             if (!listed)
             {
                 touchingSegments.Add(segment);
@@ -117,9 +134,21 @@ public abstract class Segment : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("building"))
+        {
+            other.gameObject.SendMessage("GiveAttack");
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
-        if (parent.template)
+        if (parent.template && other.GetComponentInParent<Part>())
+        {
+            return;
+        }
+        else if (parent.template)
         {
             parent.highlight();
         } 
