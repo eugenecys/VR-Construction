@@ -6,6 +6,9 @@ public class OmniTool : MonoBehaviour
     GameManager gameManager;
     ViveInputManager inputManager;
     public Builder builder;
+
+    //Xiqiao Add
+    public PlayMode playMode;
     
     public enum Side
     {
@@ -24,12 +27,14 @@ public class OmniTool : MonoBehaviour
             inputManager.registerFunction(trigger, ViveInputManager.InputType.LeftTrigger);
             inputManager.registerFunction(touchpad, ViveInputManager.InputType.LeftTouchpad);
             inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.LeftApplicationMenu);
+            inputManager.registerFunction(touchpad, ViveInputManager.InputType.LeftTouchpadUp);
         }
         else
         {
             inputManager.registerFunction(trigger, ViveInputManager.InputType.RightTrigger);
             inputManager.registerFunction(touchpad, ViveInputManager.InputType.RightTouchpad);
             inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.RightApplicationMenu);
+            inputManager.registerFunction(touchpad, ViveInputManager.InputType.RightTouchpadUp);
         }
     }
 
@@ -47,6 +52,7 @@ public class OmniTool : MonoBehaviour
                 builder.trigger();
                 break;
             case GameManager.GameState.Play:
+                playMode.SetController(side, PlayMode.InputType.triggerDown);
                 break;
         }
     }
@@ -60,9 +66,19 @@ public class OmniTool : MonoBehaviour
                 gameManager.play();
                 break;
             case GameManager.GameState.Play:
-
+                playMode.SetController(side, PlayMode.InputType.touchpadDown);
                 break;
         }
+    }
+
+    public void touchpadUp() {
+        if (gameManager.state == GameManager.GameState.Play) {
+            playMode.SetController(side, PlayMode.InputType.touchpadUp);
+        }
+    }
+
+    public void triggerUp() {
+
     }
     
     // Use this for initialization

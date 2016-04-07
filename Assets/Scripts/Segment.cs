@@ -16,6 +16,9 @@ public abstract class Segment : MonoBehaviour {
 
     protected bool active;
 
+    //Xiqiao Add
+    public bool movable;
+
     public void connect()
     {
         foreach (Segment touchingSegment in touchingSegments)
@@ -187,4 +190,8 @@ public abstract class Segment : MonoBehaviour {
     protected abstract void init();
     protected abstract void update();
     protected abstract void refresh();
+
+    //Xiqiao Add
+    public virtual void move() { }
+    public virtual void stop() { }
 }

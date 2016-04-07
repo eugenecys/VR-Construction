@@ -22,7 +22,13 @@ public class ViveInputManager : Singleton<ViveInputManager>
         LeftTouchpad,
         RightTouchpad,
         LeftApplicationMenu,
-        RightApplicationMenu
+        RightApplicationMenu,
+        
+        //Xiqiao Add
+        LeftTriggerUp,
+        RightTriggerUp,
+        LeftTouchpadUp,
+        RightTouchpadUp
     }
 
     void Awake()
@@ -76,6 +82,11 @@ public class ViveInputManager : Singleton<ViveInputManager>
             {
                 inputMap[InputType.LeftApplicationMenu]();
             }
+            //Xiqiao Add
+            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && inputMap.ContainsKey(InputType.LeftTouchpad))
+            {
+                inputMap[InputType.LeftTouchpadUp]();
+            }
         }
     }
 
@@ -99,6 +110,11 @@ public class ViveInputManager : Singleton<ViveInputManager>
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.RightApplicationMenu))
             {
                 inputMap[InputType.RightApplicationMenu]();
+            }
+            //Xiqiao Add
+            if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && inputMap.ContainsKey(InputType.LeftTouchpad))
+            {
+                inputMap[InputType.RightTouchpadUp]();
             }
         }
     }

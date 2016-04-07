@@ -15,8 +15,10 @@ public class Wheel : Segment {
 
     public void initProperties()
     {
-        setAngularForce(Constants.Wheel.FORCE);
-        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
+        setAngularForce(0);
+        setAngularVelocity(0);
+        //setAngularForce(Constants.Wheel.FORCE);
+        //setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
     }
 
     protected override void update()
@@ -52,6 +54,20 @@ public class Wheel : Segment {
         }
     }
 
+    //Xiqiao Add
+    public override void move()
+    {
+        setAngularForce(Constants.Wheel.FORCE);
+        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
+    }
+
+    //Xiqiao Add
+    public override void stop()
+    {
+        setAngularForce(0);
+        setAngularVelocity(0);
+    }
+
     public void setAngularVelocity(float vel)
     {
         JointMotor motor = wheel.motor;
@@ -77,4 +93,6 @@ public class Wheel : Segment {
         wheel.useMotor = false;
         initProperties();
     }
+
+    
 }

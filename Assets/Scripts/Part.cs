@@ -228,6 +228,26 @@ public class Part : MonoBehaviour, Interactable
         }
     }
 
+    //Xiqiao Add
+    public void move() {
+        foreach (Segment cpt in segments) {
+            if (cpt.movable) {
+                cpt.move();
+            }
+        }
+    }
+
+    //Xiqiao Add
+    public void stop() {
+        foreach (Segment cpt in segments)
+        {
+            if (cpt.movable)
+            {
+                cpt.stop();
+            }
+        }
+    }
+
     public void setState(State _state)
     {
         state = _state;

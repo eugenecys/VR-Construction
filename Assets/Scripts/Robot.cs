@@ -34,6 +34,26 @@ public class Robot : Singleton<Robot> {
         }
     }
 
+    //Xiqiao Add
+    public void move() {
+        foreach (Part part in parts) {
+            if (!part.triggerable) {
+                part.move();
+            }
+        }
+    }
+
+    //Xiqiao Add
+    public void stop() {
+        foreach (Part part in parts)
+        {
+            if (!part.triggerable)
+            {
+                part.stop();
+            }
+        }
+    }
+
     public void deploy()
     {
         state = State.Deployed;
