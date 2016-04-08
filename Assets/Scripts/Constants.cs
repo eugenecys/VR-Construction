@@ -9,6 +9,11 @@ public static class Constants {
         public const float FORCE = 500f;
     }
 
+    //Xiqiao Add
+    public static class Wing {
+        public const float FORCE = 1000f;
+    }
+
     public static class Propeller
     {
         public const float ANGULAR_VELOCITY = 200f;
@@ -23,5 +28,7 @@ public static class Constants {
     public const string NAME_WHEEL_REVERSE = "WheelR";
     public const string NAME_SAW = "Saw";
     public const string NAME_PROPELLER = "Propeller";
+    //Xiqiao Add
+    public const string NAME_WING = "Wing";
 
 }

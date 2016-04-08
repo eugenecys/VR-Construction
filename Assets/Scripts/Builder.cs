@@ -228,6 +228,10 @@ public class Builder : MonoBehaviour {
             case Part.Name.Saw:
                 partName = Constants.NAME_SAW;
                 break;
+            //Xiqiao Add
+            case Part.Name.Wing:
+                partName = Constants.NAME_WING;
+                break;
         }
         GameObject prefab = Resources.Load("Prefabs/" + partName) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;

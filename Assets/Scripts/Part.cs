@@ -25,7 +25,9 @@ public class Part : MonoBehaviour, Interactable
         Rod,
         WheelR,
         Propeller,
-        Saw
+        Saw,
+        //Xiqiao Add
+        Wing
     }
 
     public bool triggerable;
