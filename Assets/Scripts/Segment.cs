@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof (Rigidbody))]
+
 public abstract class Segment : MonoBehaviour {
 
     AssetManager assetManager;

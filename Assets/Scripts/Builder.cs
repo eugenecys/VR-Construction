@@ -11,8 +11,33 @@ public class Builder : MonoBehaviour {
     public Transform spawnPoint;
     public Part[] childParts;
     Deployer deployer;
+    public Builder other;
+
+    public Collider Long;
+    public Collider Short;
 
     private ViveInputManager inputManager;
+
+    public enum ColliderState
+    {
+        Far,
+        Close
+    }
+
+    public ColliderState colliderState;
+
+    public void setColliderState(ColliderState state)
+    {
+        colliderState = state;
+        switch(state)
+        {
+            case ColliderState.Close:
+                
+                break;
+            case ColliderState.Far:
+                break;
+        }
+    }
 
     //Delete - keyboard code
     public void connectPart()
@@ -76,7 +101,15 @@ public class Builder : MonoBehaviour {
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            
+            ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+            if (scaleArrow == null)
+            {
+
+            }
+            else
+            {
+                scaleArrow.stopDrag();
+            }
         }
         else
         {
@@ -112,7 +145,15 @@ public class Builder : MonoBehaviour {
                 Deployer deployer = contactObject.GetComponent<Deployer>();
                 if (deployer == null)
                 {
-
+                    ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+                    if (scaleArrow == null)
+                    {
+                        
+                    }
+                    else
+                    {
+                        scaleArrow.followDrag(transform.position);
+                    }
                 }
                 else
                 {

@@ -8,6 +8,8 @@ public class AssetManager : Singleton<AssetManager> {
     public Material freeMaterial;
     public Material highlightMaterial;
     public Material deleteMaterial;
+    public Material arrowMaterial;
+    public Material blankMaterial;
 
     // Use this for initialization
     void Start () {
