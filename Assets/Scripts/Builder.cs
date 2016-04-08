@@ -71,44 +71,17 @@ public class Builder : MonoBehaviour {
         robot.reset();
     }
 
-    public void trigger()
+    public void triggerUp()
     {
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            if (contactObject != null)
-            {
-                Part part = contactObject.GetComponentInParent<Part>();
-                if (part == null)
-                {
-                    Deployer deployer = contactObject.GetComponent<Deployer>();
-                    if (deployer == null)
-                    {
-
-                    }
-                    else
-                    {
-                        deployRobot();
-                        deployer.deploy();
-                    }
-                }
-                else
-                {
-                    if (part.template)
-                    {
-                        SpawnComponent(part);
-                    }
-                    else
-                    {
-                        MoveComponent(part);
-                    }
-                }
-            }
+            
         }
         else
         {
             List<Part> markedParts = new List<Part>();
-            foreach(Part part in childParts)
+            foreach (Part part in childParts)
             {
                 if (part.markedForDelete)
                 {
@@ -125,6 +98,37 @@ public class Builder : MonoBehaviour {
             else
             {
                 placeParts();
+            }
+        }
+    }
+
+    public void triggerDown()
+    {
+        if (contactObject != null)
+        {
+            Part part = contactObject.GetComponentInParent<Part>();
+            if (part == null)
+            {
+                Deployer deployer = contactObject.GetComponent<Deployer>();
+                if (deployer == null)
+                {
+
+                }
+                else
+                {
+                    deployRobot();
+                    deployer.deploy();
+                }
+            }
+            else
+            {
+                if (part.template)
+                {
+                    SpawnComponent(part);
+                } else
+                {
+                    MoveComponent(part);
+                }
             }
         }
     }

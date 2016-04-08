@@ -24,12 +24,18 @@ public class OmniTool : MonoBehaviour
             inputManager.registerFunction(triggerDown, ViveInputManager.InputType.LeftTriggerDown);
             inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.LeftTouchpadDown);
             inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.LeftApplicationMenuDown);
+            inputManager.registerFunction(triggerUp, ViveInputManager.InputType.LeftTriggerUp);
+            inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.LeftTouchpadUp);
+            inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.LeftApplicationMenuUp);
         }
         else
         {
             inputManager.registerFunction(triggerDown, ViveInputManager.InputType.RightTriggerDown);
             inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.RightTouchpadDown);
             inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.RightApplicationMenuDown);
+            inputManager.registerFunction(triggerUp, ViveInputManager.InputType.RightTriggerUp);
+            inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.RightTouchpadUp);
+            inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.RightApplicationMenuUp);
         }
     }
     
@@ -43,7 +49,7 @@ public class OmniTool : MonoBehaviour
         switch (gameManager.state)
         {
             case GameManager.GameState.Build:
-                builder.trigger();
+                builder.triggerDown();
                 break;
             case GameManager.GameState.Play:
                 break;
@@ -52,6 +58,10 @@ public class OmniTool : MonoBehaviour
 
     public void touchpadDown(params object[] args)
     {
+        if (args.Length > 0)
+        {
+            // Get position of touch
+        }
         switch (gameManager.state)
         {
             case GameManager.GameState.Build:
@@ -61,7 +71,23 @@ public class OmniTool : MonoBehaviour
                 break;
         }
     }
-    
+
+    public void applicationmenuUp(params object[] args)
+    {
+
+    }
+
+    public void triggerUp(params object[] args)
+    {
+
+    }
+
+    public void touchpadUp(params object[] args)
+    {
+
+    }
+
+
     // Use this for initialization
     void Start()
     {
