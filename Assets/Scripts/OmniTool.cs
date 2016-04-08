@@ -35,7 +35,6 @@ public class OmniTool : MonoBehaviour
 
     public void applicationmenu()
     {
-        gameManager.build();
         builder.menu();
     }
 
@@ -56,8 +55,6 @@ public class OmniTool : MonoBehaviour
         switch (gameManager.state)
         {
             case GameManager.GameState.Build:
-                builder.deployRobot();
-                gameManager.play();
                 break;
             case GameManager.GameState.Play:
 

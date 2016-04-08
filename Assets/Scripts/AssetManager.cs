@@ -7,9 +7,10 @@ public class AssetManager : Singleton<AssetManager> {
     public Material unconnectableMaterial;
     public Material freeMaterial;
     public Material highlightMaterial;
+    public Material deleteMaterial;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
