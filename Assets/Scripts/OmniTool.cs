@@ -79,7 +79,14 @@ public class OmniTool : MonoBehaviour
 
     public void triggerUp(params object[] args)
     {
-
+        switch (gameManager.state)
+        {
+            case GameManager.GameState.Build:
+                builder.triggerUp();
+                break;
+            case GameManager.GameState.Play:
+                break;
+        }
     }
 
     public void touchpadUp(params object[] args)
