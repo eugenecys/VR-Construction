@@ -21,24 +21,24 @@ public class OmniTool : MonoBehaviour
         inputManager = ViveInputManager.Instance;
         if (side.Equals(Side.Left))
         {
-            inputManager.registerFunction(trigger, ViveInputManager.InputType.LeftTrigger);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.LeftTouchpad);
-            inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.LeftApplicationMenu);
+            inputManager.registerFunction(triggerDown, ViveInputManager.InputType.LeftTriggerDown);
+            inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.LeftTouchpadDown);
+            inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.LeftApplicationMenuDown);
         }
         else
         {
-            inputManager.registerFunction(trigger, ViveInputManager.InputType.RightTrigger);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.RightTouchpad);
-            inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.RightApplicationMenu);
+            inputManager.registerFunction(triggerDown, ViveInputManager.InputType.RightTriggerDown);
+            inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.RightTouchpadDown);
+            inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.RightApplicationMenuDown);
         }
     }
-
-    public void applicationmenu()
+    
+    public void applicationmenuDown(params object[] args)
     {
         builder.menu();
     }
 
-    public void trigger()
+    public void triggerDown(params object[] args)
     {
         switch (gameManager.state)
         {
@@ -50,7 +50,7 @@ public class OmniTool : MonoBehaviour
         }
     }
 
-    public void touchpad()
+    public void touchpadDown(params object[] args)
     {
         switch (gameManager.state)
         {
