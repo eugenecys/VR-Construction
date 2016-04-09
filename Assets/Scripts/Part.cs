@@ -165,14 +165,12 @@ public class Part : MonoBehaviour, Interactable
             } 
             setState(State.Placed);
             this.transform.parent = robot.transform;
-            enablePhysics();
             resetPhysics();
         }
         else if (free)
         {
             setState(State.Placed);
             this.transform.parent = robot.transform;
-            enablePhysics();
             resetPhysics();
         }
         robot.updateParts();
