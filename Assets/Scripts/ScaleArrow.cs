@@ -17,15 +17,15 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     }
 
     public Direction direction;
-    Vector3 dragPoint;
+    Transform dragPoint;
     bool dragging;
     public Scaler scaleParent;
-    public Material highlightMaterial;
-    public Material defaultMaterial;
+    private Material highlightMaterial;
+    private Material defaultMaterial;
     MeshRenderer meshRenderer;
     
 
-    public void followDrag(Vector3 origin)
+    public void followDrag(Transform origin)
     {
         dragPoint = origin;
         scaleParent.initScale(this);
@@ -40,10 +40,9 @@ public class ScaleArrow : MonoBehaviour, Interactable {
 
     void Awake()
     {
-        scaleParent = GetComponentInParent<Scaler>();
         meshRenderer = GetComponent<MeshRenderer>();
         assetManager = AssetManager.Instance;
-    }
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -71,7 +70,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
                     transform.position = new Vector3(dragPoint.x, dragPoint.y, dragPoint.z);
                     break;
             }*/
-            transform.position = dragPoint;
+            transform.position = dragPoint.position;
         }
 	}
 

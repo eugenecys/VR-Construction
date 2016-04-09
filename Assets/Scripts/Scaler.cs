@@ -4,45 +4,60 @@ using System.Collections;
 public class Scaler : MonoBehaviour {
     
     public GameObject target;
-    private ScaleArrow scaleVector;
+    public Vector3 scalePositions;
+    private ScaleArrow scaleObject;
     private Vector3 scaleMultiplier;
     private bool scaling;
+    public ScaleArrow X;
+    public ScaleArrow Y;
+    public ScaleArrow Z;
+    public ScaleArrow Xn;
+    public ScaleArrow Yn;
+    public ScaleArrow Zn;
+
 
     public void initScale(ScaleArrow arrow)
     {
-        scaleVector = arrow;
-        float scaleLength = 0;
-        switch(arrow.direction)
-        {
-            case ScaleArrow.Direction.X:
-                scaleLength = Mathf.Abs(arrow.transform.localPosition.x - transform.localPosition.x);
-                scaleMultiplier = new Vector3(transform.localScale.x / scaleLength, 0, 0);
-                break;
-            case ScaleArrow.Direction.Y:
-                scaleLength = Mathf.Abs(arrow.transform.localPosition.y - transform.localPosition.y);
-                scaleMultiplier = new Vector3(0, transform.localScale.y / scaleLength, 0);
-                break;
-            case ScaleArrow.Direction.Z:
-                scaleLength = Mathf.Abs(arrow.transform.localPosition.z - transform.localPosition.z);
-                scaleMultiplier = new Vector3(0, 0, transform.localScale.z / scaleLength);
-                break;
-            case ScaleArrow.Direction.All:
-                scaleLength = (arrow.transform.localPosition - transform.localPosition).magnitude;
-                scaleMultiplier = new Vector3(transform.localScale.x / scaleLength, transform.localScale.y / scaleLength, transform.localScale.z / scaleLength);
-                break;
-        }
-        Debug.Log("Local Length: " + scaleLength);
+        scaleObject = arrow;
         scaling = true;
     }
 
     public void stopScale()
     {
         scaling = false;
+        X.transform.localPosition = new Vector3(X.transform.localPosition.x, 0, 0);
+        Y.transform.localPosition = new Vector3(0, Y.transform.localPosition.y, 0);
+        Z.transform.localPosition = new Vector3(0, 0, Z.transform.localPosition.z);
+        Xn.transform.localPosition = new Vector3(-Xn.transform.localPosition.x, 0, 0);
+        Yn.transform.localPosition = new Vector3(0, -Yn.transform.localPosition.y, 0);
+        Zn.transform.localPosition = new Vector3(0, 0, -Zn.transform.localPosition.z);
     }
 
     void Awake()
     {
         scaling = false;
+        Vector3 lScale = transform.localScale;
+        scaleMultiplier = new Vector3(lScale.x / scalePositions.x, lScale.y / scalePositions.y, lScale.z / scalePositions.z);
+        X.scaleParent = this;
+        Y.scaleParent = this;
+        Z.scaleParent = this;
+        Xn.scaleParent = this;
+        Yn.scaleParent = this;
+        Zn.scaleParent = this;
+
+        X.direction = ScaleArrow.Direction.X;
+        Xn.direction = ScaleArrow.Direction.X;
+        Y.direction = ScaleArrow.Direction.Y;
+        Yn.direction = ScaleArrow.Direction.Y;
+        Z.direction = ScaleArrow.Direction.Z;
+        Zn.direction = ScaleArrow.Direction.Z;
+
+        X.transform.localPosition = new Vector3(scalePositions.x, 0, 0);
+        Y.transform.localPosition = new Vector3(0,  scalePositions.y, 0);
+        Z.transform.localPosition = new Vector3(0, 0, scalePositions.z);
+        Xn.transform.localPosition = new Vector3(-scalePositions.x, 0, 0);
+        Yn.transform.localPosition = new Vector3(0, -scalePositions.y, 0);
+        Zn.transform.localPosition = new Vector3(0, 0, -scalePositions.z);
     }
     
 	// Use this for initialization
@@ -55,8 +70,9 @@ public class Scaler : MonoBehaviour {
 	    if (scaling)
         {
             Vector3 scale = target.transform.localScale;
-            float newLength = (scaleVector.transform.localPosition - transform.localPosition).magnitude;
-            switch (scaleVector.direction)
+            float newLength = (scaleObject.transform.localPosition - transform.localPosition).magnitude;
+
+            switch (scaleObject.direction)
             {
                 case ScaleArrow.Direction.X:
                     target.transform.localScale = new Vector3(scaleMultiplier.x * newLength, scale.y, scale.z);

@@ -39,6 +39,18 @@ public class Builder : MonoBehaviour {
         }
     }
 
+    void disableCollider()
+    {
+        Long.enabled = false;
+        Short.enabled = false;
+    }
+
+    void enableCollider()
+    {
+        Long.enabled = true;
+        Short.enabled = true;
+    }
+
     //Delete - keyboard code
     public void connectPart()
     {
@@ -53,6 +65,7 @@ public class Builder : MonoBehaviour {
             if (part.placed)
             {
                 part.transform.parent = robot.transform;
+                part.resetPhysics();
             }
         }
     }
@@ -98,17 +111,21 @@ public class Builder : MonoBehaviour {
 
     public void triggerUp()
     {
+        enableCollider();
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
-            if (scaleArrow == null)
+            if (contactObject != null)
             {
+                ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+                if (scaleArrow == null)
+                {
 
-            }
-            else
-            {
-                scaleArrow.stopDrag();
+                }
+                else
+                {
+                    scaleArrow.stopDrag();
+                }
             }
         }
         else
@@ -137,39 +154,41 @@ public class Builder : MonoBehaviour {
 
     public void triggerDown()
     {
+        disableCollider();
         if (contactObject != null)
         {
-            Part part = contactObject.GetComponentInParent<Part>();
-            if (part == null)
+            ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+            if (scaleArrow == null)
             {
-                Deployer deployer = contactObject.GetComponent<Deployer>();
-                if (deployer == null)
+                Part part = contactObject.GetComponentInParent<Part>();
+                if (part == null)
                 {
-                    ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
-                    if (scaleArrow == null)
+                    Deployer deployer = contactObject.GetComponent<Deployer>();
+                    if (deployer == null)
                     {
-                        
+
                     }
                     else
                     {
-                        scaleArrow.followDrag(transform.position);
+                        deployRobot();
+                        deployer.deploy();
                     }
                 }
                 else
                 {
-                    deployRobot();
-                    deployer.deploy();
+                    if (part.template)
+                    {
+                        SpawnComponent(part);
+                    }
+                    else
+                    {
+                        MoveComponent(part);
+                    }
                 }
             }
             else
             {
-                if (part.template)
-                {
-                    SpawnComponent(part);
-                } else
-                {
-                    MoveComponent(part);
-                }
+                scaleArrow.followDrag(transform);
             }
         }
     }
