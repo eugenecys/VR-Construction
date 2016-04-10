@@ -205,7 +205,6 @@ public class Builder : MonoBehaviour {
         {
             child.transform.parent = this.transform;
             child.unplace();
-            child.setState(Part.State.Connectable);
         }
     }
 

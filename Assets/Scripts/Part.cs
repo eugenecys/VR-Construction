@@ -38,6 +38,7 @@ public class Part : MonoBehaviour, Interactable
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
     List<Part> connectedParts;
+    public Scaler scaler;
 
     public State state;
     public Name name;
@@ -90,6 +91,8 @@ public class Part : MonoBehaviour, Interactable
         {
             cpt.parent = this;
         }
+
+        scaler.gameObject.SetActive(false);
     }
     
     public void addConnectedPart(Part part)
@@ -164,12 +167,14 @@ public class Part : MonoBehaviour, Interactable
                 segment.connect();
             } 
             setState(State.Placed);
+            scaler.gameObject.SetActive(false);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
         else if (free)
         {
             setState(State.Placed);
+            scaler.gameObject.SetActive(false);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
@@ -181,6 +186,9 @@ public class Part : MonoBehaviour, Interactable
         disablePhysics();
         resetPhysics();
         robot.updateParts();
+        scaler.gameObject.SetActive(true);
+        setState(Part.State.Connectable);
+        evaluateState();
     }
 
     public void deploy()
