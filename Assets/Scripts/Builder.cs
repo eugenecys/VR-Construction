@@ -108,7 +108,7 @@ public class Builder : MonoBehaviour {
         deployer.undeploy();
         robot.reset();
     }
-
+    
     public void triggerUp()
     {
         enableCollider();
@@ -172,6 +172,7 @@ public class Builder : MonoBehaviour {
                     {
                         deployRobot();
                         deployer.deploy();
+                        contactObject = null;
                     }
                 }
                 else
