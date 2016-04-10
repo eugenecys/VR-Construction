@@ -53,7 +53,7 @@ public class Scaler : MonoBehaviour {
     void Awake()
     {
         scaling = false;
-        Vector3 lScale = transform.localScale;
+        Vector3 lScale = target.transform.localScale;
         scaleMultiplier = new Vector3(lScale.x / scalePositions.x, lScale.y / scalePositions.y, lScale.z / scalePositions.z);
         X.scaleParent = this;
         Y.scaleParent = this;
@@ -61,13 +61,6 @@ public class Scaler : MonoBehaviour {
         Xn.scaleParent = this;
         Yn.scaleParent = this;
         Zn.scaleParent = this;
-
-        X.direction = ScaleArrow.Direction.X;
-        Xn.direction = ScaleArrow.Direction.X;
-        Y.direction = ScaleArrow.Direction.Y;
-        Yn.direction = ScaleArrow.Direction.Y;
-        Z.direction = ScaleArrow.Direction.Z;
-        Zn.direction = ScaleArrow.Direction.Z;
 
         X.transform.localPosition = new Vector3(scalePositions.x, 0, 0);
         Y.transform.localPosition = new Vector3(0,  scalePositions.y, 0);

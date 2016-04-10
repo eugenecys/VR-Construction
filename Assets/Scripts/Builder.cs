@@ -232,8 +232,8 @@ public class Builder : MonoBehaviour {
             {
                 iObj.unhighlight();
             }
-            contactObject = null;
-        }
+		}
+		contactObject = null;
     }
     
 	// Update is called once per frame
