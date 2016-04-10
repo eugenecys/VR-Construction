@@ -167,14 +167,12 @@ public class Part : MonoBehaviour, Interactable
                 segment.connect();
             } 
             setState(State.Placed);
-            scaler.gameObject.SetActive(false);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
         else if (free)
         {
             setState(State.Placed);
-            scaler.gameObject.SetActive(false);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
@@ -186,7 +184,6 @@ public class Part : MonoBehaviour, Interactable
         disablePhysics();
         resetPhysics();
         robot.updateParts();
-        scaler.gameObject.SetActive(true);
         setState(Part.State.Connectable);
         evaluateState();
     }
@@ -235,21 +232,27 @@ public class Part : MonoBehaviour, Interactable
         switch (_state)
         {
             case State.Connectable:
+                scaler.gameObject.SetActive(true);
                 setSegmentMaterials(assetManager.connectableMaterial);
                 break;
             case State.Unconnectable:
+                scaler.gameObject.SetActive(true);
                 setSegmentMaterials(assetManager.unconnectableMaterial);
                 break;
             case State.Free:
+                scaler.gameObject.SetActive(true);
                 setSegmentMaterials(assetManager.freeMaterial);
                 break;
             case State.Placed:
+                scaler.gameObject.SetActive(false);
                 setSegmentDefaultMaterials();
                 break;
             case State.MarkedForDelete:
+                scaler.gameObject.SetActive(false);
                 setSegmentMaterials(assetManager.deleteMaterial);
                 break;
             case State.Highlight:
+                scaler.gameObject.SetActive(false);
                 setSegmentMaterials(assetManager.highlightMaterial);
                 break;
         }

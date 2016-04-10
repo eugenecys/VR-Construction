@@ -23,7 +23,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     private Material highlightMaterial;
     private Material defaultMaterial;
     MeshRenderer meshRenderer;
-    public Collider col;
+    private Collider col;
     
     public void followDrag(Transform origin)
     {
@@ -73,6 +73,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     {
         meshRenderer = GetComponent<MeshRenderer>();
         assetManager = AssetManager.Instance;
+        col = GetComponent<Collider>();
 	}
 
 	// Use this for initialization
@@ -85,22 +86,6 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     {
 	    if (dragging)
         {
-            /*
-            switch(direction)
-            {
-                case Direction.X:
-                    transform.localPosition = new Vector3(dragPoint.x, 0, 0);
-                    break;
-                case Direction.Y:
-                    transform.localPosition = new Vector3(0, dragPoint.y, 0);
-                    break;
-                case Direction.Z:
-                    transform.localPosition = new Vector3(0, 0, dragPoint.z);
-                    break;
-                case Direction.All:
-                    transform.position = new Vector3(dragPoint.x, dragPoint.y, dragPoint.z);
-                    break;
-            }*/
             transform.position = dragPoint.position;
         }
 	}

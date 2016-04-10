@@ -15,7 +15,6 @@ public class Scaler : MonoBehaviour {
     public ScaleArrow Yn;
     public ScaleArrow Zn;
 
-
     public void initScale(ScaleArrow arrow)
     {
         scaleObject = arrow;
@@ -37,6 +36,18 @@ public class Scaler : MonoBehaviour {
         Xn.show();
         Yn.show();
         Zn.show();
+        resetPositions();
+    }
+
+    public void resetPositions()
+    {
+        Vector3 tScale = target.transform.localScale;
+        X.transform.localPosition = new Vector3(tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
+        Xn.transform.localPosition = new Vector3(-tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
+        Y.transform.localPosition = new Vector3(0, tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
+        Yn.transform.localPosition = new Vector3(0, -tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
+        Z.transform.localPosition = new Vector3(0, 0, tScale.z / scaleMultiplier.z + transform.localPosition.z);
+        Zn.transform.localPosition = new Vector3(0, 0, -tScale.z / scaleMultiplier.z + transform.localPosition.z);
     }
 
     void Awake()
