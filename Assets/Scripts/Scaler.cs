@@ -20,17 +20,23 @@ public class Scaler : MonoBehaviour {
     {
         scaleObject = arrow;
         scaling = true;
+        X.hide();
+        Y.hide();
+        Z.hide();
+        Xn.hide();
+        Yn.hide();
+        Zn.hide();
     }
 
     public void stopScale()
     {
         scaling = false;
-        X.transform.localPosition = new Vector3(X.transform.localPosition.x, 0, 0);
-        Y.transform.localPosition = new Vector3(0, Y.transform.localPosition.y, 0);
-        Z.transform.localPosition = new Vector3(0, 0, Z.transform.localPosition.z);
-        Xn.transform.localPosition = new Vector3(-Xn.transform.localPosition.x, 0, 0);
-        Yn.transform.localPosition = new Vector3(0, -Yn.transform.localPosition.y, 0);
-        Zn.transform.localPosition = new Vector3(0, 0, -Zn.transform.localPosition.z);
+        X.show();
+        Y.show();
+        Z.show();
+        Xn.show();
+        Yn.show();
+        Zn.show();
     }
 
     void Awake()
@@ -70,20 +76,23 @@ public class Scaler : MonoBehaviour {
 	    if (scaling)
         {
             Vector3 scale = target.transform.localScale;
-            float newLength = (scaleObject.transform.localPosition - transform.localPosition).magnitude;
-
+            float newLength = 0;
             switch (scaleObject.direction)
             {
                 case ScaleArrow.Direction.X:
+                    newLength = Mathf.Abs(scaleObject.transform.localPosition.x - transform.localPosition.x);
                     target.transform.localScale = new Vector3(scaleMultiplier.x * newLength, scale.y, scale.z);
                     break;
                 case ScaleArrow.Direction.Y:
+                    newLength = Mathf.Abs(scaleObject.transform.localPosition.y - transform.localPosition.y);
                     target.transform.localScale = new Vector3(scale.x, scaleMultiplier.y * newLength, scale.z);
                     break;
                 case ScaleArrow.Direction.Z:
+                    newLength = Mathf.Abs(scaleObject.transform.localPosition.z - transform.localPosition.z);
                     target.transform.localScale = new Vector3(scale.x, scale.y, scaleMultiplier.z * newLength);
                     break;
                 case ScaleArrow.Direction.All:
+                    newLength = (scaleObject.transform.localPosition - transform.localPosition).magnitude;
                     target.transform.localScale = new Vector3(scaleMultiplier.x * newLength, scaleMultiplier.y * newLength, scaleMultiplier.z * newLength);
                     break;
             }

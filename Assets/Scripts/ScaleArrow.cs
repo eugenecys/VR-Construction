@@ -23,8 +23,8 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     private Material highlightMaterial;
     private Material defaultMaterial;
     MeshRenderer meshRenderer;
+    public Collider col;
     
-
     public void followDrag(Transform origin)
     {
         dragPoint = origin;
@@ -35,7 +35,38 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     public void stopDrag()
     {
         scaleParent.stopScale();
+        resetPosition();
         dragging = false;
+    }
+
+    public void resetPosition()
+    {
+        switch(direction)
+        {
+            case Direction.X:
+                transform.localPosition = new Vector3(transform.localPosition.x, 0, 0);
+                break;
+            case Direction.Y:
+                transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
+                break;
+            case Direction.Z:
+                transform.localPosition = new Vector3(0, 0, transform.localPosition.z);
+                break;
+            case Direction.All:
+                break;
+        }
+    }
+
+    public void hide()
+    {
+        meshRenderer.enabled = false;
+        col.enabled = false;
+    }
+
+    public void show()
+    {
+        meshRenderer.enabled = true;
+        col.enabled = true;
     }
 
     void Awake()
@@ -46,7 +77,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
