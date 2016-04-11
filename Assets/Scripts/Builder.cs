@@ -340,6 +340,15 @@ public class Builder : MonoBehaviour {
             case Part.Name.Wing:
                 partName = Constants.NAME_WING;
                 break;
+            case Part.Name.Eye:
+                partName = Constants.NAME_EYE;
+                break;
+            case Part.Name.Helmet:
+                partName = Constants.NAME_HELMET;
+                break;
+            case Part.Name.Clamp:
+                partName = Constants.NAME_CLAMP;
+                break;
         }
         GameObject prefab = Resources.Load("Prefabs/" + partName) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;

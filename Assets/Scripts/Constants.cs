@@ -30,5 +30,8 @@ public static class Constants {
     public const string NAME_PROPELLER = "Propeller";
     //Xiqiao Add
     public const string NAME_WING = "Wing";
+    public const string NAME_EYE = "Eye";
+    public const string NAME_HELMET = "Helmet";
+    public const string NAME_CLAMP = "Clamp";
 
 }
