@@ -24,32 +24,35 @@ public class OmniTool : MonoBehaviour
         inputManager = ViveInputManager.Instance;
         if (side.Equals(Side.Left))
         {
-            inputManager.registerFunction(trigger, ViveInputManager.InputType.LeftTrigger);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.LeftTouchpad);
-            inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.LeftApplicationMenu);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.LeftTouchpadUp);
+            inputManager.registerFunction(triggerDown, ViveInputManager.InputType.LeftTriggerDown);
+            inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.LeftTouchpadDown);
+            inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.LeftApplicationMenuDown);
+            inputManager.registerFunction(triggerUp, ViveInputManager.InputType.LeftTriggerUp);
+            inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.LeftTouchpadUp);
+            inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.LeftApplicationMenuUp);
         }
         else
         {
-            inputManager.registerFunction(trigger, ViveInputManager.InputType.RightTrigger);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.RightTouchpad);
-            inputManager.registerFunction(applicationmenu, ViveInputManager.InputType.RightApplicationMenu);
-            inputManager.registerFunction(touchpad, ViveInputManager.InputType.RightTouchpadUp);
+            inputManager.registerFunction(triggerDown, ViveInputManager.InputType.RightTriggerDown);
+            inputManager.registerFunction(touchpadDown, ViveInputManager.InputType.RightTouchpadDown);
+            inputManager.registerFunction(applicationmenuDown, ViveInputManager.InputType.RightApplicationMenuDown);
+            inputManager.registerFunction(triggerUp, ViveInputManager.InputType.RightTriggerUp);
+            inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.RightTouchpadUp);
+            inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.RightApplicationMenuUp);
         }
     }
-
-    public void applicationmenu()
+    
+    public void applicationmenuDown(params object[] args)
     {
-        gameManager.build();
         builder.menu();
     }
 
-    public void trigger()
+    public void triggerDown(params object[] args)
     {
         switch (gameManager.state)
         {
             case GameManager.GameState.Build:
-                builder.trigger();
+                builder.triggerDown();
                 break;
             case GameManager.GameState.Play:
                 playMode.SetController(side, PlayMode.InputType.triggerDown);
@@ -57,28 +60,43 @@ public class OmniTool : MonoBehaviour
         }
     }
 
-    public void touchpad()
+    public void touchpadDown(params object[] args)
     {
+        if (args.Length > 0)
+        {
+            // Get position of touch
+        }
         switch (gameManager.state)
         {
             case GameManager.GameState.Build:
-                builder.deployRobot();
-                gameManager.play();
                 break;
             case GameManager.GameState.Play:
                 playMode.SetController(side, PlayMode.InputType.touchpadDown);
                 break;
         }
     }
-
-    public void touchpadUp() {
+    
+    public void touchpadUp(params object[] args) {
         if (gameManager.state == GameManager.GameState.Play) {
             playMode.SetController(side, PlayMode.InputType.touchpadUp);
         }
     }
+    
+    public void applicationmenuUp(params object[] args)
+    {
 
-    public void triggerUp() {
+    }
 
+    public void triggerUp(params object[] args)
+    {
+        switch (gameManager.state)
+        {
+            case GameManager.GameState.Build:
+                builder.triggerUp();
+                break;
+            case GameManager.GameState.Play:
+                break;
+        }
     }
     
     // Use this for initialization

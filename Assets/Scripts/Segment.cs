@@ -12,7 +12,7 @@ public abstract class Segment : MonoBehaviour {
     public List<Segment> touchingSegments;
     public Collider collider;
     public Rigidbody rigidbody;
-    public Collider trigger;
+    public Collider detector;
 
     protected bool active;
 

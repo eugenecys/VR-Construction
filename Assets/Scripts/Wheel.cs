@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Wheel : Segment {
+public class Wheel : Segment, Controllable {
 
     public HingeJoint wheel;
 
@@ -94,5 +95,13 @@ public class Wheel : Segment {
         initProperties();
     }
 
-    
+    public void trigger()
+    {
+        
+    }
+
+    public void joystick(Vector2 coordinates)
+    {
+        
+    }
 }

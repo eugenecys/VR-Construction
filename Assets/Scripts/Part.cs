@@ -13,7 +13,8 @@ public class Part : MonoBehaviour, Interactable
         Connectable,
         Free,
         Placed,
-        Template
+        MarkedForDelete,
+        Highlight
     }
 
     public enum Name
@@ -33,7 +34,8 @@ public class Part : MonoBehaviour, Interactable
     public bool triggerable;
     public bool template;
     private bool highlighted;
-
+    public bool markedForDelete;
+    
     public Segment[] segments;
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
@@ -82,21 +84,14 @@ public class Part : MonoBehaviour, Interactable
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
         weapons = GetComponentsInChildren<Weapon>();
         connectedParts = new List<Part>();
-        
+
+        markedForDelete = false;
+        highlighted = false;
+
         foreach (Segment cpt in segments)
         {
             cpt.parent = this;
         }
-        if (template)
-        {
-            setState(State.Template);
-            activate();
-        }
-        else
-        {
-            setState(State.Free);
-        }
-
     }
     
     public void addConnectedPart(Part part)
@@ -267,19 +262,15 @@ public class Part : MonoBehaviour, Interactable
             case State.Placed:
                 setSegmentDefaultMaterials();
                 break;
-            case State.Template:
-                if (highlighted)
-                {
-                    setSegmentMaterials(assetManager.highlightMaterial);
-                }
-                else
-                {
-                    setSegmentDefaultMaterials();
-                }
+            case State.MarkedForDelete:
+                setSegmentMaterials(assetManager.deleteMaterial);
+                break;
+            case State.Highlight:
+                setSegmentMaterials(assetManager.highlightMaterial);
                 break;
         }
     }
-
+    
     public void setSegmentMaterials(Material material)
     {
         foreach (MaterialHandler materialHandler in materialHandlers)
@@ -301,7 +292,7 @@ public class Part : MonoBehaviour, Interactable
         if (template)
         {
             highlighted = true;
-            setSegmentMaterials(assetManager.highlightMaterial);
+            setState(State.Highlight);
         }
     }
 
@@ -314,11 +305,43 @@ public class Part : MonoBehaviour, Interactable
         }
     }
 
+    public void markForDelete()
+    {
+        markedForDelete = true;
+        setState(State.MarkedForDelete);
+        List<Part> connected = getConnectedParts();
+        foreach(Part part in connected)
+        {
+            if (!part.markedForDelete)
+            {
+                part.markForDelete();
+            }
+        }
+    }
+
+    public void unmarkForDelete()
+    {
+        markedForDelete = false;
+        setState(State.Connectable);
+        List<Part> connected = getConnectedParts();
+        foreach (Part part in connected)
+        {
+            if (part.markedForDelete)
+            {
+                part.unmarkForDelete();
+            }
+        }
+    }
+
     public void evaluateState()
     {
-        if (template)
+        if (markedForDelete)
         {
-            setState(State.Template);
+            setState(State.MarkedForDelete);
+        }
+        else if (template)
+        {
+            activate();
         } 
         else if (placed)
         {

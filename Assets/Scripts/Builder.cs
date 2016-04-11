@@ -10,6 +10,7 @@ public class Builder : MonoBehaviour {
     public Vector3 spawnposition;
     public Transform spawnPoint;
     public Part[] childParts;
+    Deployer deployer;
 
     private ViveInputManager inputManager;
 
@@ -55,6 +56,7 @@ public class Builder : MonoBehaviour {
     {
         robot = Robot.Instance;
         inputManager = ViveInputManager.Instance;
+        deployer = Deployer.Instance;
     }
 
 	// Use this for initialization
@@ -65,12 +67,44 @@ public class Builder : MonoBehaviour {
     public void menu()
     {
         DestroyRobot();
+        deployer.undeploy();
+        robot.reset();
     }
 
-    public void trigger()
+    public void triggerUp()
     {
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
+        {
+            
+        }
+        else
+        {
+            List<Part> markedParts = new List<Part>();
+            foreach (Part part in childParts)
+            {
+                if (part.markedForDelete)
+                {
+                    markedParts.Add(part);
+                }
+            }
+            if (markedParts.Count > 0)
+            {
+                foreach (Part markedPart in markedParts)
+                {
+                    Destroy(markedPart.gameObject);
+                }
+            }
+            else
+            {
+                placeParts();
+            }
+        }
+    }
+
+    public void triggerDown()
+    {
+        if (contactObject != null)
         {
             Part part = contactObject.GetComponentInParent<Part>();
             if (part == null)
@@ -83,6 +117,7 @@ public class Builder : MonoBehaviour {
                 else
                 {
                     deployRobot();
+                    deployer.deploy();
                 }
             }
             else
@@ -90,16 +125,11 @@ public class Builder : MonoBehaviour {
                 if (part.template)
                 {
                     SpawnComponent(part);
-                }
-                else
+                } else
                 {
                     MoveComponent(part);
                 }
             }
-        }
-        else
-        {
-            placeParts();
         }
     }
 
@@ -136,12 +166,15 @@ public class Builder : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
-        Interactable iObj = contactObject.GetComponent<Interactable>();
-        if (iObj != null)
+        if (contactObject != null)
         {
-            iObj.unhighlight();
+            Interactable iObj = contactObject.GetComponent<Interactable>();
+            if (iObj != null)
+            {
+                iObj.unhighlight();
+            }
+            contactObject = null;
         }
-        contactObject = null;
     }
     
 	// Update is called once per frame
@@ -238,5 +271,6 @@ public class Builder : MonoBehaviour {
         sObj.transform.parent = this.transform;
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
+        spawnedPart.evaluateState();
     }
 }
