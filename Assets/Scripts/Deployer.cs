@@ -36,7 +36,6 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
     void Awake()
     {
-        meshRenderer = gameObject.GetComponent<MeshRenderer>();
         rb = gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = true;

@@ -18,6 +18,9 @@ public class Builder : MonoBehaviour {
 
     private ViveInputManager inputManager;
 
+    private float refreshDelay = 0.2f;
+    private bool triggered = false;
+
     public enum ColliderState
     {
         Far,
@@ -111,6 +114,11 @@ public class Builder : MonoBehaviour {
     
     public void triggerUp()
     {
+        if (!triggered)
+        {
+            return;
+        }
+        triggered = false;
         enableCollider();
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
@@ -154,6 +162,11 @@ public class Builder : MonoBehaviour {
 
     public void triggerDown()
     {
+        if (triggered)
+        {
+            return;
+        }
+        triggered = true;
         disableCollider();
         if (contactObject != null)
         {
@@ -180,10 +193,12 @@ public class Builder : MonoBehaviour {
                     if (part.template)
                     {
                         SpawnComponent(part);
+                        contactObject = null;
                     }
                     else
                     {
                         MoveComponent(part);
+                        contactObject = null;
                     }
                 }
             }
