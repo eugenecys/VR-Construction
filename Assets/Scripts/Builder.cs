@@ -11,8 +11,48 @@ public class Builder : MonoBehaviour {
     public Transform spawnPoint;
     public Part[] childParts;
     Deployer deployer;
+    public Builder other;
+
+    public Collider Long;
+    public Collider Short;
 
     private ViveInputManager inputManager;
+
+    private float refreshDelay = 0.2f;
+    private bool triggered = false;
+
+    public enum ColliderState
+    {
+        Far,
+        Close
+    }
+
+    public ColliderState colliderState;
+
+    public void setColliderState(ColliderState state)
+    {
+        colliderState = state;
+        switch(state)
+        {
+            case ColliderState.Close:
+                
+                break;
+            case ColliderState.Far:
+                break;
+        }
+    }
+
+    void disableCollider()
+    {
+        Long.enabled = false;
+        Short.enabled = false;
+    }
+
+    void enableCollider()
+    {
+        Long.enabled = true;
+        Short.enabled = true;
+    }
 
     //Delete - keyboard code
     public void connectPart()
@@ -28,6 +68,7 @@ public class Builder : MonoBehaviour {
             if (part.placed)
             {
                 part.transform.parent = robot.transform;
+                part.resetPhysics();
             }
         }
     }
@@ -70,13 +111,30 @@ public class Builder : MonoBehaviour {
         deployer.undeploy();
         robot.reset();
     }
-
+    
     public void triggerUp()
     {
+        if (!triggered)
+        {
+            return;
+        }
+        triggered = false;
+        enableCollider();
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
-            
+            if (contactObject != null)
+            {
+                ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+                if (scaleArrow == null)
+                {
+
+                }
+                else
+                {
+                    scaleArrow.stopDrag();
+                }
+            }
         }
         else
         {
@@ -104,31 +162,49 @@ public class Builder : MonoBehaviour {
 
     public void triggerDown()
     {
+        if (triggered)
+        {
+            return;
+        }
+        triggered = true;
+        disableCollider();
         if (contactObject != null)
         {
-            Part part = contactObject.GetComponentInParent<Part>();
-            if (part == null)
+            ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
+            if (scaleArrow == null)
             {
-                Deployer deployer = contactObject.GetComponent<Deployer>();
-                if (deployer == null)
+                Part part = contactObject.GetComponentInParent<Part>();
+                if (part == null)
                 {
+                    Deployer deployer = contactObject.GetComponent<Deployer>();
+                    if (deployer == null)
+                    {
 
+                    }
+                    else
+                    {
+                        deployRobot();
+                        deployer.deploy();
+                        contactObject = null;
+                    }
                 }
                 else
                 {
-                    deployRobot();
-                    deployer.deploy();
+                    if (part.template)
+                    {
+                        SpawnComponent(part);
+                        contactObject = null;
+                    }
+                    else
+                    {
+                        MoveComponent(part);
+                        contactObject = null;
+                    }
                 }
             }
             else
             {
-                if (part.template)
-                {
-                    SpawnComponent(part);
-                } else
-                {
-                    MoveComponent(part);
-                }
+                scaleArrow.followDrag(transform);
             }
         }
     }
@@ -145,7 +221,6 @@ public class Builder : MonoBehaviour {
         {
             child.transform.parent = this.transform;
             child.unplace();
-            child.setState(Part.State.Connectable);
         }
     }
 
@@ -173,8 +248,8 @@ public class Builder : MonoBehaviour {
             {
                 iObj.unhighlight();
             }
-            contactObject = null;
-        }
+		}
+		contactObject = null;
     }
     
 	// Update is called once per frame

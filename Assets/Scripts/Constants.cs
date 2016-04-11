@@ -5,8 +5,8 @@ public static class Constants {
     public static string LAYER_CONTROLLER = "Controller";
     public static class Wheel
     {
-        public const float ANGULAR_VELOCITY = 200f;
-        public const float FORCE = 500f;
+        public const float ANGULAR_VELOCITY = 300f;
+        public const float FORCE = 1000f;
     }
 
     //Xiqiao Add
@@ -16,8 +16,8 @@ public static class Constants {
 
     public static class Propeller
     {
-        public const float ANGULAR_VELOCITY = 200f;
-        public const float FORCE = 500f;
+        public const float ANGULAR_VELOCITY = 300f;
+        public const float FORCE = 1000f;
     }
 
     public const string NAME_WHEEL = "Wheel";

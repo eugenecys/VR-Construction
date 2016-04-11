@@ -7,7 +7,7 @@ using System.Collections;
 public class Deployer : Singleton<Deployer>, Interactable {
 
     GameManager gameManager;
-    MeshRenderer meshRenderer;
+    public MeshRenderer meshRenderer;
     AssetManager assetManager;
     Rigidbody rb;
     public GameObject cell; 
@@ -36,7 +36,6 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
     void Awake()
     {
-        meshRenderer = gameObject.GetComponent<MeshRenderer>();
         rb = gameObject.GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = true;

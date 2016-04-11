@@ -10,20 +10,24 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public GameState state;
+    public GameObject city;
 
     public void play()
     {
         state = GameState.Play;
+        city.SetActive(true);
     }
 
     public void build()
     {
         state = GameState.Build;
+        city.SetActive(false);
     }
 
     void Awake()
     {
         state = GameState.Build;
+        city.SetActive(false);
     }
 
 	// Use this for initialization

@@ -29,7 +29,7 @@ public class MaterialHandler : MonoBehaviour {
 
     public void loadDefault()
     {
-            meshRenderer.materials = defaultMaterials;
+        meshRenderer.materials = defaultMaterials;
     }
 
     // Use this for initialization
