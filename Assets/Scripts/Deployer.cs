@@ -7,7 +7,7 @@ using System.Collections;
 public class Deployer : Singleton<Deployer>, Interactable {
 
     GameManager gameManager;
-    MeshRenderer meshRenderer;
+    public MeshRenderer meshRenderer;
     AssetManager assetManager;
     Rigidbody rb;
     public GameObject cell; 

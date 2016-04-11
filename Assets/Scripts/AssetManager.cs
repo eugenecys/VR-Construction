@@ -10,6 +10,7 @@ public class AssetManager : Singleton<AssetManager> {
     public Material deleteMaterial;
     public Material arrowMaterial;
     public Material blankMaterial;
+    public Material deployMaterial;
 
     // Use this for initialization
     void Start () {
