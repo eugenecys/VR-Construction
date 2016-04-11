@@ -11,15 +11,16 @@ public class Deployer : Singleton<Deployer>, Interactable {
     AssetManager assetManager;
     Rigidbody rb;
     public GameObject cell; 
+    public Material defaultMaterial;
 
     public void highlight()
     {
-        meshRenderer.material = assetManager.highlightMaterial;
+        meshRenderer.material = assetManager.deployMaterial;
     }
 
     public void unhighlight()
     {
-        meshRenderer.material = assetManager.freeMaterial;
+        meshRenderer.material = defaultMaterial;
     }
 
     public void deploy()

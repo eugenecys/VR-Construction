@@ -18,8 +18,6 @@ public class Wheel : Segment, Controllable {
     {
         setAngularForce(0);
         setAngularVelocity(0);
-        //setAngularForce(Constants.Wheel.FORCE);
-        //setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
     }
 
     protected override void update()
