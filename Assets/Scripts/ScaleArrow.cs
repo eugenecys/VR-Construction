@@ -17,6 +17,10 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     }
 
     public Direction direction;
+    public bool negative
+    {
+        get; private set;
+    }
     Transform dragPoint;
     bool dragging;
     public Scaler scaleParent;
@@ -37,6 +41,11 @@ public class ScaleArrow : MonoBehaviour, Interactable {
         scaleParent.stopScale();
         resetPosition();
         dragging = false;
+    }
+
+    public void setNegative(bool neg)
+    {
+        negative = neg;
     }
 
     public void resetPosition()

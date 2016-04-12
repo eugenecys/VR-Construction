@@ -4,70 +4,171 @@ using System.Collections;
 public class Scaler : MonoBehaviour {
     
     public GameObject target;
-    public Vector3 scalePositions;
     private ScaleArrow scaleObject;
     private Vector3 scaleMultiplier;
     private bool scaling;
-    public ScaleArrow X;
-    public ScaleArrow Y;
-    public ScaleArrow Z;
-    public ScaleArrow Xn;
-    public ScaleArrow Yn;
-    public ScaleArrow Zn;
+    private ScaleArrow[] scaleArrows;
+    public bool uniformScale;
 
     public void initScale(ScaleArrow arrow)
     {
+        switch(arrow.direction)
+        {
+            case ScaleArrow.Direction.X:
+                scaleMultiplier = new Vector3(target.transform.localScale.x / Mathf.Abs(arrow.transform.localPosition.x), 1, 1);
+                break;
+            case ScaleArrow.Direction.Y:
+                scaleMultiplier = new Vector3(1, target.transform.localScale.y / Mathf.Abs(arrow.transform.localPosition.y), 1);
+                break;
+            case ScaleArrow.Direction.Z:
+                scaleMultiplier = new Vector3(1, 1, target.transform.localScale.z / Mathf.Abs(arrow.transform.localPosition.z));
+                break;
+            case ScaleArrow.Direction.All:
+                scaleMultiplier = new Vector3(target.transform.localScale.x / arrow.transform.localPosition.magnitude, target.transform.localScale.y / arrow.transform.localPosition.magnitude, target.transform.localScale.z / arrow.transform.localPosition.magnitude);
+                break;
+        }
         scaleObject = arrow;
         scaling = true;
-        X.hide();
-        Y.hide();
-        Z.hide();
-        Xn.hide();
-        Yn.hide();
-        Zn.hide();
+        foreach (ScaleArrow child in scaleArrows)
+        {
+            child.hide();
+        }
     }
 
     public void stopScale()
     {
         scaling = false;
-        X.show();
-        Y.show();
-        Z.show();
-        Xn.show();
-        Yn.show();
-        Zn.show();
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            arrow.show();
+        }
         resetPositions();
     }
 
     public void resetPositions()
     {
         Vector3 tScale = target.transform.localScale;
-        X.transform.localPosition = new Vector3(tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
-        Xn.transform.localPosition = new Vector3(-tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
-        Y.transform.localPosition = new Vector3(0, tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
-        Yn.transform.localPosition = new Vector3(0, -tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
-        Z.transform.localPosition = new Vector3(0, 0, tScale.z / scaleMultiplier.z + transform.localPosition.z);
-        Zn.transform.localPosition = new Vector3(0, 0, -tScale.z / scaleMultiplier.z + transform.localPosition.z);
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            switch (arrow.direction)
+            {
+                case ScaleArrow.Direction.X:
+                    if (arrow.negative)
+                    {
+                        arrow.transform.localPosition = new Vector3(-tScale.x / scaleMultiplier.x, 0, 0);
+                    }
+                    else
+                    {
+                        arrow.transform.localPosition = new Vector3(tScale.x / scaleMultiplier.x, 0, 0);
+                    }
+                    break;
+                case ScaleArrow.Direction.Y:
+                    if (arrow.negative)
+                    {
+                        arrow.transform.localPosition = new Vector3(0, -tScale.y / scaleMultiplier.x, 0);
+                    }
+                    else
+                    {
+                        arrow.transform.localPosition = new Vector3(0, tScale.y / scaleMultiplier.x, 0);
+                    }
+                    break;
+                case ScaleArrow.Direction.Z:
+                    if (arrow.negative)
+                    {
+                        arrow.transform.localPosition = new Vector3(0, 0, -tScale.x / scaleMultiplier.z);
+                    }
+                    else
+                    {
+                        arrow.transform.localPosition = new Vector3(0, 0, tScale.x / scaleMultiplier.z);
+                    }
+                    break;
+                default:
+                case ScaleArrow.Direction.All:
+                    break;
+            }
+        }
+    }
+
+    void initArrowTransforms()
+    {
+        foreach (ScaleArrow arrow in scaleArrows)
+        {
+            float xMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.right));
+            float yMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.up));
+            float zMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.forward));
+            if (xMag > yMag)
+            {
+                if (zMag > xMag)
+                {
+                    if (uniformScale)
+                    {
+                        arrow.direction = ScaleArrow.Direction.All;
+                    }
+                    else
+                    {
+                        arrow.direction = ScaleArrow.Direction.Z;
+                    }
+                    arrow.transform.localPosition = new Vector3(0, 0, arrow.transform.localPosition.z);
+                    arrow.setNegative(arrow.transform.localPosition.z > 0);
+                }
+                else
+                {
+                    if (uniformScale)
+                    {
+                        arrow.direction = ScaleArrow.Direction.All;
+                    }
+                    else
+                    {
+                        arrow.direction = ScaleArrow.Direction.X;
+                    }
+                    arrow.transform.localPosition = new Vector3(arrow.transform.localPosition.x, 0, 0);
+                    arrow.setNegative(arrow.transform.localPosition.x > 0);
+                }
+            }
+            else
+            {
+                if (zMag > yMag)
+                {
+                    if (uniformScale)
+                    {
+                        arrow.direction = ScaleArrow.Direction.All;
+                    }
+                    else
+                    {
+                        arrow.direction = ScaleArrow.Direction.Z;
+                    }
+                    arrow.transform.localPosition = new Vector3(0, 0, arrow.transform.localPosition.z);
+                    arrow.setNegative(arrow.transform.localPosition.z > 0);
+                }
+                else
+                {
+                    if (uniformScale)
+                    {
+                        arrow.direction = ScaleArrow.Direction.All;
+                    }
+                    else
+                    {
+                        arrow.direction = ScaleArrow.Direction.Y;
+                    }
+                    arrow.transform.localPosition = new Vector3(0, arrow.transform.localPosition.y, 0);
+                    arrow.setNegative(arrow.transform.localPosition.y > 0);
+                }
+            }
+            arrow.transform.rotation = Quaternion.LookRotation(arrow.transform.localPosition);
+
+        }
     }
 
     void Awake()
     {
         scaling = false;
         Vector3 lScale = target.transform.localScale;
-        scaleMultiplier = new Vector3(lScale.x / scalePositions.x, lScale.y / scalePositions.y, lScale.z / scalePositions.z);
-        X.scaleParent = this;
-        Y.scaleParent = this;
-        Z.scaleParent = this;
-        Xn.scaleParent = this;
-        Yn.scaleParent = this;
-        Zn.scaleParent = this;
-
-        X.transform.localPosition = new Vector3(scalePositions.x, 0, 0);
-        Y.transform.localPosition = new Vector3(0,  scalePositions.y, 0);
-        Z.transform.localPosition = new Vector3(0, 0, scalePositions.z);
-        Xn.transform.localPosition = new Vector3(-scalePositions.x, 0, 0);
-        Yn.transform.localPosition = new Vector3(0, -scalePositions.y, 0);
-        Zn.transform.localPosition = new Vector3(0, 0, -scalePositions.z);
+        scaleArrows = GetComponentsInChildren<ScaleArrow>();
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            arrow.scaleParent = this;
+        }
+        initArrowTransforms();
     }
     
 	// Use this for initialization
