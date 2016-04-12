@@ -36,14 +36,13 @@ public class Part : MonoBehaviour, Interactable
     private bool highlighted;
     public bool markedForDelete;
     
-    public Segment[] segments;
+    private Segment[] segments;
     Weapon[] weapons;
     MaterialHandler[] materialHandlers;
     List<Part> connectedParts;
-    public Scaler scaler;
+    private Scaler scaler;
 
     public State state;
-    public Name name;
     
     public bool placed
     {
@@ -85,6 +84,7 @@ public class Part : MonoBehaviour, Interactable
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
         weapons = GetComponentsInChildren<Weapon>();
         connectedParts = new List<Part>();
+        scaler = GetComponentInChildren<Scaler>();
 
         markedForDelete = false;
         highlighted = false;
