@@ -34,4 +34,6 @@ public static class Constants {
     public const string NAME_HELMET = "Helmet";
     public const string NAME_CLAMP = "Clamp";
 
+    public const string NAME_LASER = "Laser";
+    public const string NAME_CANNON = "Cannon";
 }

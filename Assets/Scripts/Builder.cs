@@ -349,6 +349,12 @@ public class Builder : MonoBehaviour {
             case Part.Name.Clamp:
                 partName = Constants.NAME_CLAMP;
                 break;
+            case Part.Name.Laser:
+                partName = Constants.NAME_LASER;
+                break;
+            case Part.Name.Cannon:
+                partName = Constants.NAME_CANNON;
+                break;
         }
         GameObject prefab = Resources.Load("Prefabs/" + partName) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;

@@ -31,7 +31,9 @@ public class Part : MonoBehaviour, Interactable
         Wing,
         Eye,
         Helmet,
-        Clamp
+        Clamp,
+        Laser,
+        Cannon
     }
 
     public bool triggerable;
