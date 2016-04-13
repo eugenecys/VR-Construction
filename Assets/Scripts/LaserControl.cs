@@ -33,7 +33,7 @@ public class LaserControl : Weapon {
         {
             if (hit.transform.tag == "building")
             {
-                hit.transform.GetComponent<Building>().GiveAttack();
+                hit.transform.gameObject.SendMessage("GiveAttack");
             }
         }
 
