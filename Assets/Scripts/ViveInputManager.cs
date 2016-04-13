@@ -115,7 +115,7 @@ public class ViveInputManager : Singleton<ViveInputManager>
         }
         else
         {
-            rightControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
+            leftControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
         }
     }
 
@@ -161,7 +161,7 @@ public class ViveInputManager : Singleton<ViveInputManager>
         }
         else
         {
-            leftControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
+            rightControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
         }
     }
 }
