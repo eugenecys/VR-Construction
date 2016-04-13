@@ -4,70 +4,161 @@ using System.Collections;
 public class Scaler : MonoBehaviour {
     
     public GameObject target;
-    public Vector3 scalePositions;
     private ScaleArrow scaleObject;
-    private Vector3 scaleMultiplier;
+    private Vector3 initialScale;
+    private float distMultiplier;
+    private float initialDist;
     private bool scaling;
-    public ScaleArrow X;
-    public ScaleArrow Y;
-    public ScaleArrow Z;
-    public ScaleArrow Xn;
-    public ScaleArrow Yn;
-    public ScaleArrow Zn;
+    private ScaleArrow[] scaleArrows;
+    public bool uniformScale;
+    private ScaleArrow X;
+    private ScaleArrow Xn;
+    private ScaleArrow Y;
+    private ScaleArrow Yn;
+    private ScaleArrow Z;
+    private ScaleArrow Zn;
 
     public void initScale(ScaleArrow arrow)
     {
         scaleObject = arrow;
+        initialScale = new Vector3(target.transform.localScale.x, target.transform.localScale.y, target.transform.localScale.z);
+        initialDist = arrow.transform.localPosition.magnitude;
         scaling = true;
-        X.hide();
-        Y.hide();
-        Z.hide();
-        Xn.hide();
-        Yn.hide();
-        Zn.hide();
+        switch(arrow.direction)
+        {
+            case ScaleArrow.Direction.X:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.x / target.transform.localScale.x);
+                break;
+            case ScaleArrow.Direction.Y:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.y / target.transform.localScale.y);
+                break;
+            case ScaleArrow.Direction.Z:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.z / target.transform.localScale.z);
+                break;
+        }
+        foreach (ScaleArrow child in scaleArrows)
+        {
+            child.initialPosition = child.transform.localPosition;
+            child.hide();
+        }
     }
 
     public void stopScale()
     {
         scaling = false;
-        X.show();
-        Y.show();
-        Z.show();
-        Xn.show();
-        Yn.show();
-        Zn.show();
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            arrow.show();
+        }
         resetPositions();
     }
 
     public void resetPositions()
     {
         Vector3 tScale = target.transform.localScale;
-        X.transform.localPosition = new Vector3(tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
-        Xn.transform.localPosition = new Vector3(-tScale.x / scaleMultiplier.x + transform.localPosition.x, 0, 0);
-        Y.transform.localPosition = new Vector3(0, tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
-        Yn.transform.localPosition = new Vector3(0, -tScale.y / scaleMultiplier.y + transform.localPosition.y, 0);
-        Z.transform.localPosition = new Vector3(0, 0, tScale.z / scaleMultiplier.z + transform.localPosition.z);
-        Zn.transform.localPosition = new Vector3(0, 0, -tScale.z / scaleMultiplier.z + transform.localPosition.z);
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            switch (arrow.direction)
+            {
+                case ScaleArrow.Direction.X:
+                    arrow.transform.localPosition = new Vector3(tScale.x * distMultiplier * (arrow.negative ? -1 : 1), 0, 0);
+                    break;
+                case ScaleArrow.Direction.Y:
+                    arrow.transform.localPosition = new Vector3(0, tScale.y * distMultiplier * (arrow.negative ? -1 : 1), 0);
+                    break;
+                case ScaleArrow.Direction.Z:
+                    arrow.transform.localPosition = new Vector3(0, 0, tScale.z * distMultiplier * (arrow.negative ? -1 : 1));
+                    break;
+            }
+        }
+    }
+
+    void initArrows()
+    {
+        foreach (ScaleArrow arrow in scaleArrows)
+        {
+            float xMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.right));
+            float yMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.up));
+            float zMag = Mathf.Abs(Vector3.Dot(arrow.transform.localPosition, Vector3.forward));
+            if (xMag > yMag)
+            {
+                if (zMag > xMag)
+                {
+                    arrow.direction = ScaleArrow.Direction.Z;
+                    arrow.transform.localPosition = new Vector3(0, 0, arrow.transform.localPosition.z);
+                    if (arrow.transform.localPosition.z < 0)
+                    {
+                        arrow.setNegative(true);
+                        Zn = arrow;
+                    } else
+                    {
+                        arrow.setNegative(false);
+                        Z = arrow;
+                    }
+                }
+                else
+                {
+                    arrow.direction = ScaleArrow.Direction.X;
+                    arrow.transform.localPosition = new Vector3(arrow.transform.localPosition.x, 0, 0);
+                    if (arrow.transform.localPosition.x < 0)
+                    {
+                        arrow.setNegative(true);
+                        Xn = arrow;
+                    }
+                    else
+                    {
+                        arrow.setNegative(false);
+                        X = arrow;
+                    }
+                }
+            }
+            else
+            {
+                if (zMag > yMag)
+                {
+                    arrow.direction = ScaleArrow.Direction.Z;
+                    arrow.transform.localPosition = new Vector3(0, 0, arrow.transform.localPosition.z);
+                    if (arrow.transform.localPosition.z < 0)
+                    {
+                        arrow.setNegative(true);
+                        Zn = arrow;
+                    }
+                    else
+                    {
+                        arrow.setNegative(false);
+                        Z = arrow;
+                    }
+                }
+                else
+                {
+                    arrow.direction = ScaleArrow.Direction.Y;
+                    arrow.transform.localPosition = new Vector3(0, arrow.transform.localPosition.y, 0);
+                    if (arrow.transform.localPosition.y < 0)
+                    {
+                        arrow.setNegative(true);
+                        Yn = arrow;
+                    }
+                    else
+                    {
+                        arrow.setNegative(false);
+                        Y = arrow;
+                    }
+                }
+            }
+            arrow.transform.localRotation = Quaternion.LookRotation(arrow.transform.localPosition);
+        }
     }
 
     void Awake()
     {
         scaling = false;
         Vector3 lScale = target.transform.localScale;
-        scaleMultiplier = new Vector3(lScale.x / scalePositions.x, lScale.y / scalePositions.y, lScale.z / scalePositions.z);
-        X.scaleParent = this;
-        Y.scaleParent = this;
-        Z.scaleParent = this;
-        Xn.scaleParent = this;
-        Yn.scaleParent = this;
-        Zn.scaleParent = this;
-
-        X.transform.localPosition = new Vector3(scalePositions.x, 0, 0);
-        Y.transform.localPosition = new Vector3(0,  scalePositions.y, 0);
-        Z.transform.localPosition = new Vector3(0, 0, scalePositions.z);
-        Xn.transform.localPosition = new Vector3(-scalePositions.x, 0, 0);
-        Yn.transform.localPosition = new Vector3(0, -scalePositions.y, 0);
-        Zn.transform.localPosition = new Vector3(0, 0, -scalePositions.z);
+        scaleArrows = GetComponentsInChildren<ScaleArrow>();
+        foreach(ScaleArrow arrow in scaleArrows)
+        {
+            arrow.scaleParent = this;
+        }
+        initArrows();
     }
     
 	// Use this for initialization
@@ -79,26 +170,28 @@ public class Scaler : MonoBehaviour {
 	void Update () {
 	    if (scaling)
         {
-            Vector3 scale = target.transform.localScale;
             float newLength = 0;
-            switch (scaleObject.direction)
+            if (uniformScale)
             {
-                case ScaleArrow.Direction.X:
-                    newLength = Mathf.Abs(scaleObject.transform.localPosition.x - transform.localPosition.x);
-                    target.transform.localScale = new Vector3(scaleMultiplier.x * newLength, scale.y, scale.z);
-                    break;
-                case ScaleArrow.Direction.Y:
-                    newLength = Mathf.Abs(scaleObject.transform.localPosition.y - transform.localPosition.y);
-                    target.transform.localScale = new Vector3(scale.x, scaleMultiplier.y * newLength, scale.z);
-                    break;
-                case ScaleArrow.Direction.Z:
-                    newLength = Mathf.Abs(scaleObject.transform.localPosition.z - transform.localPosition.z);
-                    target.transform.localScale = new Vector3(scale.x, scale.y, scaleMultiplier.z * newLength);
-                    break;
-                case ScaleArrow.Direction.All:
-                    newLength = (scaleObject.transform.localPosition - transform.localPosition).magnitude;
-                    target.transform.localScale = new Vector3(scaleMultiplier.x * newLength, scaleMultiplier.y * newLength, scaleMultiplier.z * newLength);
-                    break;
+                newLength = scaleObject.transform.localPosition.magnitude;
+                target.transform.localScale = initialScale * newLength / initialDist;
+            }
+            else {
+                switch (scaleObject.direction)
+                {
+                    case ScaleArrow.Direction.X:
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
+                        target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
+                        break;
+                    case ScaleArrow.Direction.Y:
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
+                        target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
+                        break;
+                    case ScaleArrow.Direction.Z:
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
+                        target.transform.localScale = new Vector3(initialScale.x, initialScale.y, initialScale.z * newLength / initialDist);
+                        break;
+                }
             }
         }
 	}

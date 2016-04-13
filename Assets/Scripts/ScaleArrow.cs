@@ -12,11 +12,14 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     {
         X,
         Y,
-        Z,
-        All
+        Z
     }
 
     public Direction direction;
+    public bool negative
+    {
+        get; private set;
+    }
     Transform dragPoint;
     bool dragging;
     public Scaler scaleParent;
@@ -24,6 +27,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     private Material defaultMaterial;
     MeshRenderer meshRenderer;
     private Collider col;
+    public Vector3 initialPosition;
     
     public void followDrag(Transform origin)
     {
@@ -39,6 +43,11 @@ public class ScaleArrow : MonoBehaviour, Interactable {
         dragging = false;
     }
 
+    public void setNegative(bool neg)
+    {
+        negative = neg;
+    }
+
     public void resetPosition()
     {
         switch(direction)
@@ -51,8 +60,6 @@ public class ScaleArrow : MonoBehaviour, Interactable {
                 break;
             case Direction.Z:
                 transform.localPosition = new Vector3(0, 0, transform.localPosition.z);
-                break;
-            case Direction.All:
                 break;
         }
     }

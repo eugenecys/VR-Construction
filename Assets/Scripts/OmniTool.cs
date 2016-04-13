@@ -6,10 +6,9 @@ public class OmniTool : MonoBehaviour
     GameManager gameManager;
     ViveInputManager inputManager;
     public Builder builder;
-
-    //Xiqiao Add
     public PlayMode playMode;
-    
+
+
     public enum Side
     {
         Left,

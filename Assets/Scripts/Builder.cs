@@ -226,7 +226,7 @@ public class Builder : MonoBehaviour {
 
     public void SpawnComponent(Part part)
     {
-        SpawnComponent(part.name, spawnPoint.position);
+        SpawnComponent(part, spawnPoint.position);
     }
 
     void OnTriggerStay(Collider other)
@@ -293,70 +293,11 @@ public class Builder : MonoBehaviour {
         {
             triggerRobot();
         }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SpawnComponent(Part.Name.Cube, spawnposition);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SpawnComponent(Part.Name.Rod, spawnposition);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            SpawnComponent(Part.Name.Wheel, spawnposition);
-        }
 	}
 
-    public void SpawnComponent(Part.Name part, Vector3 position)
+    public void SpawnComponent(Part part, Vector3 position)
     {
-        string partName = "";
-        switch (part)
-        {
-            case Part.Name.Wheel:
-                partName = Constants.NAME_WHEEL;
-                break;
-            case Part.Name.Rod:
-                partName = Constants.NAME_ROD;
-                break;
-            case Part.Name.Chain:
-                partName = Constants.NAME_CHAIN;
-                break;
-            case Part.Name.Cube:
-                partName = Constants.NAME_CUBE;
-                break;
-            case Part.Name.Gun:
-                partName = Constants.NAME_GUN;
-                break;
-            case Part.Name.WheelR:
-                partName = Constants.NAME_WHEEL_REVERSE;
-                break;
-            case Part.Name.Propeller:
-                partName = Constants.NAME_PROPELLER;
-                break;
-            case Part.Name.Saw:
-                partName = Constants.NAME_SAW;
-                break;
-            //Xiqiao Add
-            case Part.Name.Wing:
-                partName = Constants.NAME_WING;
-                break;
-            case Part.Name.Eye:
-                partName = Constants.NAME_EYE;
-                break;
-            case Part.Name.Helmet:
-                partName = Constants.NAME_HELMET;
-                break;
-            case Part.Name.Clamp:
-                partName = Constants.NAME_CLAMP;
-                break;
-            case Part.Name.Laser:
-                partName = Constants.NAME_LASER;
-                break;
-            case Part.Name.Cannon:
-                partName = Constants.NAME_CANNON;
-                break;
-        }
-        GameObject prefab = Resources.Load("Prefabs/" + partName) as GameObject;
+        GameObject prefab = Resources.Load("Prefabs/" + part.name) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
         sObj.transform.parent = this.transform;
         Part spawnedPart = sObj.GetComponent<Part>();
