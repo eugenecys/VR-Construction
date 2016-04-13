@@ -19,5 +19,4 @@ public static class Constants {
         public const float ANGULAR_VELOCITY = 300f;
         public const float FORCE = 1000f;
     }
-    
 }

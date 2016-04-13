@@ -28,7 +28,12 @@ public class Part : MonoBehaviour, Interactable
         Propeller,
         Saw,
         //Xiqiao Add
-        Wing
+        Wing,
+        Eye,
+        Helmet,
+        Clamp,
+        Laser,
+        Cannon
     }
 
     public bool triggerable;
