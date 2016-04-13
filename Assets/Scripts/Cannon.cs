@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class Cannon : Weapon {
+public class Cannon : Weapon,Controllable {
     public GameObject ammo;
     public float ammoVelocity;
     public GameObject dirCoordinator;
@@ -22,9 +23,20 @@ public class Cannon : Weapon {
 
     public override void fire()
     {
-        GameObject sObj = Object.Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
+        
+    }
+
+    public void trigger()
+    {
+        GameObject sObj = Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
+        //throw new NotImplementedException();
+    }
+
+    public void joystick(Vector2 coordinates)
+    {
+        throw new NotImplementedException();
     }
 }

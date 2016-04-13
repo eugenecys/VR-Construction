@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class LaserControl : Weapon {
+public class LaserControl : Weapon,Controllable {
     public float lineLen;
     public float duration;
     public GameObject laser;
@@ -19,8 +20,7 @@ public class LaserControl : Weapon {
 
     public override void fire()
     {
-        StopCoroutine(FireLaser());
-        StartCoroutine(FireLaser());
+        
     }
 
     IEnumerator FireLaser() {
@@ -40,5 +40,17 @@ public class LaserControl : Weapon {
         yield return new WaitForSeconds(duration);
 
         mesh.enabled = false;
+    }
+
+    public void trigger()
+    {
+        StopCoroutine(FireLaser());
+        StartCoroutine(FireLaser());
+        //throw new NotImplementedException();
+    }
+
+    public void joystick(Vector2 coordinates)
+    {
+        throw new NotImplementedException();
     }
 }

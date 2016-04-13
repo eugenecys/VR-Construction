@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour {
 
     public virtual void fire()
     {
+
     }
 
 	// Use this for initialization
