@@ -12,8 +12,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     {
         X,
         Y,
-        Z,
-        All
+        Z
     }
 
     public Direction direction;
@@ -60,8 +59,6 @@ public class ScaleArrow : MonoBehaviour, Interactable {
                 break;
             case Direction.Z:
                 transform.localPosition = new Vector3(0, 0, transform.localPosition.z);
-                break;
-            case Direction.All:
                 break;
         }
     }
