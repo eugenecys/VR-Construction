@@ -27,6 +27,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     private Material defaultMaterial;
     MeshRenderer meshRenderer;
     private Collider col;
+    public Vector3 initialPosition;
     
     public void followDrag(Transform origin)
     {

@@ -6,6 +6,7 @@ public class Scaler : MonoBehaviour {
     public GameObject target;
     private ScaleArrow scaleObject;
     private Vector3 initialScale;
+    private float distMultiplier;
     private float initialDist;
     private bool scaling;
     private ScaleArrow[] scaleArrows;
@@ -23,8 +24,21 @@ public class Scaler : MonoBehaviour {
         initialScale = new Vector3(target.transform.localScale.x, target.transform.localScale.y, target.transform.localScale.z);
         initialDist = arrow.transform.localPosition.magnitude;
         scaling = true;
+        switch(arrow.direction)
+        {
+            case ScaleArrow.Direction.X:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.x / target.transform.localScale.x);
+                break;
+            case ScaleArrow.Direction.Y:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.y / target.transform.localScale.y);
+                break;
+            case ScaleArrow.Direction.Z:
+                distMultiplier = Mathf.Abs(arrow.transform.localPosition.z / target.transform.localScale.z);
+                break;
+        }
         foreach (ScaleArrow child in scaleArrows)
         {
+            child.initialPosition = child.transform.localPosition;
             child.hide();
         }
     }
@@ -42,22 +56,18 @@ public class Scaler : MonoBehaviour {
     public void resetPositions()
     {
         Vector3 tScale = target.transform.localScale;
-        float dScale = 0;
         foreach(ScaleArrow arrow in scaleArrows)
         {
             switch (arrow.direction)
             {
                 case ScaleArrow.Direction.X:
-                    dScale = tScale.x / initialScale.x;
-                    arrow.transform.localPosition = new Vector3(arrow.transform.localPosition.x * dScale, 0, 0);
+                    arrow.transform.localPosition = new Vector3(tScale.x * distMultiplier * (arrow.negative ? -1 : 1), 0, 0);
                     break;
                 case ScaleArrow.Direction.Y:
-                    dScale = tScale.y / initialScale.y;
-                    arrow.transform.localPosition = new Vector3(0, arrow.transform.localPosition.y * dScale, 0);
+                    arrow.transform.localPosition = new Vector3(0, tScale.y * distMultiplier * (arrow.negative ? -1 : 1), 0);
                     break;
                 case ScaleArrow.Direction.Z:
-                    dScale = tScale.x / initialScale.x;
-                    arrow.transform.localPosition = new Vector3(0, 0, arrow.transform.localPosition.z * dScale);
+                    arrow.transform.localPosition = new Vector3(0, 0, tScale.z * distMultiplier * (arrow.negative ? -1 : 1));
                     break;
             }
         }
@@ -135,7 +145,7 @@ public class Scaler : MonoBehaviour {
                     }
                 }
             }
-            arrow.transform.rotation = Quaternion.LookRotation(arrow.transform.localPosition);
+            arrow.transform.localRotation = Quaternion.LookRotation(arrow.transform.localPosition);
         }
     }
 
