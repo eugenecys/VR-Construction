@@ -4,6 +4,7 @@ using System.Collections;
 public class Cannon : Weapon {
     public GameObject ammo;
     public float ammoVelocity;
+    public GameObject dirCoordinator;
     // Use this for initialization
 
     void Awake()
@@ -21,9 +22,9 @@ public class Cannon : Weapon {
 
     public override void fire()
     {
-        GameObject sObj = Object.Instantiate(ammo, transform.position, Quaternion.identity) as GameObject;
+        GameObject sObj = Object.Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
-        rb.velocity = ammoVelocity * transform.forward;
+        rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
     }
 }
