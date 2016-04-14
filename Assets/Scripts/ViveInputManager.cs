@@ -84,11 +84,11 @@ public class ViveInputManager : Singleton<ViveInputManager>
             {
                 if (leftTriggerOn && inputMap.ContainsKey(InputType.LeftTriggerAndTouchpad))
                 {
-                    inputMap[InputType.LeftTriggerAndTouchpad]();
+                    inputMap[InputType.LeftTriggerAndTouchpad](device.GetAxis());
                 } 
                 else
                 {
-                    inputMap[InputType.LeftTouchpadDown]();
+                    inputMap[InputType.LeftTouchpadDown](device.GetAxis());
                 }
             }
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.LeftApplicationMenuDown))
@@ -130,11 +130,11 @@ public class ViveInputManager : Singleton<ViveInputManager>
             {
                 if (rightTriggerOn && inputMap.ContainsKey(InputType.RightTriggerAndTouchpad))
                 {
-                    inputMap[InputType.RightTriggerAndTouchpad]();
+                    inputMap[InputType.RightTriggerAndTouchpad](device.GetAxis());
                 }
                 else
                 {
-                    inputMap[InputType.RightTouchpadDown]();
+                    inputMap[InputType.RightTouchpadDown](device.GetAxis());
                 }
             }
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.RightApplicationMenuDown))
