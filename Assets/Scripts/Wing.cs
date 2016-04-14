@@ -47,14 +47,12 @@ public class Wing : Segment {
             }
         }
     }
-
-    //Xiqiao Add
+    
     public override void move()
     {
         setAngularForce(Constants.Wing.FORCE);
     }
-
-    //Xiqiao Add
+    
     public override void stop()
     {
         setAngularForce(0);
@@ -62,7 +60,7 @@ public class Wing : Segment {
 
     public void setAngularForce(float force)
     {
-        rigidbody.AddForceAtPosition(force * transform.forward, transform.position, ForceMode.Force);
+        rb.AddForceAtPosition(force * transform.forward, transform.position, ForceMode.Force);
     }
 
     public void on()

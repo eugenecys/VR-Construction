@@ -52,21 +52,7 @@ public class Wheel : Segment, Controllable {
             }
         }
     }
-
-    //Xiqiao Add
-    public override void move()
-    {
-        setAngularForce(Constants.Wheel.FORCE);
-        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
-    }
-
-    //Xiqiao Add
-    public override void stop()
-    {
-        setAngularForce(0);
-        setAngularVelocity(0);
-    }
-
+    
     public void setAngularVelocity(float vel)
     {
         JointMotor motor = wheel.motor;
@@ -100,6 +86,17 @@ public class Wheel : Segment, Controllable {
 
     public void joystick(Vector2 coordinates)
     {
-        
+        setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
+        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY * coordinates.magnitude);
+    }
+
+    public void triggerStop()
+    {
+    }
+
+    public void joystickStop()
+    {
+        setAngularForce(0);
+        setAngularVelocity(0);
     }
 }

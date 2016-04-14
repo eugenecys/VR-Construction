@@ -8,18 +8,16 @@ public abstract class Segment : MonoBehaviour {
 
     AssetManager assetManager;
     protected Robot robot;
-    
+
     public Part parent;
     public List<Segment> connectedSegments;
     public List<Segment> touchingSegments;
-    public Collider collider;
-    public Rigidbody rigidbody;
-    public Collider detector;
+    protected Collider col;
+    protected Rigidbody rb;
+    protected Collider detector;
 
     protected bool active;
     
-    public bool movable;
-
     public void connect()
     {
         foreach (Segment touchingSegment in touchingSegments)
@@ -27,7 +25,7 @@ public abstract class Segment : MonoBehaviour {
             if (!touchingSegment.isConnected(this) && !touchingSegment.parent.unconnectable)
             {
                 FixedJoint fJoint = gameObject.AddComponent<FixedJoint>();
-                fJoint.connectedBody = touchingSegment.rigidbody;
+                fJoint.connectedBody = touchingSegment.rb;
                 connectedSegments.Add(touchingSegment);
                 parent.addConnectedPart(touchingSegment.parent);
                 touchingSegment.parent.addConnectedPart(parent);
@@ -39,7 +37,7 @@ public abstract class Segment : MonoBehaviour {
             }
         }
 
-        rigidbody.useGravity = false;
+        rb.useGravity = false;
         resetPhysics();
         active = false;
         refresh();
@@ -51,7 +49,10 @@ public abstract class Segment : MonoBehaviour {
         connectedSegments = new List<Segment>();
         touchingSegments = new List<Segment>();
         robot = Robot.Instance;
-        rigidbody.isKinematic = true;
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+        detector = GetComponentInChildren<Collider>();
+        rb.isKinematic = true;
 	}
 
     void Start()
@@ -63,18 +64,18 @@ public abstract class Segment : MonoBehaviour {
 
     public void enablePhysics()
     {
-        rigidbody.isKinematic = false;
+        rb.isKinematic = false;
     }
 
     public void disablePhysics()
     {
-        rigidbody.isKinematic = true;
+        rb.isKinematic = true;
     }
 
     public void deploy()
     {
         //trigger.isTrigger = false;
-        rigidbody.useGravity = true;
+        rb.useGravity = true;
         enablePhysics();
         resetPhysics(); 
         active = true;
@@ -84,7 +85,7 @@ public abstract class Segment : MonoBehaviour {
     public void activate()
     {
         //trigger.isTrigger = false;
-        rigidbody.useGravity = false;
+        rb.useGravity = false;
         disablePhysics();
         resetPhysics(); 
         active = true;
@@ -94,7 +95,7 @@ public abstract class Segment : MonoBehaviour {
     public void reset()
     {
         //trigger.isTrigger = true;
-        rigidbody.useGravity = false;
+        rb.useGravity = false;
         disablePhysics();
         resetPhysics(); 
         active = false;
@@ -184,8 +185,8 @@ public abstract class Segment : MonoBehaviour {
 
     public void resetPhysics()
     {
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.angularVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     protected abstract void init();

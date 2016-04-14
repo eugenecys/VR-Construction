@@ -94,6 +94,11 @@ public class Builder : MonoBehaviour {
         robot.trigger();
     }
 
+    public void triggerRobotStop()
+    {
+        robot.triggerStop();
+    }
+
     void Awake()
     {
         robot = Robot.Instance;

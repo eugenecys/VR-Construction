@@ -12,6 +12,9 @@ public class MachineGun : Weapon {
         rb.velocity = ammoVelocity * transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
     }
+    
+
+
 
     void Awake()
     {

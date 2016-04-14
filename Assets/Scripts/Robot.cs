@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Robot : Singleton<Robot> {
+public class Robot : Singleton<Robot>, Controllable {
 
     Part[] parts;
 
@@ -33,21 +33,35 @@ public class Robot : Singleton<Robot> {
             }
         }
     }
-    
-    public void move() {
-        foreach (Part part in parts) {
-            if (!part.controllable) {
-                part.move();
+
+    public void triggerStop()
+    {
+        foreach (Part part in parts)
+        {
+            if (part.controllable)
+            {
+                part.triggerStop();
             }
         }
     }
-    
-    public void stop() {
+    public void joystick(Vector2 vec)
+    {
         foreach (Part part in parts)
         {
-            if (!part.controllable)
+            if (part.controllable)
             {
-                part.stop();
+                part.joystick(vec);
+            }
+        }
+    }
+
+    public void joystickStop()
+    {
+        foreach (Part part in parts)
+        {
+            if (part.controllable)
+            {
+                part.joystickStop();
             }
         }
     }

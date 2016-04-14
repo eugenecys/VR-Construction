@@ -37,8 +37,13 @@ public class ViveInputManager : Singleton<ViveInputManager>
         LeftApplicationMenuUp,
         RightApplicationMenuUp,
 
+        LeftTouchpadAxis,
+        RightTouchpadAxis,
+
         LeftTriggerAndTouchpad,
-        RightTriggerAndTouchpad
+        RightTriggerAndTouchpad,
+
+        
     }
 
     void Awake()
@@ -72,16 +77,18 @@ public class ViveInputManager : Singleton<ViveInputManager>
 
     void updateLeft()
     {
-        if (leftControllerIndex != -1)
+        if (leftControllerIndex != -1 && leftControllerIndex != rightControllerIndex)
         {
             SteamVR_Controller.Device device = SteamVR_Controller.Input(leftControllerIndex);
 
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && inputMap.ContainsKey(InputType.LeftTriggerDown))
             {
+                leftTriggerOn = true;
                 inputMap[InputType.LeftTriggerDown]();
             }
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad) && inputMap.ContainsKey(InputType.LeftTouchpadDown))
             {
+                leftTouchpadOn = true;
                 if (leftTriggerOn && inputMap.ContainsKey(InputType.LeftTriggerAndTouchpad))
                 {
                     inputMap[InputType.LeftTriggerAndTouchpad](device.GetAxis());
@@ -93,19 +100,28 @@ public class ViveInputManager : Singleton<ViveInputManager>
             }
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.LeftApplicationMenuDown))
             {
+                leftApplicationmenuOn = true;
                 inputMap[InputType.LeftApplicationMenuDown]();
             }
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger) && inputMap.ContainsKey(InputType.LeftTriggerUp))
             {
+                leftTriggerOn = false;
                 inputMap[InputType.LeftTriggerUp]();
             }
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad) && inputMap.ContainsKey(InputType.LeftTouchpadUp))
             {
+                leftTouchpadOn = false;
                 inputMap[InputType.LeftTouchpadUp]();
             }
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.LeftApplicationMenuUp))
             {
+                leftApplicationmenuOn = false;
                 inputMap[InputType.LeftApplicationMenuUp]();
+            }
+            
+            if (leftTouchpadOn && inputMap.ContainsKey(InputType.LeftTouchpadAxis))
+            {
+                inputMap[InputType.LeftTouchpadAxis](device.GetAxis());
             }
         }
         else
@@ -118,7 +134,7 @@ public class ViveInputManager : Singleton<ViveInputManager>
 
     void updateRight()
     {
-        if (rightControllerIndex != -1)
+        if (rightControllerIndex != -1 && rightControllerIndex != leftControllerIndex)
         {
             SteamVR_Controller.Device device = SteamVR_Controller.Input(rightControllerIndex);
 
@@ -152,6 +168,11 @@ public class ViveInputManager : Singleton<ViveInputManager>
             if (device.GetPressUp(SteamVR_Controller.ButtonMask.ApplicationMenu) && inputMap.ContainsKey(InputType.RightApplicationMenuUp))
             {
                 inputMap[InputType.RightApplicationMenuUp]();
+            }
+
+            if (rightTouchpadOn && inputMap.ContainsKey(InputType.RightTouchpadAxis))
+            {
+                inputMap[InputType.RightTouchpadAxis](device.GetAxis());
             }
         }
         else

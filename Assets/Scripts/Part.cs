@@ -214,30 +214,27 @@ public class Part : MonoBehaviour, Interactable
         }
     }
 
-    public void joystickInput(Vector2 input)
+    public void triggerStop()
+    {
+        foreach (Controllable controllable in controllables)
+        {
+            controllable.triggerStop();
+        }
+    }
+
+    public void joystick(Vector2 input)
     {
         foreach (Controllable controllable in controllables)
         {
             controllable.joystick(input);
         }
     }
-    
-    public void move() {
-        foreach (Segment cpt in segments) {
-            if (cpt.movable) {
-                cpt.move();
-            }
-        }
-    }
 
-    //Xiqiao Add
-    public void stop() {
-        foreach (Segment cpt in segments)
+    public void joystickStop()
+    {
+        foreach (Controllable controllable in controllables)
         {
-            if (cpt.movable)
-            {
-                cpt.stop();
-            }
+            controllable.joystickStop();
         }
     }
 

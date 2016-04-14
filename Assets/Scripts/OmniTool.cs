@@ -17,6 +17,8 @@ public class OmniTool : MonoBehaviour
     
     public Side side;
 
+    private Vector2 axis;
+
     void Awake()
     {
         gameManager = GameManager.Instance;
@@ -29,6 +31,7 @@ public class OmniTool : MonoBehaviour
             inputManager.registerFunction(triggerUp, ViveInputManager.InputType.LeftTriggerUp);
             inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.LeftTouchpadUp);
             inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.LeftApplicationMenuUp);
+            inputManager.registerFunction(touchpadAxis, ViveInputManager.InputType.LeftTouchpadAxis);
         }
         else
         {
@@ -38,15 +41,24 @@ public class OmniTool : MonoBehaviour
             inputManager.registerFunction(triggerUp, ViveInputManager.InputType.RightTriggerUp);
             inputManager.registerFunction(touchpadUp, ViveInputManager.InputType.RightTouchpadUp);
             inputManager.registerFunction(applicationmenuUp, ViveInputManager.InputType.RightApplicationMenuUp);
+            inputManager.registerFunction(touchpadAxis, ViveInputManager.InputType.RightTouchpadAxis);
         }
     }
-    
+
     public void applicationmenuDown(params object[] args)
     {
         builder.menu();
         gameManager.state = GameManager.GameState.Build;
     }
 
+    public void touchpadAxis(params object[] args)
+    {
+        if (args.Length > 0)
+        {
+            axis = (Vector2)args[0];
+        }
+    }
+    
     public void triggerDown(params object[] args)
     {
         switch (gameManager.state)
@@ -55,36 +67,9 @@ public class OmniTool : MonoBehaviour
                 builder.triggerDown();
                 break;
             case GameManager.GameState.Play:
-                playMode.SetController(side, PlayMode.InputType.triggerDown);
+                playMode.triggerDown();
                 break;
         }
-    }
-
-    public void touchpadDown(params object[] args)
-    {
-        if (args.Length > 0)
-        {
-            // Get position of touch
-        }
-        switch (gameManager.state)
-        {
-            case GameManager.GameState.Build:
-                break;
-            case GameManager.GameState.Play:
-                playMode.SetController(side, PlayMode.InputType.touchpadDown);
-                break;
-        }
-    }
-    
-    public void touchpadUp(params object[] args) {
-        if (gameManager.state == GameManager.GameState.Play) {
-            playMode.SetController(side, PlayMode.InputType.touchpadUp);
-        }
-    }
-    
-    public void applicationmenuUp(params object[] args)
-    {
-
     }
 
     public void triggerUp(params object[] args)
@@ -95,14 +80,44 @@ public class OmniTool : MonoBehaviour
                 builder.triggerUp();
                 break;
             case GameManager.GameState.Play:
+                playMode.triggerUp();
                 break;
         }
+    }
+
+    public void touchpadDown(params object[] args)
+    {
+        switch (gameManager.state)
+        {
+            case GameManager.GameState.Build:
+                break;
+            case GameManager.GameState.Play:
+                playMode.touchPadDown(axis);
+                break;
+        }
+    }
+    
+    public void touchpadUp(params object[] args) {
+
+        switch (gameManager.state)
+        {
+            case GameManager.GameState.Build:
+                break;
+            case GameManager.GameState.Play:
+                playMode.touchPadUp();
+                break;
+        }
+    }
+    
+    public void applicationmenuUp(params object[] args)
+    {
+
     }
     
     // Use this for initialization
     void Start()
     {
-
+        axis = Vector2.zero;
     }
 
     // Update is called once per frame

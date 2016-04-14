@@ -2,16 +2,10 @@
 using System.Collections;
 
 public class PlayMode : MonoBehaviour{
-    public enum InputType {
-        triggerDown = 1,
-        touchpadDown = 2,
-        triggerUp = 3,
-        touchpadUp = 4
-    }
-    
-    private InputType curInput;
 
     private Robot robot;
+    private Vector2 smoothAxis;
+    private int smoothing = 8;
 
     void Awake() {
         robot = Robot.Instance;
@@ -25,39 +19,23 @@ public class PlayMode : MonoBehaviour{
     void Update() {
 
     }
-
-    public void SetController(OmniTool.Side side, InputType type) {
-        var deviceIndex = side == OmniTool.Side.Left ? SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost) : SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
-        curInput = type;
-
-        switch (curInput) {
-            case InputType.triggerDown:
-                TriggerDown(deviceIndex);
-                break;
-            case InputType.touchpadDown:
-                TouchPadDown(deviceIndex);
-                break;
-            case InputType.triggerUp:
-                TriggerUp(deviceIndex);
-                break;
-            case InputType.touchpadUp:
-                TouchPadUp(deviceIndex);
-                break;
-        }
-    }
-
-    void TriggerDown(int index) {
+    
+    public void triggerDown() {
         robot.trigger();
     }
 
-    void TouchPadDown(int index) {
-        robot.move();
+    public void touchPadDown(Vector2 vec)
+    {
+        smoothAxis = smoothAxis * 7 / 8 + vec / 8;
+        robot.joystick(smoothAxis);
     }
 
-    void TouchPadUp(int index) {
-        robot.stop();
+    public void touchPadUp() {
+        robot.joystickStop();
     }
 
-    void TriggerUp(int index) {
+    public void triggerUp()
+    {
+        robot.triggerStop();
     }
 }

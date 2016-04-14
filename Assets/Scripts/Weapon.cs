@@ -11,7 +11,17 @@ public class Weapon : MonoBehaviour, Controllable {
 
     }
 
+    public virtual void joystickStop()
+    {
+
+    }
+
     public virtual void trigger()
+    {
+
+    }
+
+    public virtual void triggerStop()
     {
 
     }
