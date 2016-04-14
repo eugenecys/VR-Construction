@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class ViveInputManager : Singleton<ViveInputManager>
 {
-
-    SteamVR_Controller leftController;
-    SteamVR_Controller rightController;
-
-    public GameObject leftControllerObject;
-    public GameObject rightControllerObject;
+    public SteamVR_TrackedObject leftControllerObject;
+    public SteamVR_TrackedObject rightControllerObject;
 
     int leftControllerIndex = -1;
     int rightControllerIndex = -1;
@@ -78,8 +75,6 @@ public class ViveInputManager : Singleton<ViveInputManager>
         if (leftControllerIndex != -1)
         {
             SteamVR_Controller.Device device = SteamVR_Controller.Input(leftControllerIndex);
-            leftControllerObject.transform.position = device.transform.pos;
-            leftControllerObject.transform.rotation = device.transform.rot;
 
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && inputMap.ContainsKey(InputType.LeftTriggerDown))
             {
@@ -116,6 +111,8 @@ public class ViveInputManager : Singleton<ViveInputManager>
         else
         {
             leftControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Leftmost);
+            leftControllerObject.index = (SteamVR_TrackedObject.EIndex)leftControllerIndex;
+            leftControllerObject.isValid = true;
         }
     }
 
@@ -124,8 +121,6 @@ public class ViveInputManager : Singleton<ViveInputManager>
         if (rightControllerIndex != -1)
         {
             SteamVR_Controller.Device device = SteamVR_Controller.Input(rightControllerIndex);
-            rightControllerObject.transform.position = device.transform.pos;
-            rightControllerObject.transform.rotation = device.transform.rot;
 
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && inputMap.ContainsKey(InputType.RightTriggerDown))
             {
@@ -162,6 +157,8 @@ public class ViveInputManager : Singleton<ViveInputManager>
         else
         {
             rightControllerIndex = SteamVR_Controller.GetDeviceIndex(SteamVR_Controller.DeviceRelation.Rightmost);
+            rightControllerObject.index = (SteamVR_TrackedObject.EIndex)rightControllerIndex;
+            rightControllerObject.isValid = true;
         }
     }
 }
