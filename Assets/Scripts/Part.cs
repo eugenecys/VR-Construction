@@ -16,27 +16,8 @@ public class Part : MonoBehaviour, Interactable
         MarkedForDelete,
         Highlight
     }
-
-    public enum Name
-    {
-        Wheel,
-        Gun,
-        Chain,
-        Cube,
-        Rod,
-        WheelR,
-        Propeller,
-        Saw,
-        //Xiqiao Add
-        Wing,
-        Eye,
-        Helmet,
-        Clamp,
-        Laser,
-        Cannon
-    }
-
-    public bool triggerable;
+    
+    public bool controllable;
     public bool template;
     private bool highlighted;
     public bool markedForDelete;
@@ -240,8 +221,7 @@ public class Part : MonoBehaviour, Interactable
             controllable.joystick(input);
         }
     }
-
-    //Xiqiao Add
+    
     public void move() {
         foreach (Segment cpt in segments) {
             if (cpt.movable) {

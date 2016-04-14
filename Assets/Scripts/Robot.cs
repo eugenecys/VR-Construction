@@ -27,27 +27,25 @@ public class Robot : Singleton<Robot> {
     {
         foreach (Part part in parts)
         {
-            if (part.triggerable)
+            if (part.controllable)
             {
                 part.trigger();
             }
         }
     }
-
-    //Xiqiao Add
+    
     public void move() {
         foreach (Part part in parts) {
-            if (!part.triggerable) {
+            if (!part.controllable) {
                 part.move();
             }
         }
     }
-
-    //Xiqiao Add
+    
     public void stop() {
         foreach (Part part in parts)
         {
-            if (!part.triggerable)
+            if (!part.controllable)
             {
                 part.stop();
             }
