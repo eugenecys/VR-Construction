@@ -10,27 +10,29 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public GameState state;
-    private GameObject city;
+    public GameObject city;
 
     public void play()
     {
         state = GameState.Play;
-
-        GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
-        city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+        city.SetActive(true);
+        //GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
+        //city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
     }
 
     public void build()
     {
         state = GameState.Build;
-        if (city != null)
-        {
-            Destroy(city);
-        }
+        //if (city != null)
+        //{
+        //    Destroy(city);
+        //}
+        city.SetActive(false);
     }
 
     void Awake()
     {
+        city.SetActive(false);
         state = GameState.Build;
     }
 
