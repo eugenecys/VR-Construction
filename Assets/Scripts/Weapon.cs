@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour, Controllable {
 
     public virtual void trigger()
     {
-
+        
     }
 
     public virtual void triggerStop()

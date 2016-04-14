@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class LaserControl : Weapon {
     public float lineLen;
@@ -16,13 +17,7 @@ public class LaserControl : Weapon {
 	void Update () {
 	    
 	}
-
-    public override void trigger()
-    {
-        StopCoroutine(FireLaser());
-        StartCoroutine(FireLaser());
-    }
-
+    
     IEnumerator FireLaser() {
         mesh.enabled = true;
 
@@ -33,12 +28,23 @@ public class LaserControl : Weapon {
         {
             if (hit.transform.tag == "building")
             {
-                hit.transform.GetComponent<Building>().GiveAttack();
+                hit.transform.gameObject.SendMessage("GiveAttack");
             }
         }
 
         yield return new WaitForSeconds(duration);
 
         mesh.enabled = false;
+    }
+
+    public override void trigger()
+    {
+        StopCoroutine(FireLaser());
+        StartCoroutine(FireLaser());
+        //throw new NotImplementedException();
+    }
+
+    public override void joystick(Vector2 coordinates)
+    {
     }
 }
