@@ -65,6 +65,7 @@ public class Builder : MonoBehaviour {
         foreach (Part part in childParts)
         {
             part.place();
+            enableCollider();
             if (part.placed)
             {
                 part.transform.parent = robot.transform;
@@ -167,7 +168,6 @@ public class Builder : MonoBehaviour {
             return;
         }
         triggered = true;
-        disableCollider();
         if (contactObject != null)
         {
             ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
@@ -216,6 +216,7 @@ public class Builder : MonoBehaviour {
 
     public void MoveComponent(Part part)
     {
+        disableCollider();
         List<Part> parts = part.getConnectedParts();
         foreach(Part child in parts)
         {
@@ -227,6 +228,7 @@ public class Builder : MonoBehaviour {
     public void SpawnComponent(Part part)
     {
         SpawnComponent(part, spawnPoint.position);
+        disableCollider();
     }
 
     void OnTriggerStay(Collider other)
