@@ -17,7 +17,7 @@ public class LaserControl : Weapon {
 	    
 	}
 
-    public override void fire()
+    public override void trigger()
     {
         StopCoroutine(FireLaser());
         StartCoroutine(FireLaser());

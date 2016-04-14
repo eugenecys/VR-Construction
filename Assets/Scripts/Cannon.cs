@@ -19,7 +19,7 @@ public class Cannon : Weapon {
 	
 	}
 
-    public override void fire()
+    public override void trigger()
     {
         GameObject sObj = Object.Instantiate(ammo, transform.position, Quaternion.identity) as GameObject;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();

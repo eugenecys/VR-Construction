@@ -17,8 +17,7 @@ public abstract class Segment : MonoBehaviour {
     public Collider detector;
 
     protected bool active;
-
-    //Xiqiao Add
+    
     public bool movable;
 
     public void connect()

@@ -42,7 +42,7 @@ public class Part : MonoBehaviour, Interactable
     public bool markedForDelete;
     
     private Segment[] segments;
-    Weapon[] weapons;
+    Controllable[] controllables;
     MaterialHandler[] materialHandlers;
     List<Part> connectedParts;
     private Scaler scaler;
@@ -87,7 +87,7 @@ public class Part : MonoBehaviour, Interactable
         robot = Robot.Instance;
         segments = GetComponentsInChildren<Segment>();
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
-        weapons = GetComponentsInChildren<Weapon>();
+        controllables = GetComponentsInChildren<Controllable>();
         connectedParts = new List<Part>();
         scaler = GetComponentInChildren<Scaler>();
 
@@ -227,9 +227,17 @@ public class Part : MonoBehaviour, Interactable
 
     public void trigger()
     {
-        foreach (Weapon weapon in weapons)
+        foreach (Controllable controllable in controllables)
         {
-            weapon.fire();
+            controllable.trigger();
+        }
+    }
+
+    public void joystickInput(Vector2 input)
+    {
+        foreach (Controllable controllable in controllables)
+        {
+            controllable.joystick(input);
         }
     }
 
