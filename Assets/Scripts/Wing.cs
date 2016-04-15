@@ -81,13 +81,18 @@ public class Wing : Segment, Controllable {
 
         //setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * coordinates.magnitude);
         StartCoroutine(WingForce(coordinates));
-        
+        StopCoroutine(WingForce(coordinates));
     }
 
     IEnumerator WingForce(Vector2 coordinates)
     {
         pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE * coordinates.magnitude, ForceMode.VelocityChange);
         yield return new WaitForSeconds(duration);
+        pillar.velocity = Vector3.zero;
+        pillar.angularVelocity = Vector3.zero;
+    }
+
+    void StopWing() {
         pillar.velocity = Vector3.zero;
         pillar.angularVelocity = Vector3.zero;
     }
@@ -100,7 +105,7 @@ public class Wing : Segment, Controllable {
     public void joystickStop()
     {
         //setAngularForce(0);
-        StopCoroutine(WingForce(new Vector2(0,0)));
+        StopWing();
     }
 
 }
