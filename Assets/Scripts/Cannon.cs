@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Cannon : Weapon {
+public class Cannon : Weapon,Controllable{
     public GameObject ammo;
     public float ammoVelocity;
     public GameObject dirCoordinator;

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Wing : Segment {
-
+public class Wing : Segment, Controllable {
+    public float duration;
+    public Rigidbody pillar;
     protected override void init()
     {
         initProperties();
@@ -11,6 +12,7 @@ public class Wing : Segment {
     public void initProperties()
     {
         setAngularForce(0);
+        setAngularVelocity(0);
     }
 
     protected override void update()
@@ -47,20 +49,15 @@ public class Wing : Segment {
             }
         }
     }
-    
-    public override void move()
+
+    public void setAngularVelocity(float vel)
     {
-        setAngularForce(Constants.Wing.FORCE);
-    }
-    
-    public override void stop()
-    {
-        setAngularForce(0);
+        
     }
 
     public void setAngularForce(float force)
     {
-        rb.AddForceAtPosition(force * transform.forward, transform.position, ForceMode.Force);
+        
     }
 
     public void on()
@@ -72,4 +69,38 @@ public class Wing : Segment {
     {
         initProperties();
     }
+
+    public void trigger()
+    {
+
+    }
+
+    public void joystick(Vector2 coordinates)
+    {
+        //setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
+
+        //setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * coordinates.magnitude);
+        StartCoroutine(WingForce(coordinates));
+        
+    }
+
+    IEnumerator WingForce(Vector2 coordinates)
+    {
+        pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE * coordinates.magnitude, ForceMode.VelocityChange);
+        yield return new WaitForSeconds(duration);
+        pillar.velocity = Vector3.zero;
+        pillar.angularVelocity = Vector3.zero;
+    }
+
+    public void triggerStop()
+    {
+
+    }
+
+    public void joystickStop()
+    {
+        //setAngularForce(0);
+        StopCoroutine(WingForce(new Vector2(0,0)));
+    }
+
 }

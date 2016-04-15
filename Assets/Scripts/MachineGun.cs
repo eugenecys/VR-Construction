@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class MachineGun : Weapon {
+public class MachineGun : Weapon,Controllable{
     public GameObject ammo;
     public float ammoVelocity;
         

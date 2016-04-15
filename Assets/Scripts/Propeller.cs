@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Propeller : Segment {
-
+public class Propeller : Segment, Controllable {
     public HingeJoint propeller;
+    public Rigidbody pillar;
 
     protected override void init()
     {
@@ -14,8 +14,8 @@ public class Propeller : Segment {
 
     public void initProperties()
     {
-        setAngularForce(Constants.Propeller.FORCE);
-        setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY);
+        setAngularForce(0);
+        setAngularVelocity(0);
     }
 
     protected override void update()
@@ -25,17 +25,31 @@ public class Propeller : Segment {
 
     protected override void refresh()
     {
-        switch (robot.state)
+        if (parent.template)
         {
-            case Robot.State.Active:
+            if (active)
+            {
                 on();
-                break;
-            case Robot.State.Inactive:
+            }
+            else
+            {
                 off();
-                break;
-            case Robot.State.Deployed:
-                on();
-                break;
+            }
+        }
+        else
+        {
+            switch (robot.state)
+            {
+                case Robot.State.Active:
+                    on();
+                    break;
+                case Robot.State.Inactive:
+                    off();
+                    break;
+                case Robot.State.Deployed:
+                    on();
+                    break;
+            }
         }
     }
 
@@ -63,5 +77,27 @@ public class Propeller : Segment {
     {
         propeller.useMotor = false;
         initProperties();
+    }
+
+    public void trigger()
+    {
+
+    }
+
+    public void joystick(Vector2 coordinates)
+    {
+        //setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
+        pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE * coordinates.magnitude, ForceMode.VelocityChange);
+        setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * coordinates.magnitude);
+    }
+
+    public void triggerStop()
+    {
+    }
+
+    public void joystickStop()
+    {
+        //setAngularForce(0);
+        setAngularVelocity(0);
     }
 }
