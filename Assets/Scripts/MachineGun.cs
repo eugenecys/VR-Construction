@@ -2,15 +2,22 @@
 using System.Collections;
 using System;
 
-public class MachineGun : Weapon,Controllable{
+[RequireComponent(typeof(AudioSource))]
+
+public class MachineGun : Weapon {
     public GameObject ammo;
     public float ammoVelocity;
-        
+
+    private AudioSource audioSource;
+    private SoundManager soundManager;
+
     void Awake()
     {
         eventManager = EventManager.Instance;
+        soundManager = SoundManager.Instance;
+        audioSource = GetComponent<AudioSource>();
     }
-
+    
     // Use this for initialization
     void Start () {
 	
@@ -32,6 +39,6 @@ public class MachineGun : Weapon,Controllable{
 
     public override void joystick(Vector2 coordinates)
     {
-        throw new NotImplementedException();
+        
     }
 }

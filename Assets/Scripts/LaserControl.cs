@@ -2,14 +2,27 @@
 using System.Collections;
 using System;
 
-public class LaserControl : Weapon,Controllable{
+[RequireComponent(typeof(AudioSource))]
+
+public class LaserControl : Weapon {
     public float lineLen;
     public float duration;
     public GameObject laser;
     private MeshRenderer mesh;
+
+    private AudioSource audioSource;
+    private SoundManager soundManager;
+
+    void Awake()
+    {
+
+        soundManager = SoundManager.Instance;
+        audioSource = GetComponent<AudioSource>();
+        mesh = laser.GetComponent<MeshRenderer>();
+    }
+
     // Use this for initialization
     void Start () {
-        mesh = laser.GetComponent<MeshRenderer>();
         mesh.enabled = false;
 	}
 	

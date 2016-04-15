@@ -2,8 +2,12 @@
 using System.Collections;
 using System;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class Wheel : Segment, Controllable {
 
+    private AudioSource audioSource;
+    private SoundManager soundManager;
     public HingeJoint wheel;
 
     public bool reverse;
@@ -88,15 +92,24 @@ public class Wheel : Segment, Controllable {
     {
         setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
         setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY * coordinates.magnitude);
+        audioSource.Play();
     }
 
     public void triggerStop()
     {
+        audioSource.Stop();
     }
 
     public void joystickStop()
     {
         setAngularForce(0);
         setAngularVelocity(0);
+    }
+
+    void Awake()
+    {
+        soundManager = SoundManager.Instance;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = soundManager.wheelSound;
     }
 }

@@ -4,14 +4,16 @@ using System.Collections.Generic;
 
 public class SoundManager : Singleton<SoundManager>
 {
-
-    private Dictionary<int, AudioClip> soundMap;
     private List<AudioSource> _audioSource;
     //Change the number of audio sources as needed
     private int _audioSourceCount = 10;
 
-    //Music
-    public AudioClip testSound { get; private set; }
+    //Wheel whirring sound
+    public AudioClip wheelSound { get; private set; }
+    public AudioClip machinegunSound { get; private set; }
+    public AudioClip laserCannonSound { get; private set; }
+    public AudioClip hydraulicSound { get; private set; }
+    public AudioClip attachSound { get; private set; }
 
     public void playSound(AudioClip sound)
     {
@@ -64,7 +66,6 @@ public class SoundManager : Singleton<SoundManager>
     void Awake()
     {
         _audioSource = new List<AudioSource>();
-        soundMap = new Dictionary<int, AudioClip>();
         for (int i = 0; i < _audioSourceCount; i++)
         {
             AudioSource temp = gameObject.AddComponent<AudioSource>();
@@ -72,25 +73,16 @@ public class SoundManager : Singleton<SoundManager>
         }
 
         //Loads a file from Resources/Sounds folder
-        testSound = _loadSoundClip("TestSound", 0);
+        //wheelSound = _loadSoundClip("wheelSound", 0);
 
     }
 
     private AudioClip _loadSoundClip(string filename, int i)
     {
         AudioClip clip = Resources.Load("Sounds/" + filename) as AudioClip;
-        soundMap.Add(i, clip);
         return clip;
     }
-
-    public AudioClip getSound(int idx)
-    {
-        Debug.Log(soundMap.ContainsKey(idx));
-        ICollection coll = soundMap.Keys;
-
-        return soundMap[idx];
-    }
-
+    
     IEnumerator fadeSound(int index, float time)
     {
         AudioSource AS = _audioSource[index - 1];
