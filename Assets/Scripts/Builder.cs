@@ -263,6 +263,7 @@ public class Builder : MonoBehaviour {
     
 	// Update is called once per frame
 	void Update () {
+		
         //Delete - keyboard code
         if (Input.GetMouseButtonDown(0))
         {
@@ -313,8 +314,7 @@ public class Builder : MonoBehaviour {
     public void SpawnComponent(Part part, Vector3 position)
     {
         GameObject prefab = Resources.Load("Prefabs/" + part.name) as GameObject;
-        //GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
-		GameObject sObj = Object.Instantiate(prefab, contactObject.transform.position, Quaternion.identity) as GameObject;
+        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
 		sObj.transform.parent = this.transform;
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
