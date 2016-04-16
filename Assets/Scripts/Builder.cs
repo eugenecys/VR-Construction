@@ -256,27 +256,27 @@ public class Builder : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
-		laser.active = false;
+		if (!laser) {
         contactObject = other.gameObject;
         Interactable iObj = contactObject.GetComponent<Interactable>();
         if (iObj != null)
         {
             iObj.highlight();
         }
+		}
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (contactObject != null)
-        {
-            Interactable iObj = contactObject.GetComponent<Interactable>();
-            if (iObj != null)
-            {
-                iObj.unhighlight();
-            }
+		if (!laser) {
+			if (contactObject != null) {
+				Interactable iObj = contactObject.GetComponent<Interactable> ();
+				if (iObj != null) {
+					iObj.unhighlight ();
+				}
+			}
+			contactObject = null;
 		}
-		laser.active = true;
-		contactObject = null;
     }
     
 	// Update is called once per frame

@@ -57,11 +57,15 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
 	void OnTriggerStay(Collider other)
 	{
-		highlight ();
+		if (other.tag == "Controller" || other.tag == "Laser") {
+			highlight ();
+		}
 	}
 
 	void OnTriggerExit(Collider other)
 	{
-		unhighlight ();
+		if (other.tag == "Controller" || other.tag == "Laser") {
+			unhighlight ();
+		}
 	}
 }

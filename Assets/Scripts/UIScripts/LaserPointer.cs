@@ -164,6 +164,7 @@ public class LaserPointer : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (previousContact != other.transform) {
+			active = false;
 			PointerEventArgs argsIn = new PointerEventArgs ();
 			argsIn.distance = 0f;
 			argsIn.flags = 0;
@@ -176,6 +177,7 @@ public class LaserPointer : MonoBehaviour {
 	void OnTriggerStay(Collider other)
 	{
 		if (previousContact && previousContact == other.transform) {
+			active = false;
 			PointerEventArgs argsStay = new PointerEventArgs ();
 			argsStay.distance = 0f;
 			argsStay.flags = 0;
@@ -189,6 +191,7 @@ public class LaserPointer : MonoBehaviour {
 	{
 		if(previousContact && previousContact != other.transform)
 		{
+			active = true;
 			PointerEventArgs argsOut = new PointerEventArgs();
 			argsOut.distance = 0f;
 			argsOut.flags = 0;
