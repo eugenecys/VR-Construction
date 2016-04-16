@@ -161,5 +161,41 @@ public class LaserPointer : MonoBehaviour {
 		
 		pointer.transform.localPosition = new Vector3(0f, 0f, dist/2f);
 	}
+
+	void OnTriggerEnter(Collider other) {
+		if (previousContact != other.transform) {
+			PointerEventArgs argsIn = new PointerEventArgs ();
+			argsIn.distance = 0f;
+			argsIn.flags = 0;
+			argsIn.target = other.transform;
+			OnPointerEnter (argsIn);
+			previousContact = other.transform;
+		}
+	}
+
+	void OnTriggerStay(Collider other)
+	{
+		if (previousContact && previousContact == other.transform) {
+			PointerEventArgs argsStay = new PointerEventArgs ();
+			argsStay.distance = 0f;
+			argsStay.flags = 0;
+			argsStay.target = other.transform;
+			OnPointerStay (argsStay);
+			previousContact = other.transform;
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if(previousContact && previousContact != other.transform)
+		{
+			PointerEventArgs argsOut = new PointerEventArgs();
+			argsOut.distance = 0f;
+			argsOut.flags = 0;
+			argsOut.target = previousContact;
+			OnPointerExit(argsOut);
+			previousContact = null;
+		}
+	}
 }
 

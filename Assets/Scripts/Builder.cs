@@ -45,14 +45,18 @@ public class Builder : MonoBehaviour {
 
     void disableCollider()
     {
-        Long.enabled = false;
-        //Short.enabled = false;
+		if (!laser) {
+			Long.enabled = false;
+			Short.enabled = false;
+		}
     }
 
     void enableCollider()
-    {
-        Long.enabled = true;
-        //Short.enabled = true;
+	{	
+		if (!laser) {
+			Long.enabled = true;
+			Short.enabled = true;
+		}
     }
 
     //Delete - keyboard code
