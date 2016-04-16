@@ -219,6 +219,8 @@ public class Builder : MonoBehaviour {
         robot.destroy();
     }
 
+
+	public float pullComponentSpeed = 5f;
     public void MoveComponent(Part part)
     {
         disableCollider();
@@ -227,12 +229,16 @@ public class Builder : MonoBehaviour {
         {
             child.transform.parent = this.transform;
             child.unplace();
+			if (Vector3.Distance (spawnposition, child.transform.position) > 0f) {
+				child.transform.Translate ((spawnposition - child.transform.position) * Time.deltaTime * pullComponentSpeed);
+			}
         }
     }
 
     public void SpawnComponent(Part part)
-    {
-        SpawnComponent(part, spawnPoint.position);
+    {	
+		spawnposition = spawnPoint.position;
+		SpawnComponent(part, spawnposition);
         disableCollider();
     }
 
@@ -261,7 +267,6 @@ public class Builder : MonoBehaviour {
     
 	// Update is called once per frame
 	void Update () {
-                
         //Delete - keyboard code
         if (Input.GetMouseButtonDown(0))
         {
@@ -300,15 +305,29 @@ public class Builder : MonoBehaviour {
         {
             triggerRobot();
         }
+
+		if (Input.GetKeyDown (KeyCode.R)) {
+			triggerDown ();
+		}
+		if (Input.GetKeyDown (KeyCode.U)) {
+			triggerUp ();
+		}
 	}
 
     public void SpawnComponent(Part part, Vector3 position)
     {
         GameObject prefab = Resources.Load("Prefabs/" + part.name) as GameObject;
-        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
-        sObj.transform.parent = this.transform;
+        //GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
+		GameObject sObj = Object.Instantiate(prefab, contactObject.transform.position, Quaternion.identity) as GameObject;
+		sObj.transform.parent = this.transform;
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
         spawnedPart.evaluateState();
     }
+
+
+
+	public void SetContactObject(GameObject contact) {
+		contactObject = contact;
+	}
 }

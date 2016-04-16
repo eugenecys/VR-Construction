@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TutorialManager : MonoBehaviour {
+public class SelectRobotBase : MonoBehaviour {
 
-	public Light roomLight; 
+	public GameObject BaseOne;
+	public GameObject BaseTwo;
+
 
 	// Use this for initialization
 	void Start () {
