@@ -54,10 +54,15 @@ public class LaserPointer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (active) {
-			pointer.SetActive (true);
+			if (pointer.transform.localScale.z == 0f) {
+				pointer.transform.localScale = new Vector3(thickness, thickness, length);
+			}
 			CastLaser ();
 		} else {
-			pointer.SetActive (false);
+			if (pointer.transform.localScale.z > 0f) {
+				pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
+
+			}
 		}
 	}
 

@@ -66,7 +66,7 @@ public class Builder : MonoBehaviour {
         foreach (Part part in childParts)
         {
             part.place();
-            enableCollider();
+           // enableCollider();
             if (part.placed)
             {
                 part.transform.parent = robot.transform;
@@ -122,16 +122,14 @@ public class Builder : MonoBehaviour {
     
     public void triggerUp()
     {
-		if (laser) {
-			laser.active = true;
-		}
+		
 
         if (!triggered)
         {
             return;
         }
         triggered = false;
-        enableCollider();
+        //enableCollider();
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
@@ -170,6 +168,10 @@ public class Builder : MonoBehaviour {
                 placeParts();
             }
         }
+
+		if (laser) {
+			laser.active = true;
+		}
     }
 
     public void triggerDown()
@@ -313,10 +315,10 @@ public class Builder : MonoBehaviour {
             triggerRobot();
         }
 
-		if (Input.GetKeyDown (KeyCode.R)) {
+		if (Input.GetKey (KeyCode.R)) {
 			triggerDown ();
 		}
-		if (Input.GetKeyDown (KeyCode.U)) {
+		if (Input.GetKey (KeyCode.U)) {
 			triggerUp ();
 		}
 	}
