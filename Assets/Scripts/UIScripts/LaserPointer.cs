@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LaserPointer : MonoBehaviour {
 
-	public static bool active = true;
+	public bool active = true;
 	public Color color;
 	public float thickness = 0.002f;
 	public float length = 100f; 

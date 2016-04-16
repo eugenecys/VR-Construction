@@ -21,6 +21,7 @@ public class Builder : MonoBehaviour {
     private float refreshDelay = 0.2f;
     private bool triggered = false;
 
+	private LaserPointer laser;
     public enum ColliderState
     {
         Far,
@@ -104,6 +105,7 @@ public class Builder : MonoBehaviour {
         robot = Robot.Instance;
         inputManager = ViveInputManager.Instance;
         deployer = Deployer.Instance;
+		laser = this.GetComponent<LaserPointer> ();
     }
 
 	// Use this for initialization
@@ -120,7 +122,9 @@ public class Builder : MonoBehaviour {
     
     public void triggerUp()
     {
-		LaserPointer.active = true;
+		if (laser) {
+			laser.active = true;
+		}
 
         if (!triggered)
         {
@@ -214,7 +218,9 @@ public class Builder : MonoBehaviour {
             {
                 scaleArrow.followDrag(transform);
             }
-			LaserPointer.active = false;
+			if (laser) {
+				laser.active = false;
+			}
         }
     }
 
