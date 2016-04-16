@@ -46,13 +46,13 @@ public class Builder : MonoBehaviour {
     void disableCollider()
     {
         Long.enabled = false;
-        Short.enabled = false;
+        //Short.enabled = false;
     }
 
     void enableCollider()
     {
         Long.enabled = true;
-        Short.enabled = true;
+        //Short.enabled = true;
     }
 
     //Delete - keyboard code
@@ -66,7 +66,7 @@ public class Builder : MonoBehaviour {
         foreach (Part part in childParts)
         {
             part.place();
-           // enableCollider();
+            enableCollider();
             if (part.placed)
             {
                 part.transform.parent = robot.transform;
@@ -129,7 +129,7 @@ public class Builder : MonoBehaviour {
             return;
         }
         triggered = false;
-        //enableCollider();
+        enableCollider();
         childParts = GetComponentsInChildren<Part>();
         if (childParts == null || childParts.Length == 0)
         {
