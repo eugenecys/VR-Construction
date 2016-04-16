@@ -120,6 +120,8 @@ public class Builder : MonoBehaviour {
     
     public void triggerUp()
     {
+		LaserPointer.active = true;
+
         if (!triggered)
         {
             return;
@@ -168,6 +170,7 @@ public class Builder : MonoBehaviour {
 
     public void triggerDown()
     {
+		
         if (triggered)
         {
             return;
@@ -211,6 +214,7 @@ public class Builder : MonoBehaviour {
             {
                 scaleArrow.followDrag(transform);
             }
+			LaserPointer.active = false;
         }
     }
 

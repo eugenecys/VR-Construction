@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LaserPointer : MonoBehaviour {
 
-	public bool active = true;
+	public static bool active = true;
 	public Color color;
 	public float thickness = 0.002f;
 	public float length = 100f; 
@@ -54,7 +54,10 @@ public class LaserPointer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (active) {
+			pointer.SetActive (true);
 			CastLaser ();
+		} else {
+			pointer.SetActive (false);
 		}
 	}
 
