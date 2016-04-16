@@ -220,7 +220,6 @@ public class Builder : MonoBehaviour {
     }
 
 
-	public float pullComponentSpeed = 5f;
     public void MoveComponent(Part part)
     {
         disableCollider();
@@ -229,9 +228,6 @@ public class Builder : MonoBehaviour {
         {
             child.transform.parent = this.transform;
             child.unplace();
-			if (Vector3.Distance (spawnposition, child.transform.position) > 0f) {
-				child.transform.Translate ((spawnposition - child.transform.position) * Time.deltaTime * pullComponentSpeed);
-			}
         }
     }
 

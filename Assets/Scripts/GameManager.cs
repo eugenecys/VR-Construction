@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager> {
 
@@ -39,7 +40,7 @@ public class GameManager : Singleton<GameManager> {
 
     void Awake()
     {
-		state = GameState.Start;
+		//state = GameState.Start;
     }
 
 	// Use this for initialization
@@ -77,6 +78,13 @@ public class GameManager : Singleton<GameManager> {
 		// set all children to be active
 		for (int i = 0; i < robotBase.transform.childCount; i++) {
 			robotBase.transform.GetChild (i).gameObject.SetActive (true);
+		}
+		Part part = robotBase.GetComponent<Part>();
+		List<Part> parts = part.getConnectedParts();
+
+		foreach(Part child in parts)
+		{
+			child.template = false;
 		}
 		GameObject.Instantiate (robotBase, new Vector3 (0f, robotBase.transform.localScale.y, 0f), Quaternion.identity);
 	}

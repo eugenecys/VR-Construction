@@ -16,8 +16,9 @@ public class LaserPointer : MonoBehaviour {
 
 	public LayerMask laserMask; 
 
-	public event PointerEventHandler PointerIn;
-	public event PointerEventHandler PointerOut;
+	public event PointerEventHandler PointerEnter;
+	public event PointerEventHandler PointerExit;
+	public event PointerEventHandler PointerStay;
 
 	public Transform previousContact = null;
 
@@ -43,8 +44,9 @@ public class LaserPointer : MonoBehaviour {
 		pointer.GetComponent<MeshRenderer>().material = newMaterial;
 
 
-		PointerIn += new PointerEventHandler (HittingSomething);
-		PointerOut += new PointerEventHandler (HittingNothing);
+		PointerEnter += new PointerEventHandler (HittingNewThing);
+		PointerExit += new PointerEventHandler (HittingNothing);
+		PointerStay += new PointerEventHandler (HittingSameThing);
 
 		builder = this.gameObject.GetComponent<Builder> ();
 	}
@@ -57,21 +59,26 @@ public class LaserPointer : MonoBehaviour {
 	}
 
 
-	public virtual void OnPointerIn(PointerEventArgs e)
+	public virtual void OnPointerEnter(PointerEventArgs e)
 	{
-		if (PointerIn != null) 
-			PointerIn(this, e);
+		if (PointerEnter != null) 
+			PointerEnter(this, e);
 	}
 
-	public virtual void OnPointerOut(PointerEventArgs e)
+	public virtual void OnPointerExit(PointerEventArgs e)
 	{
-		if (PointerOut != null)
-			PointerOut(this, e);
+		if (PointerExit != null)
+			PointerExit(this, e);
 	}
 
+	public virtual void OnPointerStay(PointerEventArgs e) 
+	{
+		if (PointerStay != null)
+			PointerStay(this, e);
+	}
 
-	private void HittingSomething(object sender, PointerEventArgs e) {
-		Debug.Log ("hitting something");
+	private void HittingNewThing(object sender, PointerEventArgs e) {
+		Debug.Log ("hitting new thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (e.target.gameObject);
 		}
@@ -83,7 +90,13 @@ public class LaserPointer : MonoBehaviour {
 			builder.SetContactObject (null);
 		}
 	}
-		
+
+	private void HittingSameThing(object sender, PointerEventArgs e) {
+		//Debug.Log ("hitting same thing");
+		if (GameManager.Instance.state == GameManager.GameState.Build) {
+			builder.SetContactObject (e.target.gameObject);
+		}
+	}
 
 
 	void CastLaser ()
@@ -95,13 +108,22 @@ public class LaserPointer : MonoBehaviour {
 		RaycastHit hit;
 		bool bHit = Physics.Raycast(raycast, out hit, dist, laserMask);
 
+		if (previousContact && previousContact == hit.transform) {
+			PointerEventArgs argsStay = new PointerEventArgs();
+			argsStay.distance = hit.distance;
+			argsStay.flags = 0;
+			argsStay.target = hit.transform;
+			OnPointerStay (argsStay);
+			previousContact = hit.transform;
+		}
+
 		if(previousContact && previousContact != hit.transform)
 		{
-			PointerEventArgs args = new PointerEventArgs();
-			args.distance = 0f;
-			args.flags = 0;
-			args.target = previousContact;
-			OnPointerOut(args);
+			PointerEventArgs argsOut = new PointerEventArgs();
+			argsOut.distance = 0f;
+			argsOut.flags = 0;
+			argsOut.target = previousContact;
+			OnPointerExit(argsOut);
 			previousContact = null;
 		}
 
@@ -111,7 +133,7 @@ public class LaserPointer : MonoBehaviour {
 			argsIn.distance = hit.distance;
 			argsIn.flags = 0;
 			argsIn.target = hit.transform;
-			OnPointerIn(argsIn);
+			OnPointerEnter(argsIn);
 			previousContact = hit.transform;
 		}
 
