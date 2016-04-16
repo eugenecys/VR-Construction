@@ -54,4 +54,14 @@ public class Deployer : Singleton<Deployer>, Interactable {
 	void Update () {
 	
 	}
+
+	void OnTriggerStay(Collider other)
+	{
+		highlight ();
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		unhighlight ();
+	}
 }

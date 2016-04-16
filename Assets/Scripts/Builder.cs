@@ -252,6 +252,7 @@ public class Builder : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
+		laser.active = false;
         contactObject = other.gameObject;
         Interactable iObj = contactObject.GetComponent<Interactable>();
         if (iObj != null)
@@ -270,6 +271,7 @@ public class Builder : MonoBehaviour {
                 iObj.unhighlight();
             }
 		}
+		laser.active = true;
 		contactObject = null;
     }
     
