@@ -147,8 +147,22 @@ public abstract class Segment : MonoBehaviour {
         }
     }
 
+
+	void OnTriggerEnter(Collider other) {
+		
+	}
+
     void OnTriggerStay(Collider other)
     {
+		// only highlight object when we are touching it with laser and not controlling it
+		if (other.tag == "Laser") {
+			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
+			if (!builder.triggered) {
+				parent.highlight ();
+				return;
+			}
+				
+		}
         if (parent.template && other.GetComponentInParent<Part>())
         {
             return;
@@ -168,13 +182,21 @@ public abstract class Segment : MonoBehaviour {
             updateTouchingSegments(segment);
             parent.evaluateState();
         }
-		if (other.tag == "Laser") {
-			parent.highlight ();
-		}
+
     }
 
     void OnTriggerExit(Collider other)
     {
+		// only highlight object when we are touching it with laser and not controlling it
+		if (other.tag == "Laser") {
+			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
+			if (!builder.triggered) {
+				parent.unhighlight ();
+				return;
+			}
+
+		}
+
         touchingSegments = new List<Segment>();
         if (parent.template)
         {
@@ -185,9 +207,6 @@ public abstract class Segment : MonoBehaviour {
             parent.evaluateState();
         }
 
-		if (other.tag == "Laser") {
-			parent.unhighlight ();
-		}
     }
 
     public void resetPhysics()

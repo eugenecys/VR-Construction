@@ -19,7 +19,7 @@ public class Builder : MonoBehaviour {
     private ViveInputManager inputManager;
 
     private float refreshDelay = 0.2f;
-    private bool triggered = false;
+    public bool triggered = false;
 
 	private LaserPointer laser;
     public enum ColliderState
