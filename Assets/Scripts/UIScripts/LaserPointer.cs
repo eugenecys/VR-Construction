@@ -24,11 +24,12 @@ public class LaserPointer : MonoBehaviour {
 
 	private Builder builder; 
 
+	private float raycastZOffset = -1.5f;
 	// Use this for initialization
 	void Start () {
 		holder = new GameObject();
 		holder.transform.parent = this.transform;
-		holder.transform.localPosition = new Vector3 (0f, 0f, -1.5f);
+		holder.transform.localPosition = new Vector3 (0f, 0f, raycastZOffset);
 		holder.transform.localRotation = Quaternion.identity;
 
 		pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -39,7 +40,7 @@ public class LaserPointer : MonoBehaviour {
 		pointer.transform.tag = "Laser";
 		BoxCollider box = pointer.GetComponent<BoxCollider> ();
 		box.isTrigger = true;
-		box.size = new Vector3 (5f, 5f, 1f);
+		//box.size = new Vector3 (5f, 5f, 1f);
 
 
 		Material newMaterial = new Material(Shader.Find("Unlit/Color"));

@@ -45,14 +45,14 @@ public abstract class Segment : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        //assetManager = AssetManager.Instance;
-        //connectedSegments = new List<Segment>();
-        //touchingSegments = new List<Segment>();
-        //robot = Robot.Instance;
-        //rb = GetComponent<Rigidbody>();
-        //col = GetComponent<Collider>();
-        //detector = GetComponentInChildren<Collider>();
-        //rb.isKinematic = true;
+        assetManager = AssetManager.Instance;
+        connectedSegments = new List<Segment>();
+        touchingSegments = new List<Segment>();
+        robot = Robot.Instance;
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+        detector = GetComponentInChildren<Collider>();
+        rb.isKinematic = true;
 	}
 
     void Start()
@@ -148,9 +148,6 @@ public abstract class Segment : MonoBehaviour {
     }
 
 
-	void OnTriggerEnter(Collider other) {
-		
-	}
 
     void OnTriggerStay(Collider other)
     {
@@ -162,25 +159,21 @@ public abstract class Segment : MonoBehaviour {
 			}
 				
 		}
-        if (parent.template && other.GetComponentInParent<Part>())
-        {
-            return;
-        }
-        else if (parent.template)
-        {
-            parent.highlight();
-        } 
-        else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
-        {
-            Segment segment = other.GetComponent<Segment>();
-            if (segment == null)
-            {
-                segment = other.GetComponentInParent<Segment>();
-            }
+		if (parent.template && other.GetComponentInParent<Part> ()) {
+			return;
+		} else if (parent.template) {
+			parent.highlight ();
+		} else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT) {
+			Segment segment = other.GetComponent<Segment> ();
+			if (segment == null) {
+				segment = other.GetComponentInParent<Segment> ();
+			}
 
-            updateTouchingSegments(segment);
-            parent.evaluateState();
-        }
+			updateTouchingSegments (segment);
+			parent.evaluateState ();
+		} else if (!parent.placed) {
+			parent.evaluateState ();
+		}
 
     }
 
@@ -191,6 +184,7 @@ public abstract class Segment : MonoBehaviour {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
 			if (!builder.triggered) {
 				parent.unhighlight ();
+				parent.place ();
 			}
 
 		}

@@ -9,7 +9,7 @@ public class Connector : Segment {
         //connectedSegments = new List<Segment>();
         //touchingSegments = new List<Segment>();
         //robot = Robot.Instance;
-        //rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         //col = GetComponent<Collider>();
         //detector = GetComponentInChildren<Collider>();
         //rb.isKinematic = true;

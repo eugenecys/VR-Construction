@@ -21,6 +21,8 @@ public class GameManager : Singleton<GameManager> {
 
 	public GameObject selectedBase;
 
+	public GameObject Deployer; 
+
     public void play()
     {
         state = GameState.Play;
@@ -41,6 +43,7 @@ public class GameManager : Singleton<GameManager> {
     void Awake()
     {
 		//state = GameState.Start;
+		Deployer.GetComponent<SphereCollider>().enabled = false;
     }
 
 	// Use this for initialization
@@ -71,6 +74,7 @@ public class GameManager : Singleton<GameManager> {
 		RobotBases.SetActive (false);
 		roomLight.gameObject.SetActive (true);
 		SpawnRobotBase (selectedBase);
+		Deployer.GetComponent<SphereCollider>().enabled = true;
 	}
 
 
