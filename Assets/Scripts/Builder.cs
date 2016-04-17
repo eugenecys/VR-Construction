@@ -19,8 +19,9 @@ public class Builder : MonoBehaviour {
     private ViveInputManager inputManager;
 
     private float refreshDelay = 0.2f;
-    private bool triggered = false;
+    public bool triggered = false;
 
+	private LaserPointer laser;
     public enum ColliderState
     {
         Far,
@@ -44,14 +45,18 @@ public class Builder : MonoBehaviour {
 
     void disableCollider()
     {
-        Long.enabled = false;
-        Short.enabled = false;
+		if (!laser) {
+			Long.enabled = false;
+			Short.enabled = false;
+		}
     }
 
     void enableCollider()
-    {
-        Long.enabled = true;
-        Short.enabled = true;
+	{	
+		if (!laser) {
+			Long.enabled = true;
+			Short.enabled = true;
+		}
     }
 
     //Delete - keyboard code
@@ -104,6 +109,7 @@ public class Builder : MonoBehaviour {
         robot = Robot.Instance;
         inputManager = ViveInputManager.Instance;
         deployer = Deployer.Instance;
+		laser = this.GetComponent<LaserPointer> ();
     }
 
 	// Use this for initialization
@@ -120,6 +126,8 @@ public class Builder : MonoBehaviour {
     
     public void triggerUp()
     {
+		
+
         if (!triggered)
         {
             return;
@@ -164,10 +172,15 @@ public class Builder : MonoBehaviour {
                 placeParts();
             }
         }
+		contactObject = null;
+		if (laser) {
+			laser.active = true;
+		}
     }
 
     public void triggerDown()
     {
+		
         if (triggered)
         {
             return;
@@ -211,6 +224,9 @@ public class Builder : MonoBehaviour {
             {
                 scaleArrow.followDrag(transform);
             }
+			if (laser) {
+				laser.active = false;
+			}
         }
     }
 
@@ -218,6 +234,7 @@ public class Builder : MonoBehaviour {
     {
         robot.destroy();
     }
+
 
     public void MoveComponent(Part part)
     {
@@ -231,8 +248,9 @@ public class Builder : MonoBehaviour {
     }
 
     public void SpawnComponent(Part part)
-    {
-        SpawnComponent(part, spawnPoint.position);
+    {	
+		spawnposition = spawnPoint.position;
+		SpawnComponent(part, spawnposition);
         disableCollider();
     }
 
@@ -244,24 +262,23 @@ public class Builder : MonoBehaviour {
         {
             iObj.highlight();
         }
+
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (contactObject != null)
-        {
-            Interactable iObj = contactObject.GetComponent<Interactable>();
-            if (iObj != null)
-            {
-                iObj.unhighlight();
-            }
-		}
-		contactObject = null;
+			if (contactObject != null) {
+				Interactable iObj = contactObject.GetComponent<Interactable> ();
+				if (iObj != null) {
+					iObj.unhighlight ();
+				}
+			}
+			contactObject = null;
     }
     
 	// Update is called once per frame
 	void Update () {
-                
+		
         //Delete - keyboard code
         if (Input.GetMouseButtonDown(0))
         {
@@ -300,15 +317,28 @@ public class Builder : MonoBehaviour {
         {
             triggerRobot();
         }
+
+		if (Input.GetKey (KeyCode.R)) {
+			triggerDown ();
+		}
+		if (Input.GetKey (KeyCode.U)) {
+			triggerUp ();
+		}
 	}
 
     public void SpawnComponent(Part part, Vector3 position)
     {
         GameObject prefab = Resources.Load("Prefabs/" + part.name) as GameObject;
         GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
-        sObj.transform.parent = this.transform;
+		sObj.transform.parent = this.transform;
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
         spawnedPart.evaluateState();
     }
+
+
+
+	public void SetContactObject(GameObject contact) {
+		contactObject = contact;
+	}
 }

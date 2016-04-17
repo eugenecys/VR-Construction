@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent (typeof (AudioSource))]
 public class Part : MonoBehaviour, Interactable
 {
+    AudioSource audioSource;
     AssetManager assetManager;
+    SoundManager soundManager;
     Robot robot;
 
     public enum State
@@ -66,11 +69,13 @@ public class Part : MonoBehaviour, Interactable
     {
         assetManager = AssetManager.Instance;
         robot = Robot.Instance;
+        soundManager = SoundManager.Instance;
         segments = GetComponentsInChildren<Segment>();
         materialHandlers = GetComponentsInChildren<MaterialHandler>();
         controllables = GetComponentsInChildren<Controllable>();
         connectedParts = new List<Part>();
         scaler = GetComponentInChildren<Scaler>();
+        audioSource = GetComponent<AudioSource>();
 
         markedForDelete = false;
         highlighted = false;
@@ -155,12 +160,14 @@ public class Part : MonoBehaviour, Interactable
                 segment.connect();
             } 
             setState(State.Placed);
+            audioSource.PlayOneShot(soundManager.attachSound);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
         else if (free)
         {
             setState(State.Placed);
+            audioSource.PlayOneShot(soundManager.attachSound);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
@@ -288,7 +295,7 @@ public class Part : MonoBehaviour, Interactable
     
     public void highlight()
     {
-        if (template)
+       // if (template)
         {
             highlighted = true;
             setState(State.Highlight);
@@ -297,7 +304,7 @@ public class Part : MonoBehaviour, Interactable
 
     public void unhighlight()
     {
-        if (template)
+       // if (template)
         {
             highlighted = false;
             setSegmentDefaultMaterials();

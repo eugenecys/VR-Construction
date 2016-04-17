@@ -106,4 +106,19 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     {
         meshRenderer.material = assetManager.blankMaterial;
     }
+
+	void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "Controller" || other.tag == "Laser") {
+			highlight ();
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Controller" || other.tag == "Laser") {
+			unhighlight ();
+		}
+
+	}
 }
