@@ -2,11 +2,8 @@
 using System.Collections;
 using System;
 
-<<<<<<< HEAD
-=======
 [RequireComponent(typeof(AudioSource))]
 
->>>>>>> origin/master
 public class MachineGun : Weapon {
     public GameObject ammo;
     public float ammoVelocity;
@@ -40,12 +37,5 @@ public class MachineGun : Weapon {
         //throw new NotImplementedException();
     }
 
-    public override void joystick(Vector2 coordinates)
-    {
-<<<<<<< HEAD
-        //throw new NotImplementedException();
-=======
-        
->>>>>>> origin/master
-    }
+    
 }

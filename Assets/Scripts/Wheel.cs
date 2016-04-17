@@ -89,15 +89,9 @@ public class Wheel : Segment, Controllable {
 
     public void joystick(Vector2 coordinates)
     {
-<<<<<<< HEAD
-		//Debug.Log (GetComponent<Rigidbody>().velocity);
-        setAngularForce(Constants.Wheel.FORCE );
+        setAngularForce(Constants.Wheel.FORCE);
         setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
-=======
-        setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
-        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY * coordinates.magnitude);
         audioSource.Play();
->>>>>>> origin/master
     }
 
     public void triggerStop()

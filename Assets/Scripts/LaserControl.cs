@@ -2,13 +2,10 @@
 using System.Collections;
 using System;
 
-<<<<<<< HEAD
-public class LaserControl : Weapon{
-=======
-[RequireComponent(typeof(AudioSource))]
 
-public class LaserControl : Weapon {
->>>>>>> origin/master
+[RequireComponent(typeof(AudioSource))]
+public class LaserControl : Weapon{
+
     public float lineLen;
     public float duration;
     public GameObject laser;
