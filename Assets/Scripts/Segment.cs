@@ -168,6 +168,9 @@ public abstract class Segment : MonoBehaviour {
             updateTouchingSegments(segment);
             parent.evaluateState();
         }
+		if (other.tag == "Laser") {
+			parent.highlight ();
+		}
     }
 
     void OnTriggerExit(Collider other)
@@ -181,6 +184,10 @@ public abstract class Segment : MonoBehaviour {
         {
             parent.evaluateState();
         }
+
+		if (other.tag == "Laser") {
+			parent.unhighlight ();
+		}
     }
 
     public void resetPhysics()

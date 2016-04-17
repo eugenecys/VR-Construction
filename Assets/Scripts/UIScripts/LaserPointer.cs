@@ -28,16 +28,19 @@ public class LaserPointer : MonoBehaviour {
 	void Start () {
 		holder = new GameObject();
 		holder.transform.parent = this.transform;
-		holder.transform.localPosition = Vector3.zero;
+		holder.transform.localPosition = new Vector3 (0f, 0f, -1.5f);
 		holder.transform.localRotation = Quaternion.identity;
 
 		pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		pointer.transform.parent = holder.transform;
 		pointer.transform.localScale = new Vector3(thickness, thickness, length);
-		pointer.transform.localPosition = new Vector3(0f, 0f, length/2f);
+		pointer.transform.localPosition = new Vector3(0f, 0f, length/2f );
 		pointer.transform.localRotation = Quaternion.identity;
 		pointer.transform.tag = "Laser";
-		pointer.GetComponent<BoxCollider> ().isTrigger = true;
+		BoxCollider box = pointer.GetComponent<BoxCollider> ();
+		box.isTrigger = true;
+		box.size = new Vector3 (5f, 5f, 1f);
+
 
 		Material newMaterial = new Material(Shader.Find("Unlit/Color"));
 		newMaterial.SetColor("_Color", color);
@@ -112,10 +115,10 @@ public class LaserPointer : MonoBehaviour {
 
 		float dist = length;
 
-		Ray raycast = new Ray(transform.position, transform.forward);
+		Ray raycast = new Ray(holder.transform.position, transform.forward);
 		RaycastHit hit;
 		bool bHit = Physics.Raycast(raycast, out hit, dist, laserMask);
-
+		//Debug.DrawRay (holder.transform.position, transform.forward);
 		if (previousContact && previousContact == hit.transform) {
 			PointerEventArgs argsStay = new PointerEventArgs();
 			argsStay.distance = hit.distance;
@@ -160,6 +163,7 @@ public class LaserPointer : MonoBehaviour {
 		pointer.transform.localScale = new Vector3(thickness, thickness, dist);
 		
 		pointer.transform.localPosition = new Vector3(0f, 0f, dist/2f);
+
 	}
 
 }
