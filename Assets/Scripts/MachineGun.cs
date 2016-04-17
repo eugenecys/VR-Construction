@@ -16,6 +16,7 @@ public class MachineGun : Weapon {
         eventManager = EventManager.Instance;
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = soundManager.cannonSound;
     }
     
     // Use this for initialization
@@ -34,6 +35,7 @@ public class MachineGun : Weapon {
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
+        audioSource.Play();
         //throw new NotImplementedException();
     }
 

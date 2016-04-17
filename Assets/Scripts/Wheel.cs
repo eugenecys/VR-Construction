@@ -5,7 +5,7 @@ using System;
 [RequireComponent(typeof(AudioSource))]
 
 public class Wheel : Segment, Controllable {
-
+    
     private AudioSource audioSource;
     private SoundManager soundManager;
     public HingeJoint wheel;
@@ -96,11 +96,12 @@ public class Wheel : Segment, Controllable {
 
     public void triggerStop()
     {
-        audioSource.Stop();
+        
     }
 
     public void joystickStop()
     {
+        audioSource.Stop();
         setAngularForce(0);
         setAngularVelocity(0);
     }

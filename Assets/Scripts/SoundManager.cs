@@ -11,9 +11,13 @@ public class SoundManager : Singleton<SoundManager>
     //Wheel whirring sound
     public AudioClip wheelSound { get; private set; }
     public AudioClip machinegunSound { get; private set; }
-    public AudioClip laserCannonSound { get; private set; }
+    public AudioClip laserSound { get; private set; }
     public AudioClip hydraulicSound { get; private set; }
     public AudioClip attachSound { get; private set; }
+    public AudioClip cannonSound { get; private set; }
+    public AudioClip trashSound { get; private set; }
+    public AudioClip buttonSound { get; private set; }
+    public AudioClip pickupSound { get; private set; }
 
     public void playSound(AudioClip sound)
     {
@@ -74,7 +78,14 @@ public class SoundManager : Singleton<SoundManager>
 
         //Loads a file from Resources/Sounds folder
         //wheelSound = _loadSoundClip("wheelSound", 0);
-
+        wheelSound = _loadSoundClip("ConstructionRoom-Engine_Running", 0);
+        machinegunSound = _loadSoundClip("Cannon-SingleShot", 0);
+        laserSound = _loadSoundClip("Laser", 0);
+        attachSound = _loadSoundClip("ConstructionRoom-Drop", 0);
+        cannonSound = _loadSoundClip("Cannon-SingleShot", 0);
+        trashSound = _loadSoundClip("ConstructionRoom-Trash", 0);
+        buttonSound = _loadSoundClip("ConstructionRoom-ButtonRelease", 0);
+        pickupSound = _loadSoundClip("ConstructionRoom-Pickup", 0);
     }
 
     private AudioClip _loadSoundClip(string filename, int i)

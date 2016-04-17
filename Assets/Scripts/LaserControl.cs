@@ -4,8 +4,8 @@ using System;
 
 
 [RequireComponent(typeof(AudioSource))]
-public class LaserControl : Weapon{
 
+public class LaserControl : Weapon {
     public float lineLen;
     public float duration;
     public GameObject laser;
@@ -20,6 +20,7 @@ public class LaserControl : Weapon{
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
         mesh = laser.GetComponent<MeshRenderer>();
+        audioSource.clip = soundManager.laserSound;
     }
 
     // Use this for initialization
@@ -55,6 +56,7 @@ public class LaserControl : Weapon{
     {
         StopCoroutine(FireLaser());
         StartCoroutine(FireLaser());
+        audioSource.Play();
         //throw new NotImplementedException();
     }
 

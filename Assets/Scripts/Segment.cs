@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public abstract class Segment : MonoBehaviour {
 
-    AssetManager assetManager;
+    protected AssetManager assetManager;
     protected Robot robot;
 
     public Part parent;
@@ -45,14 +45,14 @@ public abstract class Segment : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        assetManager = AssetManager.Instance;
-        connectedSegments = new List<Segment>();
-        touchingSegments = new List<Segment>();
-        robot = Robot.Instance;
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
-        detector = GetComponentInChildren<Collider>();
-        rb.isKinematic = true;
+        //assetManager = AssetManager.Instance;
+        //connectedSegments = new List<Segment>();
+        //touchingSegments = new List<Segment>();
+        //robot = Robot.Instance;
+        //rb = GetComponent<Rigidbody>();
+        //col = GetComponent<Collider>();
+        //detector = GetComponentInChildren<Collider>();
+        //rb.isKinematic = true;
 	}
 
     void Start()
