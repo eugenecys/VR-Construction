@@ -32,6 +32,6 @@ public class Cannon : Weapon,Controllable{
 
     public override void joystick(Vector2 coordinates)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

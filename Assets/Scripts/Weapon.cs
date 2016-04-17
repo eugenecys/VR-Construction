@@ -8,7 +8,7 @@ public class Weapon : MonoBehaviour, Controllable {
     
     public virtual void joystick(Vector2 coordinates)
     {
-
+        
     }
 
     public virtual void joystickStop()

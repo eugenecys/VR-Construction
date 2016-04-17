@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class LaserControl : Weapon,Controllable{
+public class LaserControl : Weapon{
     public float lineLen;
     public float duration;
     public GameObject laser;

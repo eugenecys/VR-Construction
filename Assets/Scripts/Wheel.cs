@@ -22,7 +22,6 @@ public class Wheel : Segment, Controllable {
 
     protected override void update()
     {
-        
     }
 
     protected override void refresh()
@@ -86,8 +85,9 @@ public class Wheel : Segment, Controllable {
 
     public void joystick(Vector2 coordinates)
     {
-        setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
-        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY * coordinates.magnitude);
+		//Debug.Log (GetComponent<Rigidbody>().velocity);
+        setAngularForce(Constants.Wheel.FORCE );
+        setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
     }
 
     public void triggerStop()

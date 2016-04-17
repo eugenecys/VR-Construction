@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class MachineGun : Weapon,Controllable{
+public class MachineGun : Weapon {
     public GameObject ammo;
     public float ammoVelocity;
         
@@ -32,6 +32,6 @@ public class MachineGun : Weapon,Controllable{
 
     public override void joystick(Vector2 coordinates)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

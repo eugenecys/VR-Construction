@@ -5,10 +5,14 @@ using System.Collections.Generic;
 public class Propeller : Segment, Controllable {
     public HingeJoint propeller;
     public Rigidbody pillar;
+    private bool isPressed;
+    private Vector2 curCoor;
 
     protected override void init()
     {
+		isPressed = false;
         propeller.useMotor = false;
+		curCoor = new Vector2 (0, 0);
         initProperties();
     }
 
@@ -18,9 +22,25 @@ public class Propeller : Segment, Controllable {
         setAngularVelocity(0);
     }
 
+	void Update(){
+		update ();
+	}
+
     protected override void update()
     {
-
+        if (isPressed)
+        {
+            pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE, ForceMode.VelocityChange);
+			//pillar.velocity = pillar.transform.up * Constants.Propeller.FORCE;
+			Debug.Log("pressed");
+            setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * curCoor.magnitude);
+        }
+        else {
+            setAngularVelocity(0);
+			Debug.Log ("unpressed");
+			//pillar.velocity = Vector3.zero;
+			//pillar.angularVelocity = Vector3.zero;
+        }
     }
 
     protected override void refresh()
@@ -62,9 +82,6 @@ public class Propeller : Segment, Controllable {
 
     public void setAngularForce(float force)
     {
-        JointMotor motor = propeller.motor;
-        motor.force = force;
-        propeller.motor = motor;
     }
 
     public void on()
@@ -86,18 +103,18 @@ public class Propeller : Segment, Controllable {
 
     public void joystick(Vector2 coordinates)
     {
-        //setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
-        pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE * coordinates.magnitude, ForceMode.VelocityChange);
-        setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * coordinates.magnitude);
+        //setAngularForce(Constants.Wing.FORCE * coordinates.magnitude);
+        isPressed = true;
+        curCoor = coordinates;
     }
 
     public void triggerStop()
     {
+
     }
 
     public void joystickStop()
     {
-        //setAngularForce(0);
-        setAngularVelocity(0);
+        isPressed = false;
     }
 }

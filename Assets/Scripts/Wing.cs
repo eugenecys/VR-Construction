@@ -4,6 +4,9 @@ using System.Collections;
 public class Wing : Segment, Controllable {
     public float duration;
     public Rigidbody pillar;
+    private bool isPressed;
+    private Vector2 curCoor;
+
     protected override void init()
     {
         initProperties();
@@ -15,9 +18,17 @@ public class Wing : Segment, Controllable {
         setAngularVelocity(0);
     }
 
+    void Update() {
+        update();
+    }
+
     protected override void update()
     {
-
+        if (isPressed)
+        {
+            pillar.AddForce(pillar.transform.right * Constants.Wing.FORCE, ForceMode.VelocityChange);
+            
+        }
     }
 
     protected override void refresh()
@@ -77,24 +88,8 @@ public class Wing : Segment, Controllable {
 
     public void joystick(Vector2 coordinates)
     {
-        //setAngularForce(Constants.Wheel.FORCE * coordinates.magnitude);
-
-        //setAngularVelocity(Constants.Propeller.ANGULAR_VELOCITY * coordinates.magnitude);
-        StartCoroutine(WingForce(coordinates));
-        StopCoroutine(WingForce(coordinates));
-    }
-
-    IEnumerator WingForce(Vector2 coordinates)
-    {
-        pillar.AddForce(pillar.gameObject.transform.up * Constants.Propeller.FORCE * coordinates.magnitude, ForceMode.VelocityChange);
-        yield return new WaitForSeconds(duration);
-        pillar.velocity = Vector3.zero;
-        pillar.angularVelocity = Vector3.zero;
-    }
-
-    void StopWing() {
-        pillar.velocity = Vector3.zero;
-        pillar.angularVelocity = Vector3.zero;
+        isPressed = true;
+        curCoor = coordinates;
     }
 
     public void triggerStop()
@@ -105,7 +100,7 @@ public class Wing : Segment, Controllable {
     public void joystickStop()
     {
         //setAngularForce(0);
-        StopWing();
+        isPressed = false;
     }
 
 }
