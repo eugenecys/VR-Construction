@@ -89,14 +89,14 @@ public class LaserPointer : MonoBehaviour {
 	}
 
 	private void HittingNewThing(object sender, PointerEventArgs e) {
-		Debug.Log ("hitting new thing");
+		//Debug.Log ("hitting new thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (e.target.gameObject);
 		}
 	}
 
 	private void HittingNothing(object sender, PointerEventArgs e) {
-		Debug.Log ("hitting nothing");
+		//Debug.Log ("hitting nothing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (null);
 		}

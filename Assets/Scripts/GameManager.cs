@@ -75,17 +75,16 @@ public class GameManager : Singleton<GameManager> {
 
 
 	private void SpawnRobotBase(GameObject robotBase) {
-		// set all children to be active
-		for (int i = 0; i < robotBase.transform.childCount; i++) {
-			robotBase.transform.GetChild (i).gameObject.SetActive (true);
-		}
-		Part part = robotBase.GetComponent<Part>();
-		List<Part> parts = part.getConnectedParts();
+		Part robotPart = robotBase.GetComponent<Part> ();
+		if (robotPart) {
+			GameObject prefab = Resources.Load("Prefabs/" + robotPart.name) as GameObject;
+			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y, 0f), Quaternion.identity) as GameObject;
 
-		foreach(Part child in parts)
-		{
-			child.template = false;
+			Part spawnedPart = sObj.GetComponent<Part>();
+			spawnedPart.template = false;
+			spawnedPart.setState (Part.State.Placed);
+			return;
+
 		}
-		GameObject.Instantiate (robotBase, new Vector3 (0f, robotBase.transform.localScale.y, 0f), Quaternion.identity);
 	}
 }
