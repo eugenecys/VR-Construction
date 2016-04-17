@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -11,6 +12,28 @@ public class Wheel : Segment, Controllable {
     public HingeJoint wheel;
 
     public bool reverse;
+
+	// Use this for initialization
+	void Awake () {
+		assetManager = AssetManager.Instance;
+		connectedSegments = new List<Segment>();
+		touchingSegments = new List<Segment>();
+		robot = Robot.Instance;
+		rb = GetComponent<Rigidbody>();
+		col = GetComponent<Collider>();
+		detector = GetComponentInChildren<Collider>();
+		rb.isKinematic = true;
+		soundManager = SoundManager.Instance;
+		audioSource = GetComponent<AudioSource>();
+		audioSource.clip = soundManager.wheelSound;
+	}
+
+	void Start()
+	{
+		active = false;
+		parent.evaluateState();
+		init();
+	}
 
     protected override void init()
     {
@@ -26,6 +49,7 @@ public class Wheel : Segment, Controllable {
 
     protected override void update()
     {
+		
     }
 
     protected override void refresh()
@@ -104,12 +128,5 @@ public class Wheel : Segment, Controllable {
         audioSource.Stop();
         setAngularForce(0);
         setAngularVelocity(0);
-    }
-
-    void Awake()
-    {
-        soundManager = SoundManager.Instance;
-        audioSource = GetComponent<AudioSource>();
-        audioSource.clip = soundManager.wheelSound;
     }
 }

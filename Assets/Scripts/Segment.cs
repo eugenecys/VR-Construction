@@ -44,7 +44,9 @@ public abstract class Segment : MonoBehaviour {
     }
 
 	// Use this for initialization
+	/*
 	void Awake () {
+		
         assetManager = AssetManager.Instance;
         connectedSegments = new List<Segment>();
         touchingSegments = new List<Segment>();
@@ -61,7 +63,7 @@ public abstract class Segment : MonoBehaviour {
         parent.evaluateState();
         init();
     }
-
+*/
     public void enablePhysics()
     {
         rb.isKinematic = false;
