@@ -159,7 +159,6 @@ public abstract class Segment : MonoBehaviour {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
 			if (!builder.triggered) {
 				parent.highlight ();
-				return;
 			}
 				
 		}
@@ -192,7 +191,6 @@ public abstract class Segment : MonoBehaviour {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
 			if (!builder.triggered) {
 				parent.unhighlight ();
-				return;
 			}
 
 		}
