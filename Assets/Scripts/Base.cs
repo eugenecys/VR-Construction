@@ -43,8 +43,8 @@ public class Base : Segment, Controllable
 
     public void initProperties()
     {
-        setAngularForce(0);
-        setAngularVelocity(0);
+        //setAngularForce(0);
+        //setAngularVelocity(0);
     }
 
     protected override void update()

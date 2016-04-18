@@ -85,8 +85,9 @@ public class GameManager : Singleton<GameManager> {
 		state = GameState.Build;
 		RobotBases.SetActive (false);
 		roomLight.enabled = true;
-		SpawnRobotBase (selectedBase);
 		Deployer.GetComponent<SphereCollider>().enabled = true;
+
+		SpawnRobotBase (selectedBase);
 
 	}
 
@@ -95,7 +96,7 @@ public class GameManager : Singleton<GameManager> {
 		Part robotPart = robotBase.GetComponent<Part> ();
 		if (robotPart) {
 			GameObject prefab = Resources.Load("Prefabs/" + robotPart.name) as GameObject;
-			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y, 0f), Quaternion.identity) as GameObject;
+			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y/2f, 0f), Quaternion.identity) as GameObject;
 
 			Part spawnedPart = sObj.GetComponent<Part>();
 			spawnedPart.template = false;
