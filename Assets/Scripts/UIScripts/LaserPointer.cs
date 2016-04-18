@@ -73,8 +73,6 @@ public class LaserPointer : MonoBehaviour {
 				}
 			}
 		}
-	
-
 
 
 	}
