@@ -143,7 +143,8 @@ public class ViveInputManager : Singleton<ViveInputManager>
                 inputMap[InputType.RightTriggerDown]();
             }
             if (device.GetPressDown(SteamVR_Controller.ButtonMask.Touchpad) && inputMap.ContainsKey(InputType.RightTouchpadDown))
-            {
+			{
+				rightTouchpadOn = true;
                 if (rightTriggerOn && inputMap.ContainsKey(InputType.RightTriggerAndTouchpad))
                 {
                     inputMap[InputType.RightTriggerAndTouchpad](device.GetAxis());
