@@ -9,8 +9,12 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
 	public GameObject DeployedUI;
-	public GameObject ControllerUIBuilding; 
-	public GameObject ControllerUIRobotControls; 
+	public GameObject PickUpUI;
+	public GameObject ScaleUI;
+
+
+	public static bool pickedUpForFirstTime = false;
+	public static bool scaledForFirstTime = false;
 
 	// Use this for initialization
 	void Start () {
@@ -50,12 +54,37 @@ public class UIManager :  Singleton<UIManager> {
 	public void SelectBaseOne() {
 		GameManager.Instance.SelectBase (1);
 		SelectBaseUI.SetActive (false);
-
+		BuildingUI.SetActive (true);
+		ShowPickUpControls ();
 	}
 
 	public void SelectBaseTwo() {
 		GameManager.Instance.SelectBase (2);
 		SelectBaseUI.SetActive (false);
+		BuildingUI.SetActive (true);
+		ShowPickUpControls ();
 	}
-		
+
+	public void DeployRobot() {
+		BuildingUI.SetActive (false);
+		DeployedUI.SetActive (true);
+	}
+
+	public void UndeployRobot() {
+		BuildingUI.SetActive (true);
+		DeployedUI.SetActive (false);
+	}
+
+	public void ShowPickUpControls() {
+		PickUpUI.SetActive (true);
+	}
+
+	public void ShowScaleControls() {
+		PickUpUI.SetActive (false);
+		ScaleUI.SetActive (true);
+	}
+
+	public void HideScaleControls() {
+		ScaleUI.SetActive (false);
+	}
 }

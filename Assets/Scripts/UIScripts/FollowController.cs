@@ -3,13 +3,35 @@ using System.Collections;
 
 public class FollowController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public bool followController = true;
+
+	public Transform ui;
+	public Transform controller;
+
+	public float distanceAboveController = 0f;
+
+	public float followSpeed = 10f;
+	private void Start ()
+	{
+		Vector3 controllerUp = (ui.position -  controller.position).normalized;
+		Vector3 localUp = ui.transform.up;
+
+		// Allign the body's up axis with the centre of planet
+		ui.rotation = Quaternion.FromToRotation(localUp,controllerUp) * ui.rotation;
 	}
+
+
+	private void Update ()
+	{
+		// If the UI should look at the camera set it's rotation to point from the UI to the camera.
+		if (followController) {
+			ui.rotation = Quaternion.LookRotation (ui.position - controller.position);
+			Vector3 targetDirection = controller.forward.normalized; 
+			Vector3 targetPosition = controller.position + targetDirection * distanceAboveController;
 	
-	// Update is called once per frame
-	void Update () {
-	
+			targetPosition = Vector3.Lerp (ui.position, targetPosition, followSpeed * Time.deltaTime);
+			ui.position = targetPosition;
+		}
+
 	}
 }

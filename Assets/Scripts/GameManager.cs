@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager> {
     {
         state = GameState.Play;
 		city.SetActive (true); 
+		UIManager.Instance.DeployRobot ();
     }
 
     public void build()
@@ -40,6 +41,7 @@ public class GameManager : Singleton<GameManager> {
         {
 			city.SetActive (false);
         }
+		UIManager.Instance.UndeployRobot ();
     }
 
     void Awake()
@@ -109,3 +111,4 @@ public class GameManager : Singleton<GameManager> {
 		}
 	}
 }
+

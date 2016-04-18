@@ -24,6 +24,7 @@ public class Builder : MonoBehaviour {
     public bool triggered = false;
 
 	private LaserPointer laser;
+
     public enum ColliderState
     {
         Far,
@@ -228,6 +229,10 @@ public class Builder : MonoBehaviour {
             else
             {
                 scaleArrow.followDrag(transform);
+				if (!UIManager.scaledForFirstTime) {
+					UIManager.Instance.HideScaleControls ();
+					UIManager.scaledForFirstTime = true;
+				}
             }
 			if (laser) {
 				laser.active = false;
@@ -349,9 +354,13 @@ public class Builder : MonoBehaviour {
         spawnedPart.template = false;
         spawnedPart.evaluateState();
 		audioSource.PlayOneShot(soundManager.pickupSound);
+
+		if (!UIManager.pickedUpForFirstTime) {
+			UIManager.Instance.ShowScaleControls ();
+			UIManager.pickedUpForFirstTime = true;
+		}
     }
-
-
+		
 
 	public void SetContactObject(GameObject contact) {
 		contactObject = contact;
