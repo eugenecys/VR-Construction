@@ -19,13 +19,13 @@ public class GameManager : Singleton<GameManager> {
     public GameState state;
     public GameObject city;
 
-	public Light roomLight; 
 
 	public GameObject RobotBases;
 
 	public GameObject selectedBase;
 
-	public GameObject Deployer; 
+	public GameObject[] RoomComponents; 
+
 
     public void play()
     {
@@ -55,18 +55,19 @@ public class GameManager : Singleton<GameManager> {
 		robot = Robot.Instance;
 
 		if (state == GameState.Start) {
-			Deployer.GetComponent<SphereCollider> ().enabled = false;
-			roomLight.enabled = false;
+			foreach (GameObject component in RoomComponents) {
+				component.SetActive (false);
+			}
+			Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = false;
 			audioSource.clip = soundManager.buildBGM;
 			audioSource.loop = true;
-
 			audioSource.Play ();
 		}
     }
 
 	// Use this for initialization
 	void Start () {
-		
+		Invoke ("StartGame", 5f);
 	}
 	
 	// Update is called once per frame
@@ -77,6 +78,7 @@ public class GameManager : Singleton<GameManager> {
 	public void StartGame() {
 		state = GameState.SelectBase;
 		RobotBases.SetActive (true);
+		UIManager.Instance.StartGame ();
 	}
 
 	public void SelectBase(int robotBase) {
@@ -90,10 +92,12 @@ public class GameManager : Singleton<GameManager> {
 		}
 		state = GameState.Build;
 		RobotBases.SetActive (false);
-		roomLight.enabled = true;
-		Deployer.GetComponent<SphereCollider>().enabled = true;
-
 		SpawnRobotBase (selectedBase);
+
+		foreach (GameObject component in RoomComponents) {
+			component.SetActive (true);
+		}
+		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
 
 	}
 

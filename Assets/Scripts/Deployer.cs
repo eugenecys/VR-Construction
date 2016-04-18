@@ -20,7 +20,8 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
     public void unhighlight()
     {
-        meshRenderer.material = defaultMaterial;
+		if (defaultMaterial)
+        	meshRenderer.material = defaultMaterial;
     }
 
     public void deploy()

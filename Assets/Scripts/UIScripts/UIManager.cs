@@ -31,7 +31,6 @@ public class UIManager :  Singleton<UIManager> {
 	}
 		
 	public void StartGame() {
-		GameManager.Instance.StartGame ();
 		StartUI.SetActive (false);
 		SelectBaseUI.SetActive (true);
 	}
