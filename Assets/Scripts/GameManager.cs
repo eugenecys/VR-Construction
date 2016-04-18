@@ -32,6 +32,8 @@ public class GameManager : Singleton<GameManager> {
         state = GameState.Play;
 		city.SetActive (true); 
 		UIManager.Instance.DeployRobot ();
+		UIManager.Instance.ShowWeaponsControls (true);
+		UIManager.Instance.ShowMovementControls (true);
     }
 
     public void build()

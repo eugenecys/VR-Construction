@@ -230,7 +230,7 @@ public class Builder : MonoBehaviour {
             {
                 scaleArrow.followDrag(transform);
 				if (!UIManager.scaledForFirstTime) {
-					UIManager.Instance.HideScaleControls ();
+					UIManager.Instance.ShowScaleControls (false);
 					UIManager.scaledForFirstTime = true;
 				}
             }
@@ -356,7 +356,8 @@ public class Builder : MonoBehaviour {
 		audioSource.PlayOneShot(soundManager.pickupSound);
 
 		if (!UIManager.pickedUpForFirstTime) {
-			UIManager.Instance.ShowScaleControls ();
+			UIManager.Instance.ShowPickUpControls (false);
+			UIManager.Instance.ShowScaleControls (true);
 			UIManager.pickedUpForFirstTime = true;
 		}
     }

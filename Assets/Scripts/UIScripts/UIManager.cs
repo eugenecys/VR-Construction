@@ -11,11 +11,13 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject DeployedUI;
 	public GameObject PickUpUI;
 	public GameObject ScaleUI;
-
+	public GameObject MovementUI;
+	public GameObject WeaponsUI;
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
-
+	public static bool movedForFirstTime = false;
+	public static bool firedForFirstTime = false;
 	// Use this for initialization
 	void Start () {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
@@ -27,10 +29,7 @@ public class UIManager :  Singleton<UIManager> {
 	void Update () {
 		KeyControls ();
 	}
-
-
-
-
+		
 	public void StartGame() {
 		GameManager.Instance.StartGame ();
 		StartUI.SetActive (false);
@@ -55,14 +54,14 @@ public class UIManager :  Singleton<UIManager> {
 		GameManager.Instance.SelectBase (1);
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
-		ShowPickUpControls ();
+		ShowPickUpControls (true);
 	}
 
 	public void SelectBaseTwo() {
 		GameManager.Instance.SelectBase (2);
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
-		ShowPickUpControls ();
+		ShowPickUpControls (true);
 	}
 
 	public void DeployRobot() {
@@ -75,16 +74,19 @@ public class UIManager :  Singleton<UIManager> {
 		DeployedUI.SetActive (false);
 	}
 
-	public void ShowPickUpControls() {
-		PickUpUI.SetActive (true);
+	public void ShowPickUpControls(bool val) {
+		PickUpUI.SetActive (val);
 	}
 
-	public void ShowScaleControls() {
-		PickUpUI.SetActive (false);
-		ScaleUI.SetActive (true);
+	public void ShowScaleControls(bool val) {
+		ScaleUI.SetActive (val);
+	}
+		
+	public void ShowWeaponsControls(bool val) {
+		WeaponsUI.SetActive (val);
 	}
 
-	public void HideScaleControls() {
-		ScaleUI.SetActive (false);
+	public void ShowMovementControls(bool val) {
+		MovementUI.SetActive (val);
 	}
 }

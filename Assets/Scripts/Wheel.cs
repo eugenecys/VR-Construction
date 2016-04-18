@@ -115,7 +115,7 @@ public class Wheel : Segment, Controllable {
     {
         setAngularForce(Constants.Wheel.FORCE);
         setAngularVelocity(Constants.Wheel.ANGULAR_VELOCITY);
-        audioSource.Play();
+        //audioSource.Play();
     }
 
     public void triggerStop()
