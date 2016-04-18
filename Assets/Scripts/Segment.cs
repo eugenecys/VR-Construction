@@ -150,7 +150,6 @@ public abstract class Segment : MonoBehaviour {
     }
 
 
-
     void OnTriggerStay(Collider other)
     {
 		
