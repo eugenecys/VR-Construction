@@ -153,6 +153,7 @@ public abstract class Segment : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
+		/*
 		// only highlight object when we are touching it with laser and not controlling it
 		if (other.tag == "Laser") {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
@@ -161,6 +162,7 @@ public abstract class Segment : MonoBehaviour {
 			} 
 				
 		}
+		*/
 		if (parent.template && other.GetComponentInParent<Part> ()) {
 			return;
 		} else if (parent.template) {
@@ -181,6 +183,7 @@ public abstract class Segment : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
+		/*
 		// only highlight object when we are touching it with laser and not controlling it
 		if (other.tag == "Laser") {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
@@ -193,7 +196,7 @@ public abstract class Segment : MonoBehaviour {
 			}
 
 		}
-
+		*/
         touchingSegments = new List<Segment>();
         if (parent.template)
         {

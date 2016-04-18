@@ -97,16 +97,40 @@ public class LaserPointer : MonoBehaviour {
 	}
 
 	private void HittingNewThing(object sender, PointerEventArgs e) {
-		Debug.Log ("hitting new thing");
+		//Debug.Log ("hitting new thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (e.target.gameObject);
+			if (!builder.triggered) {
+				Interactable iObj = e.target.gameObject.GetComponent<Interactable>();
+				if (iObj != null)
+				{
+					iObj.highlight();
+				}
+			} 
+
 		}
 	}
 
 	private void HittingNothing(object sender, PointerEventArgs e) {
-		Debug.Log ("hitting nothing");
+		//Debug.Log ("hitting nothing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
+			if (!builder.triggered) {
+				
+				if (previousContact.transform.parent && (previousContact.transform.parent.tag != "Controller")) {
+					// this was controlling the object
+					Interactable iObj = previousContact.GetComponent<Interactable> ();
+					if (iObj != null) {
+						iObj.unhighlight ();
+					}
+					Part part = previousContact.GetComponent<Part> ();
+					if (part) {
+						part.setState (Part.State.Placed);
+					}
+
+				}
+			}
 			builder.SetContactObject (null);
+
 		}
 	}
 
