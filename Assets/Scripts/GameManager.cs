@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager> {
 
 	private AudioSource audioSource;
 	private SoundManager soundManager; 
+	private Robot robot;
 
     public GameState state;
     public GameObject city;
@@ -47,6 +48,7 @@ public class GameManager : Singleton<GameManager> {
 
 		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
+		robot = Robot.Instance;
 
 		if (state == GameState.Start) {
 			Deployer.GetComponent<SphereCollider> ().enabled = false;
@@ -98,6 +100,7 @@ public class GameManager : Singleton<GameManager> {
 			GameObject prefab = Resources.Load("Prefabs/" + robotPart.name) as GameObject;
 			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y/2f, 0f), Quaternion.identity) as GameObject;
 
+			sObj.transform.parent = robot.transform;
 			Part spawnedPart = sObj.GetComponent<Part>();
 			spawnedPart.template = false;
 			spawnedPart.setState (Part.State.Placed);
