@@ -8,8 +8,9 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject StartUI;
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
-	public GameObject DeploymentUI;
-	public GameObject ControlsUI;
+	public GameObject DeployedUI;
+	public GameObject ControllerUIBuilding; 
+	public GameObject ControllerUIRobotControls; 
 
 	// Use this for initialization
 	void Start () {
