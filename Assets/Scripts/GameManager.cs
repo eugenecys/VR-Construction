@@ -29,7 +29,7 @@ public class GameManager : Singleton<GameManager> {
     public void play()
     {
         state = GameState.Play;
-		city.SetActive (true);
+		city.SetActive (true); 
     }
 
     public void build()
@@ -88,11 +88,6 @@ public class GameManager : Singleton<GameManager> {
 		SpawnRobotBase (selectedBase);
 		Deployer.GetComponent<SphereCollider>().enabled = true;
 
-		//audioSource.Stop ();
-		//audioSource.clip = soundManager.buildBGM;
-		//audioSource.loop = true;
-
-		//audioSource.Play ();
 	}
 
 

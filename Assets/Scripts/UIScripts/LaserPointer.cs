@@ -57,6 +57,15 @@ public class LaserPointer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (GameManager.Instance.state == GameManager.GameState.Play) {
+			pointer.gameObject.SetActive (false); 
+			active = false;
+		}
+		else {
+			pointer.gameObject.SetActive (true);
+			active = true;
+		}
+
 		if (active) {
 			if (pointer.transform.localScale.z == 0f) {
 				pointer.transform.localScale = new Vector3(thickness, thickness, length);
@@ -67,6 +76,8 @@ public class LaserPointer : MonoBehaviour {
 				pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
 			}
 		}
+
+
 	}
 
 
