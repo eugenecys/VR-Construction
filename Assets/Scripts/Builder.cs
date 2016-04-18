@@ -17,6 +17,8 @@ public class Builder : MonoBehaviour {
     public Collider Short;
 
     private ViveInputManager inputManager;
+	private AudioSource audioSource;
+	private SoundManager soundManager; 
 
     private float refreshDelay = 0.2f;
     public bool triggered = false;
@@ -110,6 +112,8 @@ public class Builder : MonoBehaviour {
         inputManager = ViveInputManager.Instance;
         deployer = Deployer.Instance;
 		laser = this.GetComponent<LaserPointer> ();
+		audioSource = this.GetComponent<AudioSource> ();
+		soundManager = SoundManager.Instance;
     }
 
 	// Use this for initialization
@@ -166,6 +170,7 @@ public class Builder : MonoBehaviour {
                 {
                     Destroy(markedPart.gameObject);
                 }
+				audioSource.PlayOneShot(soundManager.trashSound);
             }
             else
             {
@@ -245,6 +250,7 @@ public class Builder : MonoBehaviour {
             child.transform.parent = this.transform;
             child.unplace();
         }
+		audioSource.PlayOneShot(soundManager.pickupSound);
     }
 
     public void SpawnComponent(Part part)
@@ -342,6 +348,7 @@ public class Builder : MonoBehaviour {
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
         spawnedPart.evaluateState();
+		audioSource.PlayOneShot(soundManager.pickupSound);
     }
 
 

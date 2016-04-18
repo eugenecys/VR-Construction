@@ -8,7 +8,6 @@ public class SoundManager : Singleton<SoundManager>
     //Change the number of audio sources as needed
     private int _audioSourceCount = 10;
 
-    //Wheel whirring sound
     public AudioClip wheelSound { get; private set; }
     public AudioClip machinegunSound { get; private set; }
     public AudioClip laserSound { get; private set; }
@@ -16,8 +15,10 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip attachSound { get; private set; }
     public AudioClip cannonSound { get; private set; }
     public AudioClip trashSound { get; private set; }
-    public AudioClip buttonSound { get; private set; }
+    public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
+	public AudioClip buildBGM { get; private set; }
+	public AudioClip startBGM { get; private set; }
 
     public void playSound(AudioClip sound)
     {
@@ -84,8 +85,10 @@ public class SoundManager : Singleton<SoundManager>
         attachSound = _loadSoundClip("ConstructionRoom-Drop", 0);
         cannonSound = _loadSoundClip("Cannon-SingleShot", 0);
         trashSound = _loadSoundClip("ConstructionRoom-Trash", 0);
-        buttonSound = _loadSoundClip("ConstructionRoom-ButtonRelease", 0);
+        releaseSound = _loadSoundClip("ConstructionRoom-ButtonRelease", 0);
         pickupSound = _loadSoundClip("ConstructionRoom-Pickup", 0);
+		buildBGM = _loadSoundClip ("ConstructionRoom-Green", 0);
+		startBGM = _loadSoundClip ("ConstructionRoom-Drone", 0);
     }
 
     private AudioClip _loadSoundClip(string filename, int i)

@@ -12,6 +12,9 @@ public class GameManager : Singleton<GameManager> {
 		SelectBase
     }
 
+	private AudioSource audioSource;
+	private SoundManager soundManager; 
+
     public GameState state;
     public GameObject city;
 
@@ -26,9 +29,7 @@ public class GameManager : Singleton<GameManager> {
     public void play()
     {
         state = GameState.Play;
-		city.gameObject.SetActive (true);
-        //GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
-        //city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		city.SetActive (true);
     }
 
     public void build()
@@ -36,14 +37,25 @@ public class GameManager : Singleton<GameManager> {
         state = GameState.Build;
         if (city != null)
         {
-            Destroy(city);
+			city.SetActive (false);
         }
     }
 
     void Awake()
     {
 		//state = GameState.Start;
-		Deployer.GetComponent<SphereCollider>().enabled = false;
+
+		audioSource = this.GetComponent<AudioSource> ();
+		soundManager = SoundManager.Instance;
+
+		if (state == GameState.Start) {
+			Deployer.GetComponent<SphereCollider> ().enabled = false;
+			roomLight.enabled = false;
+			audioSource.clip = soundManager.buildBGM;
+			audioSource.loop = true;
+
+			audioSource.Play ();
+		}
     }
 
 	// Use this for initialization
@@ -72,9 +84,15 @@ public class GameManager : Singleton<GameManager> {
 		}
 		state = GameState.Build;
 		RobotBases.SetActive (false);
-		roomLight.gameObject.SetActive (true);
+		roomLight.enabled = true;
 		SpawnRobotBase (selectedBase);
 		Deployer.GetComponent<SphereCollider>().enabled = true;
+
+		//audioSource.Stop ();
+		//audioSource.clip = soundManager.buildBGM;
+		//audioSource.loop = true;
+
+		//audioSource.Play ();
 	}
 
 
