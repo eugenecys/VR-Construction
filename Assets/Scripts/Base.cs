@@ -126,8 +126,39 @@ public class Base : Segment, Controllable
 
     public void joystick(Vector2 coordinates)
     {
-        
+        int direction = (int)(coordinates.y / Mathf.Abs(coordinates.y));
+        float magnitude = coordinates.magnitude;
+        float leftSpeed = 0;
+        float rightSpeed = 0;
+        if (coordinates.x > 0)
+        {
+            leftSpeed = magnitude * direction;
+            rightSpeed = coordinates.y;
+        }
+        else
+        {
+            rightSpeed = magnitude * direction;
+            leftSpeed = coordinates.y;
+        }
+        setLeftSpeed(leftSpeed);
+        setRightSpeed(rightSpeed);
         audioSource.Play();
+    }
+
+    void setLeftSpeed(float speed)
+    {
+        foreach (HingeJoint wheel in leftWheels)
+        {
+            setAngularVelocity(wheel, speed * Constants.Wheel.ANGULAR_VELOCITY);
+        }
+    }
+
+    void setRightSpeed(float speed)
+    {
+        foreach (HingeJoint wheel in rightWheels)
+        {
+            setAngularVelocity(wheel, speed * Constants.Wheel.ANGULAR_VELOCITY);
+        }
     }
 
     public void triggerStop()
@@ -137,6 +168,14 @@ public class Base : Segment, Controllable
 
     public void joystickStop()
     {
+        foreach (HingeJoint wheel in leftWheels)
+        {
+            setAngularVelocity(wheel, 0);
+        }
+        foreach (HingeJoint wheel in rightWheels)
+        {
+            setAngularVelocity(wheel, 0);
+        }
         audioSource.Stop();
     }
 }
