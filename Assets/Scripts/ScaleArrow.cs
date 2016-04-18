@@ -109,16 +109,12 @@ public class ScaleArrow : MonoBehaviour, Interactable {
 
 	void OnTriggerStay(Collider other)
 	{
-		if (other.tag == "Laser") {
-			highlight ();
-		}
+		
 	}
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.tag == "Laser") {
-			unhighlight ();
-		}
+		
 
 	}
 }
