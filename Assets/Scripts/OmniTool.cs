@@ -54,6 +54,7 @@ public class OmniTool : MonoBehaviour
 		if (args.Length > 0) {
 			axis = (Vector2)args [0];
 		}
+		touchpadDown ();
 	}
 
 	public void triggerDown (params object[] args)
