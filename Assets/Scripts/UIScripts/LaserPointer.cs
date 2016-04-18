@@ -100,12 +100,23 @@ public class LaserPointer : MonoBehaviour {
 		//Debug.Log ("hitting new thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (e.target.gameObject);
+			Interactable iObj = e.target.gameObject.GetComponent<Interactable>();
+			if (iObj != null)
+			{
+				iObj.highlight();
+			}
 		}
 	}
 
 	private void HittingNothing(object sender, PointerEventArgs e) {
 		//Debug.Log ("hitting nothing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
+			if (previousContact) {
+				Interactable iObj = previousContact.GetComponent<Interactable> ();
+				if (iObj != null) {
+					iObj.unhighlight ();
+				}
+			}
 			builder.SetContactObject (null);
 		}
 	}
@@ -113,7 +124,7 @@ public class LaserPointer : MonoBehaviour {
 	private void HittingSameThing(object sender, PointerEventArgs e) {
 		//Debug.Log ("hitting same thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
-			builder.SetContactObject (e.target.gameObject);
+			//builder.SetContactObject (e.target.gameObject);
 		}
 	}
 
@@ -136,7 +147,7 @@ public class LaserPointer : MonoBehaviour {
 			previousContact = hit.transform;
 		}
 
-		if(previousContact && previousContact != hit.transform)
+		else if(previousContact && previousContact != hit.transform)
 		{
 			PointerEventArgs argsOut = new PointerEventArgs();
 			argsOut.distance = 0f;
@@ -146,7 +157,7 @@ public class LaserPointer : MonoBehaviour {
 			previousContact = null;
 		}
 
-		if(bHit && previousContact != hit.transform)
+		else if(bHit && previousContact != hit.transform)
 		{
 			PointerEventArgs argsIn = new PointerEventArgs();
 			argsIn.distance = hit.distance;
