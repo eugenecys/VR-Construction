@@ -12,6 +12,7 @@ public class Base : Segment, Controllable
     private SoundManager soundManager;
     public HingeJoint[] leftWheels;
     public HingeJoint[] rightWheels;
+	private List<Rigidbody> wheelRBs;
     
     // Use this for initialization
     void Awake()
@@ -27,6 +28,13 @@ public class Base : Segment, Controllable
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = soundManager.wheelSound;
+		wheelRBs = new List<Rigidbody> ();
+		foreach (HingeJoint wheel in leftWheels) {
+			wheelRBs.Add(wheel.gameObject.GetComponent<Rigidbody>());
+		}
+		foreach (HingeJoint wheel in rightWheels) {
+			wheelRBs.Add(wheel.gameObject.GetComponent<Rigidbody>());
+		}
     }
 
     void Start()
@@ -95,6 +103,10 @@ public class Base : Segment, Controllable
 
     public void on()
     {
+		foreach (Rigidbody rb in wheelRBs) {
+			rb.useGravity = true;
+			rb.isKinematic = false;
+		}
         foreach (HingeJoint joint in leftWheels)
         {
             joint.useMotor = true;
@@ -107,7 +119,11 @@ public class Base : Segment, Controllable
     }
 
     public void off()
-    {
+	{
+		foreach (Rigidbody rb in wheelRBs) {
+			rb.useGravity = false;
+			rb.isKinematic = true;
+		}
         foreach (HingeJoint joint in leftWheels)
         {
             joint.useMotor = false;
@@ -164,7 +180,7 @@ public class Base : Segment, Controllable
     {
         foreach (HingeJoint wheel in rightWheels)
 		{
-			setAngularForce (wheel, speed * Constants.Wheel.FORCE);
+			setAngularForce (wheel, force * Constants.Wheel.FORCE);
             setAngularVelocity(wheel, - speed * Constants.Wheel.ANGULAR_VELOCITY);
         }
     }
