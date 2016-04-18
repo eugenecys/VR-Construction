@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager> {
     public void play()
     {
         state = GameState.Play;
-
+		city.gameObject.SetActive (true);
         //GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
         //city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
     }
