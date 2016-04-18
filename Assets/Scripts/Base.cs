@@ -43,7 +43,6 @@ public class Base : Segment, Controllable
 
     public void initProperties()
     {
-		
     }
 
     protected override void update()
