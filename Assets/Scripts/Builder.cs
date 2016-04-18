@@ -318,10 +318,18 @@ public class Builder : MonoBehaviour {
             triggerRobot();
         }
 
-		if (Input.GetKey (KeyCode.R)) {
+		if (Input.GetKey (KeyCode.R) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
 			triggerDown ();
 		}
-		if (Input.GetKey (KeyCode.U)) {
+
+		if (Input.GetKey (KeyCode.E) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
+			triggerDown ();
+		}
+		if (Input.GetKey (KeyCode.U) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
+			triggerUp ();
+		}
+
+		if (Input.GetKey (KeyCode.Y) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
 			triggerUp ();
 		}
 	}

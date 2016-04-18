@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public GameState state;
-    private GameObject city;
+    public GameObject city;
 
 	public Light roomLight; 
 
@@ -27,8 +27,8 @@ public class GameManager : Singleton<GameManager> {
     {
         state = GameState.Play;
 
-        GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
-        city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+        //GameObject prefab = Resources.Load("Prefabs/City") as GameObject;
+        //city = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
     }
 
     public void build()

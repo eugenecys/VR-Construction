@@ -158,7 +158,7 @@ public abstract class Segment : MonoBehaviour {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
 			if (!builder.triggered) {
 				parent.highlight ();
-			}
+			} 
 				
 		}
 		if (parent.template && other.GetComponentInParent<Part> ()) {
@@ -185,8 +185,11 @@ public abstract class Segment : MonoBehaviour {
 		if (other.tag == "Laser") {
 			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
 			if (!builder.triggered) {
-				parent.unhighlight ();
-				parent.place ();
+				if (parent.transform.parent && (parent.transform.parent.tag != "Controller")) {
+					// this was controlling the object
+					parent.unhighlight ();
+					parent.setState (Part.State.Placed);
+				}
 			}
 
 		}

@@ -65,7 +65,6 @@ public class LaserPointer : MonoBehaviour {
 		} else {
 			if (pointer.transform.localScale.z > 0f) {
 				pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
-
 			}
 		}
 	}
