@@ -24,6 +24,7 @@ public class Part : MonoBehaviour, Interactable
     public bool template;
     private bool highlighted;
     public bool markedForDelete;
+    public bool scalable;
     
     private Segment[] segments;
     Controllable[] controllables;
@@ -85,7 +86,15 @@ public class Part : MonoBehaviour, Interactable
             cpt.parent = this;
         }
 
-        scaler.gameObject.SetActive(false);
+        if (scaler == null)
+        {
+            scalable = false;
+        }
+        else
+        {
+            scalable = true;
+            scaler.gameObject.SetActive(false);
+        }
     }
     
     public void addConnectedPart(Part part)
@@ -251,27 +260,45 @@ public class Part : MonoBehaviour, Interactable
         switch (_state)
         {
             case State.Connectable:
-                scaler.gameObject.SetActive(true);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(true);
+                }
                 setSegmentMaterials(assetManager.connectableMaterial);
                 break;
             case State.Unconnectable:
-                scaler.gameObject.SetActive(true);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(true);
+                }
                 setSegmentMaterials(assetManager.unconnectableMaterial);
                 break;
             case State.Free:
-                scaler.gameObject.SetActive(true);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(true);
+                }
                 setSegmentMaterials(assetManager.freeMaterial);
                 break;
             case State.Placed:
-                scaler.gameObject.SetActive(false);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(false);
+                }
                 setSegmentDefaultMaterials();
                 break;
             case State.MarkedForDelete:
-                scaler.gameObject.SetActive(false);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(false);
+                }
                 setSegmentMaterials(assetManager.deleteMaterial);
                 break;
             case State.Highlight:
-                scaler.gameObject.SetActive(false);
+                if (scalable)
+                {
+                    scaler.gameObject.SetActive(false);
+                }
                 setSegmentMaterials(assetManager.highlightMaterial);
                 break;
         }
