@@ -4,6 +4,14 @@ using System;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+public struct PointerData
+{
+	public uint controllerIndex;
+	public uint flags;
+	public float distance;
+	public Transform target;
+}
+
 
 public class LaserPointer : MonoBehaviour {
 
@@ -56,7 +64,7 @@ public class LaserPointer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if (GameManager.Instance.state == GameManager.GameState.Play) {
 			pointer.gameObject.SetActive (false); 
 		}
@@ -98,7 +106,7 @@ public class LaserPointer : MonoBehaviour {
 
 	private void HittingNewThing(object sender, PointerEventArgs e) {
 		//Debug.Log ("hitting new thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
 			builder.SetContactObject (e.target.gameObject);
 			Interactable iObj = e.target.gameObject.GetComponent<Interactable>();
 			if (iObj != null)
@@ -110,7 +118,7 @@ public class LaserPointer : MonoBehaviour {
 
 	private void HittingNothing(object sender, PointerEventArgs e) {
 		//Debug.Log ("hitting nothing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
 			if (previousContact) {
 				Interactable iObj = previousContact.GetComponent<Interactable> ();
 				if (iObj != null) {
@@ -123,7 +131,7 @@ public class LaserPointer : MonoBehaviour {
 
 	private void HittingSameThing(object sender, PointerEventArgs e) {
 		//Debug.Log ("hitting same thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
 			builder.SetContactObject (e.target.gameObject);
 			Interactable iObj = e.target.gameObject.GetComponent<Interactable> ();
 			if (iObj != null) {
@@ -132,6 +140,41 @@ public class LaserPointer : MonoBehaviour {
 		} 
 	}
 
+	private void LaserEnter(PointerData data) {
+		//Debug.Log ("hitting new thing");
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			builder.SetContactObject (data.target.gameObject);
+			Interactable iObj = data.target.gameObject.GetComponent<Interactable>();
+			if (iObj != null)
+			{
+				iObj.highlight();
+			}
+		}
+	}
+
+	private void LaserStay(PointerData data) {
+		//Debug.Log ("hitting same thing");
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			builder.SetContactObject (data.target.gameObject);
+			Interactable iObj = data.target.gameObject.GetComponent<Interactable> ();
+			if (iObj != null) {
+				iObj.highlight ();
+			}
+		} 
+	}
+
+	private void LaserExit(PointerData data) {
+		//Debug.Log ("hitting nothing");
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			if (previousContact) {
+				Interactable iObj = previousContact.GetComponent<Interactable> ();
+				if (iObj != null) {
+					iObj.unhighlight ();
+				}
+			}
+			builder.SetContactObject (null);
+		}
+	}
 
 	void CastLaser ()
 	{
@@ -142,6 +185,8 @@ public class LaserPointer : MonoBehaviour {
 		RaycastHit hit;
 		bool bHit = Physics.Raycast(raycast, out hit, dist, laserMask);
 		//Debug.DrawRay (holder.transform.position, transform.forward);
+
+		/*
 		if (previousContact && previousContact == hit.transform) {
 			PointerEventArgs argsStay = new PointerEventArgs();
 			argsStay.distance = hit.distance;
@@ -170,6 +215,37 @@ public class LaserPointer : MonoBehaviour {
 			OnPointerEnter(argsIn);
 			previousContact = hit.transform;
 		}
+		*/
+
+		if (previousContact && previousContact == hit.transform) {
+			PointerData argsStay = new PointerData();
+			argsStay.distance = hit.distance;
+			argsStay.flags = 0;
+			argsStay.target = hit.transform;
+			LaserStay (argsStay);
+			previousContact = hit.transform;
+		}
+
+		else if(previousContact && previousContact != hit.transform)
+		{
+			PointerData argsOut = new PointerData();
+			argsOut.distance = 0f;
+			argsOut.flags = 0;
+			argsOut.target = previousContact;
+			LaserExit(argsOut);
+			previousContact = null;
+		}
+
+		else if(bHit && previousContact != hit.transform)
+		{
+			PointerData argsIn = new PointerData();
+			argsIn.distance = hit.distance;
+			argsIn.flags = 0;
+			argsIn.target = hit.transform;
+			LaserEnter(argsIn);
+			previousContact = hit.transform;
+		}
+
 
 		// if haven't hit anything, set previous contact to null 
 		if(!bHit)
