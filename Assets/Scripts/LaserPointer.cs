@@ -24,15 +24,16 @@ public class LaserPointer : MonoBehaviour {
 
 	public LayerMask laserMask; 
 
-	public event PointerEventHandler PointerEnter;
-	public event PointerEventHandler PointerExit;
-	public event PointerEventHandler PointerStay;
-
 	public Transform previousContact = null;
 
 	private Builder builder; 
 
 	private float raycastZOffset = -1.5f;
+
+	void Awake() {
+		builder = this.gameObject.GetComponent<Builder> ();
+	}
+
 	// Use this for initialization
 	void Start () {
 		holder = new GameObject();
@@ -55,12 +56,6 @@ public class LaserPointer : MonoBehaviour {
 		newMaterial.SetColor("_Color", color);
 		pointer.GetComponent<MeshRenderer>().material = newMaterial;
 
-
-		PointerEnter += new PointerEventHandler (HittingNewThing);
-		PointerExit += new PointerEventHandler (HittingNothing);
-		PointerStay += new PointerEventHandler (HittingSameThing);
-
-		builder = this.gameObject.GetComponent<Builder> ();
 	}
 	
 	// Update is called once per frame
@@ -84,65 +79,13 @@ public class LaserPointer : MonoBehaviour {
 
 
 	}
-
-
-	public virtual void OnPointerEnter(PointerEventArgs e)
-	{
-		if (PointerEnter != null) 
-			PointerEnter(this, e);
-	}
-
-	public virtual void OnPointerExit(PointerEventArgs e)
-	{
-		if (PointerExit != null)
-			PointerExit(this, e);
-	}
-
-	public virtual void OnPointerStay(PointerEventArgs e) 
-	{
-		if (PointerStay != null)
-			PointerStay(this, e);
-	}
-
-	private void HittingNewThing(object sender, PointerEventArgs e) {
-		//Debug.Log ("hitting new thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
-			builder.SetContactObject (e.target.gameObject);
-			Interactable iObj = e.target.gameObject.GetComponent<Interactable>();
-			if (iObj != null)
-			{
-				iObj.highlight();
-			}
-		}
-	}
-
-	private void HittingNothing(object sender, PointerEventArgs e) {
-		//Debug.Log ("hitting nothing");
-		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
-			if (previousContact) {
-				Interactable iObj = previousContact.GetComponent<Interactable> ();
-				if (iObj != null) {
-					iObj.unhighlight ();
-				}
-			}
-			builder.SetContactObject (null);
-		}
-	}
-
-	private void HittingSameThing(object sender, PointerEventArgs e) {
-		//Debug.Log ("hitting same thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
-			builder.SetContactObject (e.target.gameObject);
-			Interactable iObj = e.target.gameObject.GetComponent<Interactable> ();
-			if (iObj != null) {
-				iObj.highlight ();
-			}
-		} 
-	}
+		
 
 	private void LaserEnter(PointerData data) {
 		//Debug.Log ("hitting new thing");
+
 		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			SoundManager.Instance.playSound(SoundManager.Instance.pickupSound);
 			builder.SetContactObject (data.target.gameObject);
 			Interactable iObj = data.target.gameObject.GetComponent<Interactable>();
 			if (iObj != null)
@@ -185,37 +128,6 @@ public class LaserPointer : MonoBehaviour {
 		RaycastHit hit;
 		bool bHit = Physics.Raycast(raycast, out hit, dist, laserMask);
 		//Debug.DrawRay (holder.transform.position, transform.forward);
-
-		/*
-		if (previousContact && previousContact == hit.transform) {
-			PointerEventArgs argsStay = new PointerEventArgs();
-			argsStay.distance = hit.distance;
-			argsStay.flags = 0;
-			argsStay.target = hit.transform;
-			OnPointerStay (argsStay);
-			previousContact = hit.transform;
-		}
-
-		else if(previousContact && previousContact != hit.transform)
-		{
-			PointerEventArgs argsOut = new PointerEventArgs();
-			argsOut.distance = 0f;
-			argsOut.flags = 0;
-			argsOut.target = previousContact;
-			OnPointerExit(argsOut);
-			previousContact = null;
-		}
-
-		else if(bHit && previousContact != hit.transform)
-		{
-			PointerEventArgs argsIn = new PointerEventArgs();
-			argsIn.distance = hit.distance;
-			argsIn.flags = 0;
-			argsIn.target = hit.transform;
-			OnPointerEnter(argsIn);
-			previousContact = hit.transform;
-		}
-		*/
 
 		if (previousContact && previousContact == hit.transform) {
 			PointerData argsStay = new PointerData();
