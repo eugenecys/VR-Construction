@@ -31,7 +31,7 @@ public class BuildingHit : MonoBehaviour {
     //}
 
     void Start() {
-        s = ScoreManager.getInstance();
+        s = ScoreManager.Instance;
     }
 
     void OnCollisionEnter(Collision c) {

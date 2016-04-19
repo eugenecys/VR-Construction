@@ -44,23 +44,27 @@ public abstract class Segment : MonoBehaviour {
     }
 
 	// Use this for initialization
-	//void Awake () {
- //       assetManager = AssetManager.Instance;
- //       connectedSegments = new List<Segment>();
- //       touchingSegments = new List<Segment>();
- //       robot = Robot.Instance;
- //       rb = GetComponent<Rigidbody>();
- //       col = GetComponent<Collider>();
- //       detector = GetComponentInChildren<Collider>();
- //       rb.isKinematic = true;
- //   }
 
-    //void Start()
-    //{
-    //    active = false;
-    //    parent.evaluateState();
-    //    init();
-    //}
+	/*
+	void Awake () {
+		
+        assetManager = AssetManager.Instance;
+        connectedSegments = new List<Segment>();
+        touchingSegments = new List<Segment>();
+        robot = Robot.Instance;
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+        detector = GetComponentInChildren<Collider>();
+        rb.isKinematic = true;
+	}
+
+    void Start()
+    {
+        active = false;
+        parent.evaluateState();
+        init();
+    }
+*/
 
     public void enablePhysics()
     {
@@ -148,53 +152,28 @@ public abstract class Segment : MonoBehaviour {
     }
 
 
-	void OnTriggerEnter(Collider other) {
-		
-	}
-
     void OnTriggerStay(Collider other)
     {
-		// only highlight object when we are touching it with laser and not controlling it
-		if (other.tag == "Laser") {
-			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
-			if (!builder.triggered) {
-				parent.highlight ();
+		
+		if (parent.template && other.GetComponentInParent<Part> ()) {
+			return;
+		} else if (parent.template) {
+			parent.highlight ();
+		} else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT) {
+			Segment segment = other.GetComponent<Segment> ();
+			if (segment == null) {
+				segment = other.GetComponentInParent<Segment> ();
 			}
-				
-		}
-        if (parent.template && other.GetComponentInParent<Part>())
-        {
-            return;
-        }
-        else if (parent.template)
-        {
-            parent.highlight();
-        } 
-        else if (!parent.placed && other.gameObject.tag == Constants.LAYER_COMPONENT)
-        {
-            Segment segment = other.GetComponent<Segment>();
-            if (segment == null)
-            {
-                segment = other.GetComponentInParent<Segment>();
-            }
 
-            updateTouchingSegments(segment);
-            parent.evaluateState();
-        }
+			updateTouchingSegments (segment);
+			parent.evaluateState ();
+		} 
+
 
     }
 
     void OnTriggerExit(Collider other)
     {
-		// only highlight object when we are touching it with laser and not controlling it
-		if (other.tag == "Laser") {
-			Builder builder = other.transform.parent.parent.gameObject.GetComponent<Builder> ();
-			if (!builder.triggered) {
-				parent.unhighlight ();
-			}
-
-		}
-
         touchingSegments = new List<Segment>();
         if (parent.template)
         {

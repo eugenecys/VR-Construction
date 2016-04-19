@@ -167,7 +167,7 @@ public class Part : MonoBehaviour, Interactable
         else if (free)
         {
             setState(State.Placed);
-            audioSource.PlayOneShot(soundManager.attachSound);
+			audioSource.PlayOneShot(soundManager.attachSound);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
@@ -295,7 +295,7 @@ public class Part : MonoBehaviour, Interactable
     
     public void highlight()
     {
-       // if (template)
+       if (template)
         {
             highlighted = true;
             setState(State.Highlight);
@@ -304,7 +304,7 @@ public class Part : MonoBehaviour, Interactable
 
     public void unhighlight()
     {
-       // if (template)
+       if (template)
         {
             highlighted = false;
             setSegmentDefaultMaterials();

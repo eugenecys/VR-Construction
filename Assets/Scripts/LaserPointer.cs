@@ -4,6 +4,14 @@ using System;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+public struct PointerData
+{
+	public uint controllerIndex;
+	public uint flags;
+	public float distance;
+	public Transform target;
+}
+
 
 public class LaserPointer : MonoBehaviour {
 
@@ -16,19 +24,21 @@ public class LaserPointer : MonoBehaviour {
 
 	public LayerMask laserMask; 
 
-	public event PointerEventHandler PointerEnter;
-	public event PointerEventHandler PointerExit;
-	public event PointerEventHandler PointerStay;
-
 	public Transform previousContact = null;
 
 	private Builder builder; 
+
+	private float raycastZOffset = -1.5f;
+
+	void Awake() {
+		builder = this.gameObject.GetComponent<Builder> ();
+	}
 
 	// Use this for initialization
 	void Start () {
 		holder = new GameObject();
 		holder.transform.parent = this.transform;
-		holder.transform.localPosition = new Vector3 (0f, 0f, -1.5f);
+		holder.transform.localPosition = new Vector3 (0f, 0f, raycastZOffset);
 		holder.transform.localRotation = Quaternion.identity;
 
 		pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -39,76 +49,75 @@ public class LaserPointer : MonoBehaviour {
 		pointer.transform.tag = "Laser";
 		BoxCollider box = pointer.GetComponent<BoxCollider> ();
 		box.isTrigger = true;
-		box.size = new Vector3 (5f, 5f, 1f);
+		//box.size = new Vector3 (5f, 5f, 1f);
 
 
 		Material newMaterial = new Material(Shader.Find("Unlit/Color"));
 		newMaterial.SetColor("_Color", color);
 		pointer.GetComponent<MeshRenderer>().material = newMaterial;
 
-
-		PointerEnter += new PointerEventHandler (HittingNewThing);
-		PointerExit += new PointerEventHandler (HittingNothing);
-		PointerStay += new PointerEventHandler (HittingSameThing);
-
-		builder = this.gameObject.GetComponent<Builder> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (active) {
-			if (pointer.transform.localScale.z == 0f) {
-				pointer.transform.localScale = new Vector3(thickness, thickness, length);
-			}
-			CastLaser ();
-		} else {
-			if (pointer.transform.localScale.z > 0f) {
-				pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
-
+	void FixedUpdate () {
+		if (GameManager.Instance.state == GameManager.GameState.Play) {
+			pointer.gameObject.SetActive (false); 
+		}
+		else {
+			pointer.gameObject.SetActive (true);
+			if (active) {
+				if (pointer.transform.localScale.z == 0f) {
+					pointer.transform.localScale = new Vector3(thickness, thickness, length);
+				}
+				CastLaser ();
+			} else {
+				if (pointer.transform.localScale.z > 0f) {
+					pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
+				}
 			}
 		}
+
+
 	}
+		
 
-
-	public virtual void OnPointerEnter(PointerEventArgs e)
-	{
-		if (PointerEnter != null) 
-			PointerEnter(this, e);
-	}
-
-	public virtual void OnPointerExit(PointerEventArgs e)
-	{
-		if (PointerExit != null)
-			PointerExit(this, e);
-	}
-
-	public virtual void OnPointerStay(PointerEventArgs e) 
-	{
-		if (PointerStay != null)
-			PointerStay(this, e);
-	}
-
-	private void HittingNewThing(object sender, PointerEventArgs e) {
+	private void LaserEnter(PointerData data) {
 		//Debug.Log ("hitting new thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
-			builder.SetContactObject (e.target.gameObject);
+
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			SoundManager.Instance.playSound(SoundManager.Instance.pickupSound);
+			builder.SetContactObject (data.target.gameObject);
+			Interactable iObj = data.target.gameObject.GetComponent<Interactable>();
+			if (iObj != null)
+			{
+				iObj.highlight();
+			}
 		}
 	}
 
-	private void HittingNothing(object sender, PointerEventArgs e) {
+	private void LaserStay(PointerData data) {
+		//Debug.Log ("hitting same thing");
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			builder.SetContactObject (data.target.gameObject);
+			Interactable iObj = data.target.gameObject.GetComponent<Interactable> ();
+			if (iObj != null) {
+				iObj.highlight ();
+			}
+		} 
+	}
+
+	private void LaserExit(PointerData data) {
 		//Debug.Log ("hitting nothing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
+		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
+			if (previousContact) {
+				Interactable iObj = previousContact.GetComponent<Interactable> ();
+				if (iObj != null) {
+					iObj.unhighlight ();
+				}
+			}
 			builder.SetContactObject (null);
 		}
 	}
-
-	private void HittingSameThing(object sender, PointerEventArgs e) {
-		//Debug.Log ("hitting same thing");
-		if (GameManager.Instance.state == GameManager.GameState.Build) {
-			builder.SetContactObject (e.target.gameObject);
-		}
-	}
-
 
 	void CastLaser ()
 	{
@@ -119,34 +128,36 @@ public class LaserPointer : MonoBehaviour {
 		RaycastHit hit;
 		bool bHit = Physics.Raycast(raycast, out hit, dist, laserMask);
 		//Debug.DrawRay (holder.transform.position, transform.forward);
+
 		if (previousContact && previousContact == hit.transform) {
-			PointerEventArgs argsStay = new PointerEventArgs();
+			PointerData argsStay = new PointerData();
 			argsStay.distance = hit.distance;
 			argsStay.flags = 0;
 			argsStay.target = hit.transform;
-			OnPointerStay (argsStay);
+			LaserStay (argsStay);
 			previousContact = hit.transform;
 		}
 
-		if(previousContact && previousContact != hit.transform)
+		else if(previousContact && previousContact != hit.transform)
 		{
-			PointerEventArgs argsOut = new PointerEventArgs();
+			PointerData argsOut = new PointerData();
 			argsOut.distance = 0f;
 			argsOut.flags = 0;
 			argsOut.target = previousContact;
-			OnPointerExit(argsOut);
+			LaserExit(argsOut);
 			previousContact = null;
 		}
 
-		if(bHit && previousContact != hit.transform)
+		else if(bHit && previousContact != hit.transform)
 		{
-			PointerEventArgs argsIn = new PointerEventArgs();
+			PointerData argsIn = new PointerData();
 			argsIn.distance = hit.distance;
 			argsIn.flags = 0;
 			argsIn.target = hit.transform;
-			OnPointerEnter(argsIn);
+			LaserEnter(argsIn);
 			previousContact = hit.transform;
 		}
+
 
 		// if haven't hit anything, set previous contact to null 
 		if(!bHit)

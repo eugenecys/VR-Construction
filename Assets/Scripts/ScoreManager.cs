@@ -1,15 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScoreManager : MonoBehaviour {
-    private static ScoreManager singleton;
-
-    public static ScoreManager getInstance() {
-        if (singleton == null) {
-            singleton = new ScoreManager();
-        }
-        return singleton;
-    }
+public class ScoreManager :  Singleton<ScoreManager>{
 
     private int score = 0;
 

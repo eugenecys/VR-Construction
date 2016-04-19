@@ -20,7 +20,8 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
     public void unhighlight()
     {
-        meshRenderer.material = defaultMaterial;
+		if (defaultMaterial)
+        	meshRenderer.material = defaultMaterial;
     }
 
     public void deploy()
@@ -57,15 +58,10 @@ public class Deployer : Singleton<Deployer>, Interactable {
 
 	void OnTriggerStay(Collider other)
 	{
-		if (other.tag == "Controller" || other.tag == "Laser") {
-			highlight ();
-		}
 	}
 
 	void OnTriggerExit(Collider other)
 	{
-		if (other.tag == "Controller" || other.tag == "Laser") {
-			unhighlight ();
-		}
+		
 	}
 }

@@ -15,7 +15,6 @@ public class RotateToLookAtCam : MonoBehaviour {
 		Vector3 camUp = (m_UIElement.position -  m_Camera.position).normalized;
 		Vector3 localUp = m_UIElement.transform.up;
 
-		// Allign the body's up axis with the centre of planet
 		m_UIElement.rotation = Quaternion.FromToRotation(localUp,camUp) * m_UIElement.rotation;
 	}
 

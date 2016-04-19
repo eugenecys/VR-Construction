@@ -4,6 +4,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Connector : Segment {
+
     void Awake()
     {
         assetManager = AssetManager.Instance;
@@ -22,6 +23,7 @@ public class Connector : Segment {
         parent.evaluateState();
         init();
     }
+
     protected override void init()
     {
         

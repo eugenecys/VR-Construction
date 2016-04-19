@@ -17,11 +17,14 @@ public class Builder : MonoBehaviour {
     public Collider Short;
 
     private ViveInputManager inputManager;
+	private AudioSource audioSource;
+	private SoundManager soundManager; 
 
     private float refreshDelay = 0.2f;
     public bool triggered = false;
 
 	private LaserPointer laser;
+
     public enum ColliderState
     {
         Far,
@@ -110,6 +113,8 @@ public class Builder : MonoBehaviour {
         inputManager = ViveInputManager.Instance;
         deployer = Deployer.Instance;
 		laser = this.GetComponent<LaserPointer> ();
+		audioSource = this.GetComponent<AudioSource> ();
+		soundManager = SoundManager.Instance;
     }
 
 	// Use this for initialization
@@ -166,6 +171,7 @@ public class Builder : MonoBehaviour {
                 {
                     Destroy(markedPart.gameObject);
                 }
+				audioSource.PlayOneShot(soundManager.trashSound);
             }
             else
             {
@@ -223,6 +229,10 @@ public class Builder : MonoBehaviour {
             else
             {
                 scaleArrow.followDrag(transform);
+				if (!UIManager.scaledForFirstTime) {
+					UIManager.Instance.ShowScaleControls (false);
+					UIManager.scaledForFirstTime = true;
+				}
             }
 			if (laser) {
 				laser.active = false;
@@ -245,6 +255,7 @@ public class Builder : MonoBehaviour {
             child.transform.parent = this.transform;
             child.unplace();
         }
+		audioSource.PlayOneShot(soundManager.pickupSound);
     }
 
     public void SpawnComponent(Part part)
@@ -318,10 +329,18 @@ public class Builder : MonoBehaviour {
             triggerRobot();
         }
 
-		if (Input.GetKey (KeyCode.R)) {
+		if (Input.GetKey (KeyCode.R) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
 			triggerDown ();
 		}
-		if (Input.GetKey (KeyCode.U)) {
+
+		if (Input.GetKey (KeyCode.E) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
+			triggerDown ();
+		}
+		if (Input.GetKey (KeyCode.U) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
+			triggerUp ();
+		}
+
+		if (Input.GetKey (KeyCode.Y) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
 			triggerUp ();
 		}
 	}
@@ -334,9 +353,15 @@ public class Builder : MonoBehaviour {
         Part spawnedPart = sObj.GetComponent<Part>();
         spawnedPart.template = false;
         spawnedPart.evaluateState();
+		audioSource.PlayOneShot(soundManager.pickupSound);
+
+		if (!UIManager.pickedUpForFirstTime) {
+			UIManager.Instance.ShowPickUpControls (false);
+			UIManager.Instance.ShowScaleControls (true);
+			UIManager.pickedUpForFirstTime = true;
+		}
     }
-
-
+		
 
 	public void SetContactObject(GameObject contact) {
 		contactObject = contact;
