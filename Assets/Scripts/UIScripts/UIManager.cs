@@ -65,6 +65,10 @@ public class UIManager :  Singleton<UIManager> {
 		DeployedUI.SetActive (true);
 		ShowPickUpControls(false);
 		ShowScaleControls(false);
+		if (!firedForFirstTime)
+			ShowWeaponsControls (true); 
+		if (!movedForFirstTime)
+			ShowMovementControls (true);
 	}
 
 	public void UndeployRobot() {

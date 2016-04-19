@@ -161,7 +161,7 @@ public class Base : Segment, Controllable
 		}
 		leftForce = 1;
 		rightForce = 1;
-		Debug.Log ("left: " + leftSpeed + ", " + rightSpeed);
+		//Debug.Log ("left: " + leftSpeed + ", " + rightSpeed);
         setLeftSpeed(leftSpeed, leftForce);
 		setRightSpeed(rightSpeed, rightForce);
         //audioSource.Play();

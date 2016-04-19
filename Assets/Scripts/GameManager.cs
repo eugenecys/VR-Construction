@@ -32,8 +32,6 @@ public class GameManager : Singleton<GameManager> {
         state = GameState.Play;
 		city.SetActive (true); 
 		UIManager.Instance.DeployRobot ();
-		UIManager.Instance.ShowWeaponsControls (true);
-		UIManager.Instance.ShowMovementControls (true);
     }
 
     public void build()
@@ -96,7 +94,7 @@ public class GameManager : Singleton<GameManager> {
 
 
 	private void HideRoom() {
-		RenderSettings.ambientIntensity = 0f;
+		//RenderSettings.ambientIntensity = 0f;
 		foreach (GameObject component in RoomComponents) {
 			component.SetActive (false);
 		}
@@ -112,7 +110,7 @@ public class GameManager : Singleton<GameManager> {
 			component.SetActive (true);
 		}
 		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
-		RenderSettings.ambientIntensity = 1f;
+		//RenderSettings.ambientIntensity = 1f;
 	}
 
 
