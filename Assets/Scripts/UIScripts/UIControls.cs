@@ -21,6 +21,11 @@ public class UIControls : MonoBehaviour {
 			VRButton vrBtn = laser.previousContact.GetComponent<VRButton> ();
 			if (vrBtn) {
 				vrBtn.btnFunction.Invoke ();
+			} else {
+				BaseButton baseBtn = laser.previousContact.GetComponent<BaseButton> ();
+				if (baseBtn) {
+					baseBtn.btnFunction.Invoke ();
+				}
 			}
 		}
 	}

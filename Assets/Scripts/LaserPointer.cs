@@ -125,12 +125,11 @@ public class LaserPointer : MonoBehaviour {
 		//Debug.Log ("hitting same thing");
 		if (GameManager.Instance.state == GameManager.GameState.Build) {
 			builder.SetContactObject (e.target.gameObject);
-			Interactable iObj = e.target.gameObject.GetComponent<Interactable>();
-			if (iObj != null)
-			{
-				iObj.highlight();
+			Interactable iObj = e.target.gameObject.GetComponent<Interactable> ();
+			if (iObj != null) {
+				iObj.highlight ();
 			}
-		}
+		} 
 	}
 
 

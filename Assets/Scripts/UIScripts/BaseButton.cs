@@ -9,28 +9,28 @@ public class BaseButton : MonoBehaviour, Interactable {
 	private Color originalColor; 
 	private bool highlighted = false;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		originalColor = baseLight.color;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
 	void OnTriggerStay (Collider col)
 	{
-		if (!highlighted) {
+		if (!highlighted && (col.tag == "Laser")) {
 			highlight ();
 		}
 	}
 
 	void OnTriggerExit (Collider col)
-	{
+	{	
 		unhighlight ();
 	}
 
 	public void highlight ()
+
 	{	baseLight.color = Color.blue;
 		highlighted = true;
 	}
