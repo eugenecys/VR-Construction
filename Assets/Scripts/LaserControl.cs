@@ -6,26 +6,25 @@ using System;
 [RequireComponent(typeof(AudioSource))]
 
 public class LaserControl : Weapon {
-    public float lineLen;
-    public float duration;
-    public GameObject laser;
-    private MeshRenderer mesh;
-
     private AudioSource audioSource;
     private SoundManager soundManager;
+
+    public float laserLen;
+	public float laserRadius;
+	public GameObject laser;
 
     void Awake()
     {
 
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
-        mesh = laser.GetComponent<MeshRenderer>();
+        //mesh = laser.GetComponent<MeshRenderer>();
         audioSource.clip = soundManager.laserSound;
     }
 
     // Use this for initialization
     void Start () {
-        mesh.enabled = false;
+        //mesh.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -33,29 +32,16 @@ public class LaserControl : Weapon {
 	    
 	}
     
-    IEnumerator FireLaser() {
-        mesh.enabled = true;
-
-        Ray ray = new Ray(transform.position, transform.right);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, lineLen))
-        {
-            if (hit.transform.tag == "building")
-            {
-                hit.transform.gameObject.SendMessage("GiveAttack");
-            }
-        }
-
-        yield return new WaitForSeconds(duration);
-
-        mesh.enabled = false;
+    void FireLaser() {
+		var prefab = Instantiate (laser, transform.position, Quaternion.identity) as GameObject;
+		var blast = prefab.GetComponent<SuperBlast> ();
+        blast.blastSize = laserRadius;
+        blast.Launch(transform.position + transform.forward * laserLen);
     }
 
     public override void trigger()
     {
-        StopCoroutine(FireLaser());
-        StartCoroutine(FireLaser());
+        FireLaser();
         audioSource.Play();
         //throw new NotImplementedException();
     }
