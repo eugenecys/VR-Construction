@@ -10,6 +10,7 @@ public class LaserControl : Weapon {
     private SoundManager soundManager;
 
     public float laserLen;
+	public GameObject laser;
 
     void Awake()
     {
@@ -31,7 +32,8 @@ public class LaserControl : Weapon {
 	}
     
     void FireLaser() {
-        var blast = Instantiate(Resources.Load("Prefabs/SuperBlast"), transform.position, Quaternion.identity) as SuperBlast;
+		var prefab = Instantiate (laser, transform.position, Quaternion.identity) as GameObject;
+		var blast = prefab.GetComponent<SuperBlast> ();
         blast.blastSize = laserLen;
         blast.Launch(transform.position + transform.forward * laserLen);
     }
