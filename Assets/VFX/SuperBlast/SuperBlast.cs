@@ -11,7 +11,8 @@ public class SuperBlast : MonoBehaviour
     //stage 2
 	public float blastSize;
 	public float blastTime;
-    public Vector3 blastPID = new Vector3(0.3f, 2f, 0.003f);
+    //public Vector3 blastPID = new Vector3(0.3f, 2f, 0.003f);
+	public Vector3 blastPID = new Vector3(0.03f, 0.2f, 0.0003f);
     public Vector2 texTileFactor;
     public Vector2 animSpeed;
     public float startScaleCorrection;
@@ -60,7 +61,7 @@ public class SuperBlast : MonoBehaviour
         _fx.outerParticleSys.gameObject.SetActive(true);
         _fx.outerParticleSys.startLifetime = dist / 100f; //hard code
         _fx.outerParticleSys.gameObject.transform.localScale =
-            new Vector3(blastSize, _fx.outerParticleSys.gameObject.transform.localScale.y, blastSize);
+            new Vector3(blastSize/2, _fx.outerParticleSys.gameObject.transform.localScale.y, blastSize/2);
         //_fx.startParticleSys.sh
         if(!_fx.outerParticleSys.isPlaying)
             _fx.outerParticleSys.Play();
@@ -89,7 +90,7 @@ public class SuperBlast : MonoBehaviour
         _fx.uvAnimSpeed = animSpeed;
         _fx.energyCylinder.SetActive(true);
         _fx.contactParticleSys.gameObject.transform.position += (target - transform.position).normalized * startOffset;
-        _fx.contactParticleSys.startSize = blastSize * startScaleCorrection;
+        _fx.contactParticleSys.startSize = blastSize/2 * startScaleCorrection;
         _fx.contactParticleSys.gameObject.SetActive(true);
         if (!_fx.contactParticleSys.isPlaying)
             _fx.contactParticleSys.Play();
@@ -103,7 +104,7 @@ public class SuperBlast : MonoBehaviour
         timer = 0f;
         while (timer < blastTime)
         {
-            float error = blastSize - radius;
+            float error = 0.1f * blastSize - radius;
             integral += error * Time.deltaTime;
             float derivative = (error - prevError) / Time.deltaTime;
             radius = kp * error + ki * integral + kd * derivative;
@@ -181,6 +182,7 @@ public class SuperBlast : MonoBehaviour
         hits = Physics.CapsuleCastAll(transform.position, target, blastSize, 
             (target - transform.position).normalized, 
             (target - transform.position).magnitude);
+		
         foreach (var hit in hits)
         {
             if (hit.collider.gameObject.CompareTag("building"))
