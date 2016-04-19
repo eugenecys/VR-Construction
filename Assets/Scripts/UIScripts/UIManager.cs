@@ -36,9 +36,6 @@ public class UIManager :  Singleton<UIManager> {
 	}
 
 	private void KeyControls() {
-		if (Input.GetKeyDown (KeyCode.I)) {
-			StartGame ();
-		}
 
 		if (Input.GetKeyDown (KeyCode.O)) {
 			SelectBaseOne ();

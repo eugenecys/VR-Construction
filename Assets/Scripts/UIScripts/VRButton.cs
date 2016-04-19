@@ -36,13 +36,15 @@ public class VRButton : MonoBehaviour, Interactable
 
 	public void highlight ()
 	{
-		btnImage.material = selected;
+		if (btnImage)
+			btnImage.material = selected;
 		highlighted = true;
 	}
 
 	public void unhighlight ()
 	{
-		btnImage.material = null;
+		if (btnImage)
+			btnImage.material = null;
 		highlighted = false;
 	}
 }

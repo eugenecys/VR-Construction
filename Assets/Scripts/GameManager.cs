@@ -67,12 +67,12 @@ public class GameManager : Singleton<GameManager> {
 
 	// Use this for initialization
 	void Start () {
-		Invoke ("StartGame", 5f);
+		//Invoke ("StartGame", 5f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		KeyControls ();
 	}
 
 	public void StartGame() {
@@ -115,6 +115,13 @@ public class GameManager : Singleton<GameManager> {
 			return;
 
 		}
+	}
+
+	private void KeyControls() {
+		if (Input.GetKeyDown (KeyCode.I)) {
+			StartGame ();
+		}
+
 	}
 }
 
