@@ -53,15 +53,13 @@ public class GameManager : Singleton<GameManager> {
 		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
 		robot = Robot.Instance;
+		audioSource.clip = soundManager.buildBGM;
+		audioSource.loop = true;
+		audioSource.Play ();
 
 		if (state == GameState.Start) {
-			foreach (GameObject component in RoomComponents) {
-				component.SetActive (false);
-			}
-			Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = false;
-			audioSource.clip = soundManager.buildBGM;
-			audioSource.loop = true;
-			audioSource.Play ();
+			HideRoom ();
+
 		}
     }
 
@@ -90,16 +88,33 @@ public class GameManager : Singleton<GameManager> {
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
 			break;
 		}
+
+		SpawnRobotBase (selectedBase);
+		ShowRoom ();
+	
+	}
+
+
+	private void HideRoom() {
+		RenderSettings.ambientIntensity = 0f;
+		foreach (GameObject component in RoomComponents) {
+			component.SetActive (false);
+		}
+		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = false;
+	}
+
+
+
+	private void ShowRoom() {
 		state = GameState.Build;
 		RobotBases.SetActive (false);
-		SpawnRobotBase (selectedBase);
-
 		foreach (GameObject component in RoomComponents) {
 			component.SetActive (true);
 		}
 		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
-
+		RenderSettings.ambientIntensity = 1f;
 	}
+
 
 
 	private void SpawnRobotBase(GameObject robotBase) {
