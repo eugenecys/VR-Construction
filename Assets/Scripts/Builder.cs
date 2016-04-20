@@ -290,59 +290,6 @@ public class Builder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-        //Delete - keyboard code
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-            {
-                Segment component = hit.collider.gameObject.GetComponent<Segment>();
-                if (component == null)
-                {
-                    component = hit.collider.gameObject.GetComponentInParent<Segment>();
-                }
-                if (component != null)
-                {
-                    activeComponent = component;
-                }
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            deactivateRobot();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            activateRobot();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            deployRobot();
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            connectPart();
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            triggerRobot();
-        }
-
-		if (Input.GetKey (KeyCode.R) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
-			triggerDown ();
-		}
-
-		if (Input.GetKey (KeyCode.E) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
-			triggerDown ();
-		}
-		if (Input.GetKey (KeyCode.U) && GetComponent<OmniTool>().side == OmniTool.Side.Right) {
-			triggerUp ();
-		}
-
-		if (Input.GetKey (KeyCode.Y) && GetComponent<OmniTool>().side == OmniTool.Side.Left) {
-			triggerUp ();
-		}
 	}
 
     public void SpawnComponent(Part part, Vector3 position)
