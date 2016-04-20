@@ -21,23 +21,35 @@ public class MachineGun : Weapon {
     
     // Use this for initialization
     void Start () {
-	
+        fireCountDown = fireInteval;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (isFiring) {
+            Inteval();
+        }
 	}
 
     public override void trigger()
+    {
+        isFiring = true;
+        //throw new NotImplementedException();
+    }
+
+    public override void triggerStop()
+    {
+        isFiring = false;
+    }
+
+    protected override void Fire()
     {
         GameObject sObj = Instantiate(ammo, transform.position, Quaternion.identity) as GameObject;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
         audioSource.Play();
-        //throw new NotImplementedException();
     }
 
-    
+
 }
