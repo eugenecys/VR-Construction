@@ -7,7 +7,7 @@ public class SelectRobotBase : MonoBehaviour {
 	public GameObject BaseTwo;
     public GameObject BaseOnePlaceholder;
     public GameObject BaseTwoPlaceholder;
-    public float rotationSpeed = 1f;
+    public float rotationSpeed = 15f;
 
 	// Use this for initialization
 	void Start () {
