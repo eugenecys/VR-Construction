@@ -14,6 +14,16 @@ public class Base : Segment, Controllable
     public HingeJoint[] rightWheels;
 	private List<Rigidbody> wheelRBs;
     
+    public enum Type
+    {
+        WheelBase,
+        TreadBase
+    }
+
+    public Type baseType;
+    private float baseSpeed;
+    private float baseForce;
+
     // Use this for initialization
     void Awake()
     {
@@ -27,6 +37,10 @@ public class Base : Segment, Controllable
         rb.isKinematic = true;
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
         audioSource.clip = soundManager.wheelSound;
 		wheelRBs = new List<Rigidbody> ();
 		foreach (HingeJoint wheel in leftWheels) {
@@ -35,6 +49,17 @@ public class Base : Segment, Controllable
 		foreach (HingeJoint wheel in rightWheels) {
 			wheelRBs.Add(wheel.gameObject.GetComponent<Rigidbody>());
 		}
+        switch (baseType)
+        {
+            case Type.TreadBase:
+                baseSpeed = Constants.Tread.ANGULAR_VELOCITY;
+                baseForce = Constants.Tread.FORCE;
+                break;
+            case Type.WheelBase:
+                baseSpeed = Constants.Wheel.ANGULAR_VELOCITY;
+                baseForce = Constants.Wheel.FORCE;
+                break;
+        }
     }
 
     void Start()
@@ -161,7 +186,6 @@ public class Base : Segment, Controllable
 		}
 		leftForce = 1;
 		rightForce = 1;
-		//Debug.Log ("left: " + leftSpeed + ", " + rightSpeed);
         setLeftSpeed(leftSpeed, leftForce);
 		setRightSpeed(rightSpeed, rightForce);
         //audioSource.Play();
@@ -171,8 +195,8 @@ public class Base : Segment, Controllable
     {
         foreach (HingeJoint wheel in leftWheels)
         {
-			setAngularForce (wheel, force * Constants.Wheel.FORCE);
-            setAngularVelocity(wheel, speed * Constants.Wheel.ANGULAR_VELOCITY);
+			setAngularForce (wheel, force * baseForce);
+            setAngularVelocity(wheel, speed * baseSpeed);
         }
     }
 
@@ -180,8 +204,8 @@ public class Base : Segment, Controllable
     {
         foreach (HingeJoint wheel in rightWheels)
 		{
-			setAngularForce (wheel, force * Constants.Wheel.FORCE);
-            setAngularVelocity(wheel, - speed * Constants.Wheel.ANGULAR_VELOCITY);
+			setAngularForce (wheel, force * baseForce);
+            setAngularVelocity(wheel, - speed * baseSpeed);
         }
     }
 
