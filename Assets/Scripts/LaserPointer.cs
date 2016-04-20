@@ -85,7 +85,6 @@ public class LaserPointer : MonoBehaviour {
 		//Debug.Log ("hitting new thing");
 
 		if (GameManager.Instance.state == GameManager.GameState.Build && builder) {
-			SoundManager.Instance.playSound(SoundManager.Instance.pickupSound);
 			builder.SetContactObject (data.target.gameObject);
 			Interactable iObj = data.target.gameObject.GetComponent<Interactable>();
 			if (iObj != null)
