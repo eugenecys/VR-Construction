@@ -36,6 +36,7 @@ public class LaserControl : Weapon {
 		var prefab = Instantiate (laser, transform.position, Quaternion.identity) as GameObject;
 		var blast = prefab.GetComponent<SuperBlast> ();
         prefab.transform.parent = transform;
+        prefab.transform.localPosition = Vector3.zero;
         blast.blastSize = laserRadius;
         blast.Launch(transform.position + transform.forward * laserLen);
     }
