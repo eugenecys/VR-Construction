@@ -110,13 +110,7 @@ public class Part : MonoBehaviour, Interactable
 
     public void removeConnectedPart(Part part)
     {
-        foreach(Part storedPart in connectedParts)
-        {
-            if (part.Equals(storedPart))
-            {
-                connectedParts.Remove(storedPart);
-            }
-        }
+		connectedParts.Remove (part);
     }
 
     public List<Part> getConnectedParts()
