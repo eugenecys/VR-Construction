@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -26,6 +25,10 @@ public class Wheel : Segment, Controllable {
 		rb.isKinematic = true;
 		soundManager = SoundManager.Instance;
 		audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
 		audioSource.clip = soundManager.wheelSound;
 	}
 
