@@ -18,26 +18,38 @@ public class Cannon : Weapon {
         audioSource.clip = soundManager.cannonSound;
     }
     void Start () {
-
+        fireCountDown = fireInteval;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+        if (isFiring) {
+            Inteval();
+        }
 	}
     
     public override void trigger()
+    {
+        isFiring = true;
+        //throw new NotImplementedException();
+    }
+
+    public override void triggerStop()
+    {
+        isFiring = false;
+    }
+
+    public override void joystick(Vector2 coordinates)
+    {
+        //throw new NotImplementedException();
+    }
+
+    protected override void Fire()
     {
         audioSource.Play();
         GameObject sObj = Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
-        //throw new NotImplementedException();
-    }
-
-    public override void joystick(Vector2 coordinates)
-    {
-        //throw new NotImplementedException();
     }
 }

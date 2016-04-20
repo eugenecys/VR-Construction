@@ -25,30 +25,43 @@ public class LaserControl : Weapon {
     // Use this for initialization
     void Start () {
         //mesh.enabled = false;
+        fireCountDown = fireInteval;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    
+        if (isFiring) {
+            Inteval();
+        }
 	}
     
     void FireLaser() {
-		var prefab = Instantiate (laser, transform.position, Quaternion.identity) as GameObject;
-		var blast = prefab.GetComponent<SuperBlast> ();
-        prefab.transform.parent = transform;
-        prefab.transform.localPosition = Vector3.zero;
-        blast.blastSize = laserRadius;
-        blast.Launch(transform.position + transform.forward * laserLen);
+		
     }
 
     public override void trigger()
     {
-        FireLaser();
-        audioSource.Play();
+        isFiring = true;   
         //throw new NotImplementedException();
+    }
+
+    public override void triggerStop()
+    {
+        isFiring = false;
     }
 
     public override void joystick(Vector2 coordinates)
     {
+    }
+
+    protected override void Fire()
+    {
+        var prefab = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
+        var blast = prefab.GetComponent<SuperBlast>();
+        prefab.transform.parent = transform;
+        prefab.transform.localPosition = Vector3.zero;
+        blast.blastSize = laserRadius;
+        blast.Launch(transform.position + transform.forward * laserLen);
+        audioSource.Play();
     }
 }
