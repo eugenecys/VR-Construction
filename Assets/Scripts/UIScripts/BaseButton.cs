@@ -40,5 +40,15 @@ public class BaseButton : MonoBehaviour, Interactable {
 		baseLight.color = originalColor;
 		highlighted = false;
 	}
+
+    public void online()
+    {
+
+    }
+
+    public void offline()
+    {
+
+    }
 }
 	

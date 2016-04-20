@@ -107,6 +107,17 @@ public class ScaleArrow : MonoBehaviour, Interactable {
         meshRenderer.material = assetManager.blankMaterial;
     }
 
+    public void online()
+    {
+
+
+    }
+
+    public void offline()
+    {
+
+    }
+
 	void OnTriggerStay(Collider other)
 	{
 		

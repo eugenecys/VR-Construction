@@ -92,7 +92,7 @@ public class Robot : Singleton<Robot>, Controllable {
         parts = GetComponentsInChildren<Part>();
         foreach (Part part in parts)
         {
-            part.activate();
+            part.online();
         }
     }
 

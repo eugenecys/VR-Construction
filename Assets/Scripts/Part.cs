@@ -337,6 +337,16 @@ public class Part : MonoBehaviour, Interactable
         setSegmentMaterials(assetManager.highlightMaterial);
     }
 
+    public void online()
+    {
+        trigger();
+    }
+
+    public void offline()
+    {
+        triggerStop();
+    }
+
     public void unhighlight()
     {
         highlighted = false;

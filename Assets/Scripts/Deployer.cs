@@ -23,6 +23,16 @@ public class Deployer : Singleton<Deployer>, Interactable {
 		if (defaultMaterial)
         	meshRenderer.material = defaultMaterial;
     }
+    
+    public void online()
+    {
+
+    }
+
+    public void offline()
+    {
+
+    }
 
     public void deploy()
     {

@@ -47,4 +47,15 @@ public class VRButton : MonoBehaviour, Interactable
 			btnImage.material = null;
 		highlighted = false;
 	}
+
+    public void online ()
+    {
+
+    }
+
+    public void offline()
+    {
+
+    }
+
 }

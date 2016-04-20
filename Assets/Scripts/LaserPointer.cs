@@ -90,6 +90,7 @@ public class LaserPointer : MonoBehaviour {
 			if (iObj != null)
 			{
 				iObj.highlight();
+                iObj.online();
 			}
 		}
 	}
@@ -100,8 +101,9 @@ public class LaserPointer : MonoBehaviour {
 			builder.SetContactObject (data.target.gameObject);
 			Interactable iObj = data.target.gameObject.GetComponent<Interactable> ();
 			if (iObj != null) {
-				iObj.highlight ();
-			}
+				iObj.highlight();
+                iObj.online();
+            }
 		} 
 	}
 
@@ -112,6 +114,7 @@ public class LaserPointer : MonoBehaviour {
 				Interactable iObj = previousContact.GetComponent<Interactable> ();
 				if (iObj != null) {
 					iObj.unhighlight ();
+                    iObj.offline();
 				}
 			}
 			builder.SetContactObject (null);
