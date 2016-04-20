@@ -38,9 +38,7 @@ public abstract class Segment : MonoBehaviour {
             }
         }
 
-        rb.useGravity = false;
-        resetPhysics();
-        active = false;
+        deploy();
         refresh();
     }
 
