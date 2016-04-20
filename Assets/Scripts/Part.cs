@@ -16,8 +16,7 @@ public class Part : MonoBehaviour, Interactable
         Connectable,
         Free,
         Placed,
-        MarkedForDelete,
-        Highlight
+        MarkedForDelete
     }
     
     public bool controllable;
@@ -319,13 +318,6 @@ public class Part : MonoBehaviour, Interactable
                 }
                 setSegmentMaterials(assetManager.deleteMaterial);
                 break;
-            case State.Highlight:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(false);
-                }
-                setSegmentMaterials(assetManager.highlightMaterial);
-                break;
         }
     }
     
@@ -347,20 +339,14 @@ public class Part : MonoBehaviour, Interactable
     
     public void highlight()
     {
-       if (template)
-        {
-            highlighted = true;
-            setState(State.Highlight);
-        }
+        highlighted = true;
+        setSegmentMaterials(assetManager.highlightMaterial);
     }
 
     public void unhighlight()
     {
-       if (template)
-        {
-            highlighted = false;
-            setSegmentDefaultMaterials();
-        }
+        highlighted = false;
+        setSegmentDefaultMaterials();
     }
 
     public void markForDelete()
