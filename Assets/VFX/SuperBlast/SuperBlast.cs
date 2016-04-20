@@ -95,10 +95,11 @@ public class SuperBlast : MonoBehaviour
         _fx.energyCylinder.SetActive(true);
         _fx.contactParticleSys.gameObject.transform.position += (target - transform.position).normalized * startOffset;
         _fx.contactParticleSys.startSize = blastSize/2 * startScaleCorrection;
+		/*
         _fx.contactParticleSys.gameObject.SetActive(true);
         if (!_fx.contactParticleSys.isPlaying)
             _fx.contactParticleSys.Play();
-
+        */
         GenerateContacts(target);
 
         float prevError = 0f;

@@ -5,7 +5,9 @@ public class SelectRobotBase : MonoBehaviour {
 
 	public GameObject BaseOne;
 	public GameObject BaseTwo;
-	public float rotationSpeed = 1f;
+    public GameObject BaseOnePlaceholder;
+    public GameObject BaseTwoPlaceholder;
+    public float rotationSpeed = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +21,7 @@ public class SelectRobotBase : MonoBehaviour {
 
 
 	private void RotateBases() {
-		BaseOne.transform.RotateAroundLocal (Vector3.up, Time.deltaTime * rotationSpeed);
-		BaseTwo.transform.RotateAroundLocal (Vector3.up, Time.deltaTime * rotationSpeed);
+        BaseOnePlaceholder.transform.Rotate(Vector3.up, Time.deltaTime * rotationSpeed);
+		BaseTwoPlaceholder.transform.Rotate(Vector3.up, Time.deltaTime * rotationSpeed);
 	}
 }
