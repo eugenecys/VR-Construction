@@ -109,6 +109,17 @@ public class Part : MonoBehaviour, Interactable
         connectedParts.Add(part);
     }
 
+    public void removeConnectedPart(Part part)
+    {
+        foreach(Part storedPart in connectedParts)
+        {
+            if (part.Equals(storedPart))
+            {
+                connectedParts.Remove(storedPart);
+            }
+        }
+    }
+
     public List<Part> getConnectedParts()
     {
         List<Part> parts = new List<Part>();
@@ -181,6 +192,20 @@ public class Part : MonoBehaviour, Interactable
             resetPhysics();
         }
         robot.updateParts();
+    }
+
+    public void disconnect()
+    {
+        foreach(Part part in connectedParts)
+        {
+            part.removeConnectedPart(this);
+        }
+        connectedParts = new List<Part>();
+
+        foreach(Segment segment in segments)
+        {
+            segment.disconnect();
+        }
     }
 
     public void unplace()

@@ -249,12 +249,9 @@ public class Builder : MonoBehaviour {
     public void MoveComponent(Part part)
     {
         disableCollider();
-        List<Part> parts = part.getConnectedParts();
-        foreach(Part child in parts)
-        {
-            child.transform.parent = this.transform;
-            child.unplace();
-        }
+        part.disconnect();
+        part.transform.parent = this.transform;
+        part.unplace();
 		audioSource.PlayOneShot(soundManager.pickupSound);
     }
 

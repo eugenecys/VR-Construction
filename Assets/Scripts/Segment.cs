@@ -42,6 +42,39 @@ public abstract class Segment : MonoBehaviour {
         refresh();
     }
 
+    public void disconnect()
+    {
+        foreach(Segment connectedSegment in connectedSegments)
+        {
+            connectedSegment.disconnectFrom(this);
+        }
+        FixedJoint[] joints = gameObject.GetComponents<FixedJoint>();
+        foreach(FixedJoint joint in joints)
+        {
+            Destroy(joint);
+        }
+        connectedSegments = new List<Segment>();
+    }
+
+    public void disconnectFrom(Segment other)
+    {
+        FixedJoint[] joints = gameObject.GetComponents<FixedJoint>();
+        foreach(FixedJoint joint in joints)
+        {
+            if (joint.connectedBody.gameObject.Equals(other.gameObject))
+            {
+                Destroy(joint);
+            }
+        }
+        foreach(Segment segment in connectedSegments)
+        {
+            if (segment.Equals(other))
+            {
+                connectedSegments.Remove(segment);
+            }
+        }
+    }
+
 	// Use this for initialization
 
 	/*
