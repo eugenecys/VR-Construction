@@ -5,6 +5,7 @@ using System;
 public class Weapon : MonoBehaviour, Controllable {
 
     protected EventManager eventManager;
+    protected ScoreManager scoreManager;
     
     public virtual void joystick(Vector2 coordinates)
     {
@@ -35,5 +36,12 @@ public class Weapon : MonoBehaviour, Controllable {
 	void Update () {
 	
 	}
+
+    protected void AddScore() {
+        if (scoreManager) {
+            scoreManager.AddScore();
+        }
+    }
+
 
 }

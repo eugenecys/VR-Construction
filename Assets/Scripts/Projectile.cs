@@ -2,10 +2,14 @@
 using System.Collections;
 
 public class Projectile : MonoBehaviour {
+    private ScoreManager scoreManager;
 
+    void Awake() {
+        scoreManager = ScoreManager.Instance;
+    }
 	// Use this for initialization
 	void Start () {
-	
+	    
 	}
 	
 	// Update is called once per frame
@@ -16,6 +20,7 @@ public class Projectile : MonoBehaviour {
     void OnTriggerEnter(Collider col) {
         if (col.transform.tag == "building") {
             col.transform.gameObject.SendMessage("GiveAttack");
+            scoreManager.AddScore();
         }
     }
 }

@@ -7,7 +7,7 @@ public class Drill : Weapon {
     private bool m_rotate;
     void Awake()
     {
-        
+        scoreManager = ScoreManager.Instance;
     }
 
     // Use this for initialization
@@ -26,6 +26,7 @@ public class Drill : Weapon {
                 if (hit.transform.tag == "building")
                 {
                     hit.transform.gameObject.SendMessage("GiveAttack");
+                    scoreManager.AddScore();
                 }
             }
         }

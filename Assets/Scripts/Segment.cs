@@ -8,6 +8,7 @@ public abstract class Segment : MonoBehaviour {
 
     protected AssetManager assetManager;
     protected Robot robot;
+    protected ScoreManager scoreManager;
 
     public Part parent;
     public List<Segment> connectedSegments;
@@ -148,6 +149,7 @@ public abstract class Segment : MonoBehaviour {
         if (other.gameObject.CompareTag("building"))
         {
             other.gameObject.SendMessage("GiveAttack");
+            AddScore();
         }
     }
 
@@ -190,6 +192,14 @@ public abstract class Segment : MonoBehaviour {
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+    }
+
+    protected void AddScore()
+    {
+        if (scoreManager)
+        {
+            scoreManager.AddScore();
+        }
     }
 
     protected abstract void init();

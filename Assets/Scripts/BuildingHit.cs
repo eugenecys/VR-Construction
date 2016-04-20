@@ -34,18 +34,18 @@ public class BuildingHit : MonoBehaviour {
         s = ScoreManager.Instance;
     }
 
-    void OnCollisionEnter(Collision c) {
-        if (c.gameObject.CompareTag("building"))
-        {
-            c.gameObject.SendMessage("GiveAttack");
-            int score_count = s.GetScore() + 1;
-            score.text = "Score : " + score_count.ToString();
-            s.SetScore(score_count);
-            //EffectManager.Instance.CameraEffects(0.1f);
-            //if ((state == RobotState.dodging) || (state == RobotState.damaged))
-            //{
-            //    rb.velocity = oldVelo;
-            //}
-        }
-    }
+    //void OnCollisionEnter(Collision c) {
+    //    if (c.gameObject.CompareTag("building"))
+    //    {
+    //        c.gameObject.SendMessage("GiveAttack");
+    //        int score_count = s.GetScore() + 1;
+    //        score.text = "Score : " + score_count.ToString();
+    //        s.SetScore(score_count);
+    //        //EffectManager.Instance.CameraEffects(0.1f);
+    //        //if ((state == RobotState.dodging) || (state == RobotState.damaged))
+    //        //{
+    //        //    rb.velocity = oldVelo;
+    //        //}
+    //    }
+    //}
 }

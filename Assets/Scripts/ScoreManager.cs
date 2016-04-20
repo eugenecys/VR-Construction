@@ -3,15 +3,15 @@ using System.Collections;
 
 public class ScoreManager :  Singleton<ScoreManager>{
 
-    private int score = 0;
+    private static int score = 0;
 
-    public void SetScore(int s) {
-        score = s;
+    public int _score{
+        get { return score; }
+        set { score = value; }
     }
 
-    public int GetScore() {
-        int tmp = score;
-        return tmp;
+    public void AddScore() {
+        ++score;
     }
 	// Use this for initialization
 	void Start () {

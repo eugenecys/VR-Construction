@@ -27,6 +27,8 @@ public class Wheel : Segment, Controllable {
 		soundManager = SoundManager.Instance;
 		audioSource = GetComponent<AudioSource>();
 		audioSource.clip = soundManager.wheelSound;
+
+        scoreManager = ScoreManager.Instance;
 	}
 
 	void Start()

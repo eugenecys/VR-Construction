@@ -15,6 +15,9 @@ public class Connector : Segment {
         col = GetComponent<Collider>();
         detector = GetComponentInChildren<Collider>();
         rb.isKinematic = true;
+
+        scoreManager = ScoreManager.Instance;
+
     }
 
     void Start()

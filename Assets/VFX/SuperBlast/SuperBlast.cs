@@ -23,6 +23,8 @@ public class SuperBlast : MonoBehaviour
     private bool _causeDamage;
     private List<ParticleSystem> _contactParticles;
 
+    private ScoreManager scoreManager;
+
     private SuperBlastFX _fx
     {
         get { return GetComponent<SuperBlastFX>(); }
@@ -35,6 +37,8 @@ public class SuperBlast : MonoBehaviour
     {
         _causeDamage = false;
         _contactParticles = new List<ParticleSystem>();
+
+        scoreManager = ScoreManager.Instance;
     }
 
 	public void Launch(Vector3 target)
@@ -188,6 +192,7 @@ public class SuperBlast : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("building"))
             {
                 hit.collider.gameObject.SendMessage("GiveAttack");
+                scoreManager.AddScore();
             }
         }
     }
