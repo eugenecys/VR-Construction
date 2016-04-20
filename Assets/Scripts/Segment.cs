@@ -37,8 +37,7 @@ public abstract class Segment : MonoBehaviour {
                 }
             }
         }
-
-        deploy();
+        
         refresh();
     }
 

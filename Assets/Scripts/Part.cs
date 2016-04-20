@@ -171,15 +171,15 @@ public class Part : MonoBehaviour, Interactable
             foreach (Segment segment in segments)
             {
                 segment.connect();
-            } 
-            setState(State.Placed);
+            }
+            deploy();
             audioSource.PlayOneShot(soundManager.attachSound);
             this.transform.parent = robot.transform;
             resetPhysics();
         }
         else if (free)
         {
-            setState(State.Placed);
+            deploy();
 			audioSource.PlayOneShot(soundManager.attachSound);
             this.transform.parent = robot.transform;
             resetPhysics();
