@@ -70,4 +70,8 @@ public class Weapon : MonoBehaviour, Controllable {
 
     }
 
+    protected virtual void AmmoScale(float scale) {
+
+    }
+
 }

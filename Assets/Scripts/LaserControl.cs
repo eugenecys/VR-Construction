@@ -64,4 +64,11 @@ public class LaserControl : Weapon {
         blast.Launch(transform.position + transform.forward * laserLen);
         audioSource.Play();
     }
+
+    protected override void AmmoScale(float scale)
+    {
+        laserLen *= scale;
+        laserRadius *= scale;
+        laser.transform.localScale *= scale;
+    }
 }
