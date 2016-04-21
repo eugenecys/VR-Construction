@@ -14,7 +14,7 @@ public class Builder : MonoBehaviour
 	Deployer deployer;
 	public Builder other;
 
-	public float pullSpeed = 5f;
+	private float pullSpeed = 15f;
 
 	private ViveInputManager inputManager;
 	private AudioSource audioSource;
@@ -174,11 +174,11 @@ public class Builder : MonoBehaviour
 				} else {
 					if (part.template) {
 						currentPart = SpawnComponent (part);
-						PullComponent (currentPart);
+						PullComponent (currentPart, true);
 						contactObject = null;
 					} else {
 						MoveComponent (part);
-						PullComponent (contactObject);
+						//PullComponent (contactObject);
 						contactObject = null;
 					}
 				}
@@ -197,17 +197,25 @@ public class Builder : MonoBehaviour
 
 	private GameObject currentPart = null;
 
-	public void PullComponent (GameObject part)
+	public void PullComponent (GameObject part, bool pulling)
 	{
-		currentPart = part;
-		StartCoroutine (PullingComponent ());
+		if (pulling) {
+			currentPart = part;
+			StartCoroutine (PullingComponent ());
+		} else {
+			currentPart = null;
+			StopCoroutine(PullingComponent());
+		}
+
+
 	}
+
 
 	IEnumerator PullingComponent ()
 	{
 		Vector3 pullingTo = spawnPoint.position;
 		while (currentPart) {
-			if (Vector3.Distance (pullingTo, currentPart.transform.position) > 0f) {
+			if (Vector3.Distance (pullingTo, currentPart.transform.position) > 0.1f && Vector3.Distance (pullingTo, currentPart.transform.position) < Mathf.Infinity ) {
 				currentPart.transform.Translate ((pullingTo - currentPart.transform.position) * Time.deltaTime * pullSpeed);
 			} else {
 				currentPart = null;
