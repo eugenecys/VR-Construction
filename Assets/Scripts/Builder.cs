@@ -174,7 +174,7 @@ public class Builder : MonoBehaviour
 				} else {
 					if (part.template) {
 						currentPart = SpawnComponent (part);
-						PullComponent (currentPart, true);
+						PullComponent (currentPart);
 						contactObject = null;
 					} else {
 						MoveComponent (part);
@@ -199,15 +199,8 @@ public class Builder : MonoBehaviour
 
 	public void PullComponent (GameObject part, bool pulling)
 	{
-		if (pulling) {
-			currentPart = part;
-			StartCoroutine (PullingComponent ());
-		} else {
-			currentPart = null;
-			StopCoroutine(PullingComponent());
-		}
-
-
+		currentPart = part;
+		StartCoroutine (PullingComponent ());
 	}
 
 
@@ -223,7 +216,6 @@ public class Builder : MonoBehaviour
 			}
 			yield return null;
 		}
-
 	}
 
 

@@ -339,12 +339,14 @@ public class Part : MonoBehaviour, Interactable
 
     public void online()
     {
-        trigger();
+		if (this.template)
+        	trigger();
     }
 
     public void offline()
     {
-        triggerStop();
+		if (this.template)
+       		triggerStop();
     }
 
     public void unhighlight()
