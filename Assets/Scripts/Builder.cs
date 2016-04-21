@@ -197,7 +197,7 @@ public class Builder : MonoBehaviour
 
 	private GameObject currentPart = null;
 
-	public void PullComponent (GameObject part, bool pulling)
+	public void PullComponent (GameObject part)
 	{
 		currentPart = part;
 		StartCoroutine (PullingComponent ());
