@@ -7,17 +7,18 @@ public class FollowController : MonoBehaviour {
 
 	public Transform ui;
 	public Transform controller;
-
+	public Transform lookingAt;
 	public float distanceAboveController = 0f;
 
 	public float followSpeed = 10f;
 	private void Start ()
 	{
 		Vector3 controllerUp = (ui.position -  controller.position).normalized;
-		Vector3 localUp = ui.transform.up;
+		Vector3 localForward = ui.transform.forward;
 
 		// Allign the body's up axis with the centre of planet
-		ui.rotation = Quaternion.FromToRotation(localUp,controllerUp) * ui.rotation;
+		ui.rotation = Quaternion.FromToRotation(localForward,controllerUp) * ui.rotation;
+
 	}
 
 
@@ -25,13 +26,13 @@ public class FollowController : MonoBehaviour {
 	{
 		// If the UI should look at the controller set it's rotation to point from the UI to the controller
 		if (followController) {
-			ui.rotation = Quaternion.LookRotation (ui.position - controller.position);
-			Vector3 targetDirection = controller.forward.normalized; 
-			Vector3 targetPosition = controller.position + targetDirection * distanceAboveController;
+			Quaternion newRot = Quaternion.LookRotation (ui.position - lookingAt.position);
+			ui.rotation = newRot;
+			Vector3 targetPosition = controller.position + controller.up.normalized * distanceAboveController;
 	
 			targetPosition = Vector3.Lerp (ui.position, targetPosition, followSpeed * Time.deltaTime);
 			ui.position = targetPosition;
-		}
+		} 
 
 	}
 }
