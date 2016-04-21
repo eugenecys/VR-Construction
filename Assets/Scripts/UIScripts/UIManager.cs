@@ -70,7 +70,7 @@ public class UIManager :  Singleton<UIManager> {
 	}
 
 	public void ShowScaleControls(bool val) {
-		//ScaleUI.SetActive (val);
+		ScaleUI.SetActive (val);
 	}
 		
 	public void ShowWeaponsControls(bool val) {
