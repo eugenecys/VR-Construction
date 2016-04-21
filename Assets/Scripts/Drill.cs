@@ -47,4 +47,11 @@ public class Drill : Weapon {
         anim.SetBool("rotate", false);
         m_rotate = false;
     }
+
+    public override void triggerStop()
+    {
+        anim.SetBool("rotate", false);
+        StopCoroutine(DrillRotate());
+        m_rotate = false;
+    }
 }
