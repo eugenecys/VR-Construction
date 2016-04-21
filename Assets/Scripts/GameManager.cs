@@ -9,7 +9,8 @@ public class GameManager : Singleton<GameManager> {
         Build,
         Play,
 		Start,
-		SelectBase
+		SelectBase,
+		End
     }
 
 	private AudioSource audioSource;
@@ -63,12 +64,12 @@ public class GameManager : Singleton<GameManager> {
 
 	// Use this for initialization
 	void Start () {
-		//Invoke ("StartGame", 5f);
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		KeyControls ();
+		
 	}
 
 	public void StartGame() {
@@ -115,11 +116,11 @@ public class GameManager : Singleton<GameManager> {
 
 
 
-	private void SpawnRobotBase(GameObject robotBase) {
+	public void SpawnRobotBase(GameObject robotBase) {
 		Part robotPart = robotBase.GetComponent<Part> ();
 		if (robotPart) {
 			GameObject prefab = Resources.Load("Prefabs/" + robotPart.name) as GameObject;
-			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y/2f, 0f), Quaternion.identity) as GameObject;
+			GameObject sObj = Object.Instantiate(prefab, new Vector3 (0f, robotBase.transform.localScale.y/2f, 0f), robotBase.transform.rotation) as GameObject;
 
 			sObj.transform.parent = robot.transform;
 			Part spawnedPart = sObj.GetComponent<Part>();
@@ -129,12 +130,6 @@ public class GameManager : Singleton<GameManager> {
 
 		}
 	}
-
-	private void KeyControls() {
-		if (Input.GetKeyDown (KeyCode.I)) {
-			StartGame ();
-		}
-
-	}
+		
 }
 

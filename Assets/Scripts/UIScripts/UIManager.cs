@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class UIManager :  Singleton<UIManager> {
 
@@ -13,6 +14,7 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject ScaleUI;
 	public GameObject MovementUI;
 	public GameObject WeaponsUI;
+	public Text ScoreUI; 
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
@@ -27,23 +29,12 @@ public class UIManager :  Singleton<UIManager> {
 	
 	// Update is called once per frame
 	void Update () {
-		KeyControls ();
+		UpdateScore ();
 	}
 		
 	public void StartGame() {
 		StartUI.SetActive (false);
 		SelectBaseUI.SetActive (true);
-	}
-
-	private void KeyControls() {
-
-		if (Input.GetKeyDown (KeyCode.O)) {
-			SelectBaseOne ();
-		}
-
-		if (Input.GetKeyDown (KeyCode.P)) {
-			SelectBaseTwo ();
-		}
 	}
 
 	public void SelectBaseOne() {
@@ -65,17 +56,13 @@ public class UIManager :  Singleton<UIManager> {
 		DeployedUI.SetActive (true);
 		ShowPickUpControls(false);
 		ShowScaleControls(false);
-		if (!firedForFirstTime)
-			ShowWeaponsControls (true); 
-		if (!movedForFirstTime)
-			ShowMovementControls (true);
+		ShowScore (true);
 	}
 
 	public void UndeployRobot() {
 		BuildingUI.SetActive (true);
 		DeployedUI.SetActive (false);
-		ShowWeaponsControls (false);
-		ShowMovementControls (false);
+		ShowScore (false);
 	}
 
 	public void ShowPickUpControls(bool val) {
@@ -83,7 +70,7 @@ public class UIManager :  Singleton<UIManager> {
 	}
 
 	public void ShowScaleControls(bool val) {
-		ScaleUI.SetActive (val);
+		//ScaleUI.SetActive (val);
 	}
 		
 	public void ShowWeaponsControls(bool val) {
@@ -92,5 +79,13 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void ShowMovementControls(bool val) {
 		MovementUI.SetActive (val);
+	}
+
+	private void UpdateScore() {
+		ScoreUI.text = "Score : " + ScoreManager.Instance._score;
+	}
+
+	public void ShowScore(bool val) {
+		ScoreUI.gameObject.SetActive (val);
 	}
 }

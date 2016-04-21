@@ -16,11 +16,12 @@ public struct PointerData
 public class LaserPointer : MonoBehaviour {
 
 	public bool active = true;
-	public Color color;
+
 	public float thickness = 0.002f;
 	public float length = 100f; 
 	public GameObject holder;
 	public GameObject pointer;
+	public Material pointerMat;
 
 	public LayerMask laserMask; 
 
@@ -51,10 +52,7 @@ public class LaserPointer : MonoBehaviour {
 		box.isTrigger = true;
 		//box.size = new Vector3 (5f, 5f, 1f);
 
-
-		Material newMaterial = new Material(Shader.Find("Unlit/Color"));
-		newMaterial.SetColor("_Color", color);
-		pointer.GetComponent<MeshRenderer>().material = newMaterial;
+		pointer.GetComponent<MeshRenderer>().material = pointerMat;
 
 	}
 	

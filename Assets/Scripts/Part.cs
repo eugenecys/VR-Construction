@@ -65,6 +65,8 @@ public class Part : MonoBehaviour, Interactable
         }
     }
 
+	public float spawnZOffset = 0f;
+
     void Awake()
     {
         assetManager = AssetManager.Instance;
