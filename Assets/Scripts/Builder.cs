@@ -8,8 +8,13 @@ public class Builder : MonoBehaviour
 	private Robot robot;
 	private Segment activeComponent;
 	private GameObject contactObject;
-	public Vector3 spawnposition;
-	public Transform spawnPoint;
+	private Vector3 spawnPosition;
+	private Vector3 pullPosition;
+	private GameObject currentPart = null;
+
+	public Transform pullPoint;
+
+
 	public Part[] childParts;
 	Deployer deployer;
 	public Builder other;
@@ -195,27 +200,32 @@ public class Builder : MonoBehaviour
 		}
 	}
 
-	private GameObject currentPart = null;
 
 	public void PullComponent (GameObject part)
 	{
 		currentPart = part;
-		StartCoroutine (PullingComponent ());
+		StartCoroutine (PullingComponent (part.GetComponent<Part>().spawnZOffset));
 	}
 
 
-	IEnumerator PullingComponent ()
+	IEnumerator PullingComponent (float zOffset)
 	{
-		Vector3 pullingTo = spawnPoint.position;
+		UpdatePullPosition (zOffset);
+
 		while (currentPart) {
-			if (Vector3.Distance (pullingTo, currentPart.transform.position) > 0.1f && Vector3.Distance (pullingTo, currentPart.transform.position) < Mathf.Infinity ) {
-				currentPart.transform.Translate ((pullingTo - currentPart.transform.position) * Time.deltaTime * pullSpeed);
+			if (Vector3.Distance (pullPosition, currentPart.transform.position) > 0.1f && Vector3.Distance (pullPosition, currentPart.transform.position) < Mathf.Infinity ) {
+				currentPart.transform.Translate ((pullPosition - currentPart.transform.position) * Time.deltaTime * pullSpeed, Space.World);
 			} else {
 				currentPart = null;
-				StopCoroutine (PullingComponent());
+				StopCoroutine ("PullingComponent");
 			}
 			yield return null;
 		}
+	}
+
+	private void UpdatePullPosition(float zOffset) {
+		pullPosition = pullPoint.position;
+		pullPosition.z += zOffset;
 	}
 
 
@@ -235,9 +245,8 @@ public class Builder : MonoBehaviour
 
 	public GameObject SpawnComponent (Part part)
 	{	
-		//spawnposition = spawnPoint.position;
-		spawnposition = part.gameObject.transform.position;
-		return SpawnComponent (part, spawnposition);
+		spawnPosition = part.gameObject.transform.position;
+		return SpawnComponent (part, spawnPosition);
 	}
 
 	void OnTriggerStay (Collider other)
@@ -270,7 +279,7 @@ public class Builder : MonoBehaviour
 	public GameObject SpawnComponent (Part part, Vector3 position)
 	{
 		GameObject prefab = Resources.Load ("Prefabs/" + part.name) as GameObject;
-		GameObject sObj = Object.Instantiate (prefab, position, Quaternion.identity) as GameObject;
+		GameObject sObj = Object.Instantiate (prefab, position, prefab.transform.rotation) as GameObject;
 		sObj.transform.parent = this.transform;
 		Part spawnedPart = sObj.GetComponent<Part> ();
 		spawnedPart.template = false;
@@ -291,4 +300,5 @@ public class Builder : MonoBehaviour
 	{
 		contactObject = contact;
 	}
+		
 }
