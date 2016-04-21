@@ -2,312 +2,293 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Builder : MonoBehaviour {
+public class Builder : MonoBehaviour
+{
 
-    private Robot robot;
-    private Segment activeComponent;
-    private GameObject contactObject;
-    public Vector3 spawnposition;
-    public Transform spawnPoint;
-    public Part[] childParts;
-    Deployer deployer;
-    public Builder other;
+	private Robot robot;
+	private Segment activeComponent;
+	private GameObject contactObject;
+	public Vector3 spawnposition;
+	public Transform spawnPoint;
+	public Part[] childParts;
+	Deployer deployer;
+	public Builder other;
 
-    public Collider Long;
-    public Collider Short;
+	public float pullSpeed = 5f;
 
-    private ViveInputManager inputManager;
+	private ViveInputManager inputManager;
 	private AudioSource audioSource;
-	private SoundManager soundManager; 
+	private SoundManager soundManager;
 
-    private float refreshDelay = 0.2f;
-    public bool triggered = false;
+	private float refreshDelay = 0.2f;
+	public bool triggered = false;
 
 	private LaserPointer laser;
 
-    public enum ColliderState
-    {
-        Far,
-        Close
-    }
+	public enum ColliderState
+	{
+		Far,
+		Close
+	}
 
-    public ColliderState colliderState;
+	public ColliderState colliderState;
 
-    public void setColliderState(ColliderState state)
-    {
-        colliderState = state;
-        switch(state)
-        {
-            case ColliderState.Close:
+	public void setColliderState (ColliderState state)
+	{
+		colliderState = state;
+		switch (state) {
+		case ColliderState.Close:
                 
-                break;
-            case ColliderState.Far:
-                break;
-        }
-    }
-
-    void disableCollider()
-    {
-		if (!laser) {
-			Long.enabled = false;
-			Short.enabled = false;
+			break;
+		case ColliderState.Far:
+			break;
 		}
-    }
+	}
 
-    void enableCollider()
-	{	
-		if (!laser) {
-			Long.enabled = true;
-			Short.enabled = true;
+
+	//Delete - keyboard code
+	public void connectPart ()
+	{
+		activeComponent.parent.place ();
+	}
+
+	public void placeParts ()
+	{
+		foreach (Part part in childParts) {
+			part.place ();
+			if (part.placed) {
+				part.transform.parent = robot.transform;
+				part.resetPhysics ();
+			}
 		}
-    }
+	}
 
-    //Delete - keyboard code
-    public void connectPart()
-    {
-        activeComponent.parent.place();
-    }
+	public void deactivateRobot ()
+	{
+		robot.reset ();
+	}
 
-    public void placeParts()
-    {
-        foreach (Part part in childParts)
-        {
-            part.place();
-            enableCollider();
-            if (part.placed)
-            {
-                part.transform.parent = robot.transform;
-                part.resetPhysics();
-            }
-        }
-    }
+	public void activateRobot ()
+	{
+		robot.activate ();
+	}
 
-    public void deactivateRobot()
-    {
-        robot.reset();
-    }
+	public void deployRobot ()
+	{
+		robot.deploy ();
+	}
 
-    public void activateRobot()
-    {
-        robot.activate();
-    }
+	public void triggerRobot ()
+	{
+		robot.trigger ();
+	}
 
-    public void deployRobot()
-    {
-        robot.deploy();
-    }
+	public void triggerRobotStop ()
+	{
+		robot.triggerStop ();
+	}
 
-    public void triggerRobot()
-    {
-        robot.trigger();
-    }
-
-    public void triggerRobotStop()
-    {
-        robot.triggerStop();
-    }
-
-    void Awake()
-    {
-        robot = Robot.Instance;
-        inputManager = ViveInputManager.Instance;
-        deployer = Deployer.Instance;
+	void Awake ()
+	{
+		robot = Robot.Instance;
+		inputManager = ViveInputManager.Instance;
+		deployer = Deployer.Instance;
 		laser = this.GetComponent<LaserPointer> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
-    }
+	}
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 	
 	}
 
-    public void menu()
-    {
-        DestroyRobot();
-        deployer.undeploy();
-        robot.reset();
-    }
-    
-    public void triggerUp()
-    {
+	public void menu ()
+	{
+		DestroyRobot ();
+		deployer.undeploy ();
+		robot.reset ();
+	}
+
+	public void triggerUp ()
+	{
 		
 
-        if (!triggered)
-        {
-            return;
-        }
-        triggered = false;
-        enableCollider();
-        childParts = GetComponentsInChildren<Part>();
-        if (childParts == null || childParts.Length == 0)
-        {
-            if (contactObject != null)
-            {
-                ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
-                if (scaleArrow == null)
-                {
+		if (!triggered) {
+			return;
+		}
+		triggered = false;
+		childParts = GetComponentsInChildren<Part> ();
+		if (childParts == null || childParts.Length == 0) {
+			if (contactObject != null) {
+				ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow> ();
+				if (scaleArrow == null) {
 
-                }
-                else
-                {
-                    scaleArrow.stopDrag();
-                }
-            }
-        }
-        else
-        {
-            List<Part> markedParts = new List<Part>();
-            foreach (Part part in childParts)
-            {
-                if (part.markedForDelete)
-                {
-                    markedParts.Add(part);
-                }
-            }
-            if (markedParts.Count > 0)
-            {
-                foreach (Part markedPart in markedParts)
-                {
-                    Destroy(markedPart.gameObject);
-                }
-				audioSource.PlayOneShot(soundManager.trashSound);
-            }
-            else
-            {
-                placeParts();
-            }
-        }
+				} else {
+					scaleArrow.stopDrag ();
+				}
+			}
+		} else {
+			List<Part> markedParts = new List<Part> ();
+			foreach (Part part in childParts) {
+				if (part.markedForDelete) {
+					markedParts.Add (part);
+				}
+			}
+			if (markedParts.Count > 0) {
+				foreach (Part markedPart in markedParts) {
+					Destroy (markedPart.gameObject);
+				}
+				audioSource.PlayOneShot (soundManager.trashSound);
+			} else {
+				placeParts ();
+			}
+		}
 		contactObject = null;
 		if (laser) {
 			laser.active = true;
 		}
-    }
+	}
 
-    public void triggerDown()
-    {
+	public void triggerDown ()
+	{
 		
-        if (triggered)
-        {
-            return;
-        }
-        triggered = true;
-        if (contactObject != null)
-        {
-            ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow>();
-            if (scaleArrow == null)
-            {
-                Part part = contactObject.GetComponentInParent<Part>();
-                if (part == null)
-                {
-                    Deployer deployer = contactObject.GetComponent<Deployer>();
-                    if (deployer == null)
-                    {
+		if (triggered) {
+			return;
+		}
+		triggered = true;
+		if (contactObject != null) {
+			ScaleArrow scaleArrow = contactObject.GetComponent<ScaleArrow> ();
+			if (scaleArrow == null) {
+				Part part = contactObject.GetComponentInParent<Part> ();
+				if (part == null) {
+					Deployer deployer = contactObject.GetComponent<Deployer> ();
+					if (deployer == null) {
 
-                    }
-                    else
-                    {
-                        deployRobot();
-                        deployer.deploy();
-                        contactObject = null;
-                    }
-                }
-                else
-                {
-                    if (part.template)
-                    {
-                        SpawnComponent(part);
-                        contactObject = null;
-                    }
-                    else
-                    {
-                        MoveComponent(part);
-                        contactObject = null;
-                    }
-                }
-            }
-            else
-            {
-                scaleArrow.followDrag(transform);
+					} else {
+						deployRobot ();
+						deployer.deploy ();
+						contactObject = null;
+					}
+				} else {
+					if (part.template) {
+						currentPart = SpawnComponent (part);
+						PullComponent (currentPart);
+						contactObject = null;
+					} else {
+						MoveComponent (part);
+						PullComponent (contactObject);
+						contactObject = null;
+					}
+				}
+			} else {
+				scaleArrow.followDrag (transform);
 				if (!UIManager.scaledForFirstTime) {
 					UIManager.Instance.ShowScaleControls (false);
 					UIManager.scaledForFirstTime = true;
 				}
-            }
+			}
 			if (laser) {
 				laser.active = false;
 			}
-        }
-    }
+		}
+	}
 
-    public void DestroyRobot()
-    {
-        robot.destroy();
-    }
+	private GameObject currentPart = null;
 
+	public void PullComponent (GameObject part)
+	{
+		currentPart = part;
+		StartCoroutine (PullingComponent ());
+	}
 
-    public void MoveComponent(Part part)
-    {
-        disableCollider();
-        part.disconnect();
-        part.transform.parent = this.transform;
-        part.unplace();
-		audioSource.PlayOneShot(soundManager.pickupSound);
-    }
-
-    public void SpawnComponent(Part part)
-    {	
-		spawnposition = spawnPoint.position;
-		SpawnComponent(part, spawnposition);
-        disableCollider();
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        contactObject = other.gameObject;
-        Interactable iObj = contactObject.GetComponent<Interactable>();
-        if (iObj != null)
-        {
-            iObj.highlight();
-        }
-
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-			if (contactObject != null) {
-				Interactable iObj = contactObject.GetComponent<Interactable> ();
-				if (iObj != null) {
-					iObj.unhighlight ();
-				}
+	IEnumerator PullingComponent ()
+	{
+		Vector3 pullingTo = spawnPoint.position;
+		while (currentPart) {
+			if (Vector3.Distance (pullingTo, currentPart.transform.position) > 0f) {
+				currentPart.transform.Translate ((pullingTo - currentPart.transform.position) * Time.deltaTime * pullSpeed);
+			} else {
+				currentPart = null;
+				StopCoroutine (PullingComponent());
 			}
-			contactObject = null;
-    }
+			yield return null;
+		}
+
+	}
+
+
+	public void DestroyRobot ()
+	{
+		robot.destroy ();
+	}
+
+
+	public void MoveComponent (Part part)
+	{
+		part.disconnect ();
+		part.transform.parent = this.transform;
+		part.unplace ();
+		audioSource.PlayOneShot (soundManager.pickupSound);
+	}
+
+	public GameObject SpawnComponent (Part part)
+	{	
+		//spawnposition = spawnPoint.position;
+		spawnposition = part.gameObject.transform.position;
+		return SpawnComponent (part, spawnposition);
+	}
+
+	void OnTriggerStay (Collider other)
+	{
+		contactObject = other.gameObject;
+		Interactable iObj = contactObject.GetComponent<Interactable> ();
+		if (iObj != null) {
+			iObj.highlight ();
+		}
+
+	}
+
+	void OnTriggerExit (Collider other)
+	{
+		if (contactObject != null) {
+			Interactable iObj = contactObject.GetComponent<Interactable> ();
+			if (iObj != null) {
+				iObj.unhighlight ();
+			}
+		}
+		contactObject = null;
+	}
     
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		
 	}
 
-    public void SpawnComponent(Part part, Vector3 position)
-    {
-        GameObject prefab = Resources.Load("Prefabs/" + part.name) as GameObject;
-        GameObject sObj = Object.Instantiate(prefab, position, Quaternion.identity) as GameObject;
+	public GameObject SpawnComponent (Part part, Vector3 position)
+	{
+		GameObject prefab = Resources.Load ("Prefabs/" + part.name) as GameObject;
+		GameObject sObj = Object.Instantiate (prefab, position, Quaternion.identity) as GameObject;
 		sObj.transform.parent = this.transform;
-        Part spawnedPart = sObj.GetComponent<Part>();
-        spawnedPart.template = false;
-        spawnedPart.evaluateState();
-		audioSource.PlayOneShot(soundManager.pickupSound);
+		Part spawnedPart = sObj.GetComponent<Part> ();
+		spawnedPart.template = false;
+		spawnedPart.evaluateState ();
+		audioSource.PlayOneShot (soundManager.pickupSound);
 
 		if (!UIManager.pickedUpForFirstTime) {
 			UIManager.Instance.ShowPickUpControls (false);
 			UIManager.Instance.ShowScaleControls (true);
 			UIManager.pickedUpForFirstTime = true;
 		}
-    }
-		
 
-	public void SetContactObject(GameObject contact) {
+		return sObj;
+	}
+
+
+	public void SetContactObject (GameObject contact)
+	{
 		contactObject = contact;
 	}
 }

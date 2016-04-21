@@ -138,6 +138,16 @@ public class OmniTool : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		KeyControls ();
+	}
+
+	private void KeyControls() {
+		if (Input.GetKeyDown (KeyCode.R)) {
+			triggerDown ();
+		}
+		if (Input.GetKeyDown (KeyCode.E)) {
+			triggerUp ();
+		}
 
 	}
 }
