@@ -52,4 +52,9 @@ public class Cannon : Weapon {
         rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
     }
+
+    protected override void AmmoScale(float scale)
+    {
+        ammo.transform.localScale *= scale;
+    }
 }

@@ -51,5 +51,9 @@ public class MachineGun : Weapon {
         audioSource.Play();
     }
 
+    protected override void AmmoScale(float scale)
+    {
+        ammo.transform.localScale *= scale;
+    }
 
 }
