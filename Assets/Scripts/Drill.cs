@@ -34,24 +34,33 @@ public class Drill : Weapon {
 
     public override void trigger()
     {
-        anim.SetBool("rotate", true);
-        m_rotate = true;
-        StopCoroutine(DrillRotate());
-        StartCoroutine(DrillRotate());
+
+        //StopCoroutine(DrillRotate());
+        //StartCoroutine(DrillRotate());
         //throw new NotImplementedException();
+        RotateDrill();
     }
 
-    IEnumerator DrillRotate() {
+    //IEnumerator DrillRotate() {
         
-        yield return new WaitForSeconds(3f);
-        anim.SetBool("rotate", false);
-        m_rotate = false;
-    }
+    //    yield return new WaitForSeconds(3f);
+    //    anim.SetBool("rotate", false);
+    //    m_rotate = false;
+    //}
 
     public override void triggerStop()
     {
+        StopDrill();
+    }
+
+    void RotateDrill() {
+        anim.SetBool("rotate", true);
+        m_rotate = true;
+    }
+
+    void StopDrill() {
         anim.SetBool("rotate", false);
-        StopCoroutine(DrillRotate());
+        //StopCoroutine(DrillRotate());
         m_rotate = false;
     }
 }
