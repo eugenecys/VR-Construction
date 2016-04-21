@@ -23,7 +23,7 @@ public class FollowController : MonoBehaviour {
 
 	private void Update ()
 	{
-		// If the UI should look at the camera set it's rotation to point from the UI to the camera.
+		// If the UI should look at the controller set it's rotation to point from the UI to the controller
 		if (followController) {
 			ui.rotation = Quaternion.LookRotation (ui.position - controller.position);
 			Vector3 targetDirection = controller.forward.normalized; 

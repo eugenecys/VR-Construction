@@ -114,6 +114,7 @@ public class Builder : MonoBehaviour
 		DestroyRobot ();
 		deployer.undeploy ();
 		robot.reset ();
+		GameManager.Instance.SpawnRobotBase (GameManager.Instance.selectedBase);
 	}
 
 	public void triggerUp ()
