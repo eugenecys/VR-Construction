@@ -15,6 +15,7 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject MovementUI;
 	public GameObject WeaponsUI;
 	public Text ScoreUI; 
+	public Text TimeUI;
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
@@ -57,12 +58,14 @@ public class UIManager :  Singleton<UIManager> {
 		ShowPickUpControls(false);
 		ShowScaleControls(false);
 		ShowScore (true);
+		ShowTime (true);
 	}
 
 	public void UndeployRobot() {
 		BuildingUI.SetActive (true);
 		DeployedUI.SetActive (false);
 		ShowScore (false);
+		ShowTime (false);
 	}
 
 	public void ShowPickUpControls(bool val) {
@@ -87,5 +90,9 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void ShowScore(bool val) {
 		ScoreUI.gameObject.SetActive (val);
+	}
+
+	public void ShowTime(bool val) {
+		TimeUI.gameObject.SetActive (val);
 	}
 }
