@@ -3,13 +3,14 @@ using System.Collections;
 
 public class RobotIndicator : MonoBehaviour {
     private GameManager gameManager;
-    private GameObject m_indicator;
-	private bool isIndicated;
-	private MeshRenderer mesh;
-	private Transform robotTran;
+    public GameObject m_indicator;
+	public bool isIndicated;
+	public MeshRenderer mesh;
+	public Transform robotTran;
 
 	public GameObject robot;
     public GameObject indicator;
+	public GameObject inContainer;
     public GameObject headSet;
     public float rayLen;
     public float height;
@@ -25,36 +26,29 @@ public class RobotIndicator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		LocateIndicator ();
-        SetIndicatorInvisiblity();
 	}
 
 	void LocateIndicator(){
 		if (!isIndicated && gameManager.state == GameManager.GameState.Build) {
-			robotTran = robot.transform.Find ("BaseBodyContainer");
-			if (robotTran != null) {
-				isIndicated = true;
-				m_indicator = Instantiate(indicator, robotTran.position + new Vector3(0, height, 0), Quaternion.identity) as GameObject;
-				m_indicator.transform.SetParent (robotTran);
-				mesh = m_indicator.GetComponent<MeshRenderer> ();
-			} 
-		}
+			robotTran = robot.GetComponentInChildren<IndicatorMark> ().gameObject.transform;
+			isIndicated = true;
+
+			m_indicator = Instantiate (indicator, inContainer.transform.position, Quaternion.identity) as GameObject;
+			m_indicator.transform.SetParent (inContainer.transform);
+			mesh = m_indicator.GetComponent<MeshRenderer> ();
+
+		} else if (isIndicated && gameManager.state == GameManager.GameState.Play) {
+			m_indicator.GetComponent<Animator> ().SetBool ("jump", true);
+			Vector3 curPos = robotTran.position;
+			inContainer.transform.position = curPos;
+			IndicatorActivate ();
+		} 
 	}
 
-    void SetIndicatorInvisiblity() {
-		if (isIndicated) {
-			if (gameManager.state == GameManager.GameState.Play)
-			{
-				IndicatorActivate();
-			}
-			else {
-				mesh.enabled = false;
-			}
-		}
-    }
-
     void IndicatorActivate() {
-		Ray ray = new Ray(robotTran.transform.position, headSet.transform.position);
+		Ray ray = new Ray(headSet.transform.position, robotTran.position);
         RaycastHit hit;
+		Debug.DrawRay (headSet.transform.position,robotTran.position, Color.red);
         if (Physics.Raycast(ray, out hit, rayLen))
         {
             if (hit.transform.CompareTag("building"))
