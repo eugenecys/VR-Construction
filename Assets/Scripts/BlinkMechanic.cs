@@ -27,7 +27,7 @@ public class BlinkMechanic : MonoBehaviour
 
 	public void gripDown ()
 	{
-		BlinkTo (Robot.Instance.transform.position);
+		BlinkTo (Robot.Instance.transform.GetChild(0).transform.position);
 	}
 
 	private void BlinkTo (Vector3 robotPos)
@@ -35,6 +35,7 @@ public class BlinkMechanic : MonoBehaviour
 
 		oldCenter = trackingSpace.transform.position;
 		newCenter = robotPos;
+		Debug.Log ("gets here3");
 		StartCoroutine (ShiftTeleport ());
 	}
 
@@ -43,6 +44,7 @@ public class BlinkMechanic : MonoBehaviour
 		while (true) {
 			Vector3 dir = newCenter - trackingSpace.transform.position;
 			if (dir.magnitude > shiftStopDist) {
+				Debug.Log ("gets here4");
 				// still moving to our destination
 				trackingSpace.transform.Translate (dir * shiftSpeed * Time.deltaTime, Space.World);
 			} else {
