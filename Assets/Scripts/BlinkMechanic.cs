@@ -34,7 +34,7 @@ public class BlinkMechanic : MonoBehaviour
 	{
 
 		oldCenter = trackingSpace.transform.position;
-		newCenter = GetNewCenterOfTrackingSpace(robotPos);
+		newCenter = robotPos;
 		StartCoroutine (ShiftTeleport ());
 	}
 

@@ -16,13 +16,15 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject WeaponsUI;
 	public Text ScoreUI; 
 	public Text TimeUI;
+	public GameObject HighScoreUI;
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
 	public static bool movedForFirstTime = false;
 	public static bool firedForFirstTime = false;
+
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
 			StartUI.SetActive (true);
 		}
@@ -94,5 +96,18 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void ShowTime(bool val) {
 		TimeUI.gameObject.SetActive (val);
+	}
+		
+
+	public void EndGame(int finalScore) {
+		ShowTime (false);
+		HighScoreUI.SetActive (true);
+		Text rank; 
+		for (int i = 0; i < 10; i++) {
+			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
+			rank.text += PlayerPrefs.GetInt((i+1).ToString()).ToString();
+		}
+		HighScoreUI.transform.GetChild (10).GetComponent<Text> ().text += finalScore.ToString();
+	
 	}
 }

@@ -26,7 +26,8 @@ public class TimeManager : Singleton<TimeManager> {
 				countdown -= 1;
 				timer.text = "Time to destroy: " + countdown.ToString();
 			} else if (countdown == 0 && deployed) {
-				Undeploy ();
+				GameManager.Instance.EndGame ();
+				//Undeploy ();
 			}
             curTime = 0;
         }

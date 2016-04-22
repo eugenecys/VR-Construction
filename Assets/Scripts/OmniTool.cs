@@ -47,8 +47,10 @@ public class OmniTool : MonoBehaviour
 
 	public void applicationmenuDown (params object[] args)
 	{
-		builder.menu ();
-		gameManager.state = GameManager.GameState.Build;
+		if (gameManager.debug) {
+			builder.menu ();
+			gameManager.state = GameManager.GameState.Build;
+		}
 	}
 
 	public void touchpadAxis (params object[] args)

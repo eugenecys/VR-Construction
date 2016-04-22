@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class GameManager : Singleton<GameManager> {
 
+	public bool debug = true;
+
     public enum GameState
     {
         Build,
@@ -130,6 +132,12 @@ public class GameManager : Singleton<GameManager> {
 			return;
 
 		}
+	}
+
+	public void EndGame() {
+		state = GameState.End;
+		ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score);
+		UIManager.Instance.EndGame (ScoreManager.Instance._score);
 	}
 		
 }
