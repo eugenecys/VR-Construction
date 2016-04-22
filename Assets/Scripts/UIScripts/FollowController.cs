@@ -32,10 +32,13 @@ public class FollowController : MonoBehaviour {
 			newEulur.z = 0f;
 			newRot.eulerAngles = newEulur;
 			ui.rotation = newRot;
+
+
 			Vector3 targetPosition = controller.position + controller.up.normalized * distanceAboveController;
 	
 			targetPosition = Vector3.Lerp (ui.position, targetPosition, followSpeed * Time.deltaTime);
 			ui.position = targetPosition;
+
 		} 
 
 	}

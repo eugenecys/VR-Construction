@@ -2,499 +2,441 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent (typeof (AudioSource))]
+[RequireComponent (typeof(AudioSource))]
 public class Part : MonoBehaviour, Interactable
 {
-    AudioSource audioSource;
-    AssetManager assetManager;
-    SoundManager soundManager;
-    Robot robot;
+	AudioSource audioSource;
+	AssetManager assetManager;
+	SoundManager soundManager;
+	Robot robot;
 
-    public enum State
-    {
-        Unconnectable,
-        Connectable,
-        Free,
-        Placed,
-        MarkedForDelete
-    }
+	public enum State
+	{
+		Unconnectable,
+		Connectable,
+		Free,
+		Placed,
+		MarkedForDelete
+	}
+
+	public bool controllable;
+	public bool template;
+	private bool highlighted;
+	public bool markedForDelete;
+	public bool scalable;
     
-    public bool controllable;
-    public bool template;
-    private bool highlighted;
-    public bool markedForDelete;
-    public bool scalable;
-    
-    private Segment[] segments;
-    Controllable[] controllables;
-    MaterialHandler[] materialHandlers;
-    List<Part> connectedParts;
-    private Scaler scaler;
+	private Segment[] segments;
+	Controllable[] controllables;
+	MaterialHandler[] materialHandlers;
+	List<Part> connectedParts;
+	private Scaler scaler;
 
-    public State state;
-    
-    public bool placed
-    {
-        get
-        {
-            return state.Equals(State.Placed);
-        }
-    }
+	public State state;
 
-    public bool connectable
-    {
-        get
-        {
-            return state.Equals(State.Connectable);
-        }
-    }
+	public bool placed {
+		get {
+			return state.Equals (State.Placed);
+		}
+	}
 
-    public bool unconnectable
-    {
-        get
-        {
-            return state.Equals(State.Unconnectable);
-        }
-    }
+	public bool connectable {
+		get {
+			return state.Equals (State.Connectable);
+		}
+	}
 
-    public bool free
-    {
-        get
-        {
-            return state.Equals(State.Free);
-        }
-    }
+	public bool unconnectable {
+		get {
+			return state.Equals (State.Unconnectable);
+		}
+	}
 
-	public float spawnZOffset = 0f;
+	public bool free {
+		get {
+			return state.Equals (State.Free);
+		}
+	}
 
-    void Awake()
-    {
-        assetManager = AssetManager.Instance;
-        robot = Robot.Instance;
-        soundManager = SoundManager.Instance;
-        segments = GetComponentsInChildren<Segment>();
-        materialHandlers = GetComponentsInChildren<MaterialHandler>();
-        controllables = GetComponentsInChildren<Controllable>();
-        connectedParts = new List<Part>();
-        scaler = GetComponentInChildren<Scaler>();
-        audioSource = GetComponent<AudioSource>();
+	public float distanceFromController = 0f;
 
-        markedForDelete = false;
-        highlighted = false;
+	void Awake ()
+	{
+		assetManager = AssetManager.Instance;
+		robot = Robot.Instance;
+		soundManager = SoundManager.Instance;
+		segments = GetComponentsInChildren<Segment> ();
+		materialHandlers = GetComponentsInChildren<MaterialHandler> ();
+		controllables = GetComponentsInChildren<Controllable> ();
+		connectedParts = new List<Part> ();
+		scaler = GetComponentInChildren<Scaler> ();
+		audioSource = GetComponent<AudioSource> ();
 
-        foreach (Segment cpt in segments)
-        {
-            cpt.parent = this;
-        }
+		markedForDelete = false;
+		highlighted = false;
 
-        if (scaler == null)
-        {
-            scalable = false;
-        }
-        else
-        {
-            scalable = true;
-            scaler.gameObject.SetActive(false);
-        }
-    }
-    
-    public void addConnectedPart(Part part)
-    {
-        foreach(Part storedPart in connectedParts)
-        {
-            if (part.Equals(storedPart))
-            {
-                return;
-            }
-        }
-        connectedParts.Add(part);
-    }
+		foreach (Segment cpt in segments) {
+			cpt.parent = this;
+		}
 
-    public void removeConnectedPart(Part part)
-    {
+		if (scaler == null) {
+			scalable = false;
+		} else {
+			scalable = true;
+			scaler.gameObject.SetActive (false);
+		}
+	}
+
+	public void addConnectedPart (Part part)
+	{
+		foreach (Part storedPart in connectedParts) {
+			if (part.Equals (storedPart)) {
+				return;
+			}
+		}
+		connectedParts.Add (part);
+	}
+
+	public void removeConnectedPart (Part part)
+	{
 		connectedParts.Remove (part);
-    }
+	}
 
-    public List<Part> getConnectedParts()
-    {
-        List<Part> parts = new List<Part>();
-        parts.Add(this);
-        foreach (Part part in connectedParts)
-        {
-            part.retrieveConnectedParts(parts);
-        }
-        return parts;
-    }
+	public List<Part> getConnectedParts ()
+	{
+		List<Part> parts = new List<Part> ();
+		parts.Add (this);
+		foreach (Part part in connectedParts) {
+			part.retrieveConnectedParts (parts);
+		}
+		return parts;
+	}
 
-    protected void retrieveConnectedParts(List<Part> existingParts)
-    {
-        if (existingParts.Contains(this))
-        {
-            return;
-        }
-        else
-        {
-            existingParts.Add(this);
-        }
-        foreach (Part part in connectedParts)
-        {
-            part.retrieveConnectedParts(existingParts);
-        }
-    }
+	protected void retrieveConnectedParts (List<Part> existingParts)
+	{
+		if (existingParts.Contains (this)) {
+			return;
+		} else {
+			existingParts.Add (this);
+		}
+		foreach (Part part in connectedParts) {
+			part.retrieveConnectedParts (existingParts);
+		}
+	}
 
-    public void resetPhysics()
-    {
-        foreach (Segment segment in segments)
-        {
-            segment.resetPhysics();
-        }
-    }
+	public void resetPhysics ()
+	{
+		foreach (Segment segment in segments) {
+			segment.resetPhysics ();
+		}
+	}
 
-    public void enablePhysics()
-    {
-        foreach(Segment segment in segments)
-        {
-            segment.enablePhysics();
-        }
-    }
+	public void enablePhysics ()
+	{
+		foreach (Segment segment in segments) {
+			segment.enablePhysics ();
+		}
+	}
 
-    public void disablePhysics()
-    {
-        foreach (Segment segment in segments)
-        {
-            segment.disablePhysics();
-        }
-    }
+	public void disablePhysics ()
+	{
+		foreach (Segment segment in segments) {
+			segment.disablePhysics ();
+		}
+	}
 
-    public void place()
-    {
-        if (connectable)
-        {
-            foreach (Segment segment in segments)
-            {
-                segment.connect();
-            }
-            deploy();
-            audioSource.PlayOneShot(soundManager.attachSound);
-            this.transform.parent = robot.transform;
-            resetPhysics();
-        }
-        else if (free)
-        {
-            deploy();
-			audioSource.PlayOneShot(soundManager.attachSound);
-            this.transform.parent = robot.transform;
-            resetPhysics();
-        }
-        robot.updateParts();
-    }
+	public void place ()
+	{
+		if (connectable) {
+			foreach (Segment segment in segments) {
+				segment.connect ();
+			}
+			deploy ();
+			audioSource.PlayOneShot (soundManager.attachSound);
+			this.transform.parent = robot.transform;
+			resetPhysics ();
+		} else if (free) {
+			deploy ();
+			audioSource.PlayOneShot (soundManager.attachSound);
+			this.transform.parent = robot.transform;
+			resetPhysics ();
+		}
+		robot.updateParts ();
+	}
 
-    public void disconnect()
-    {
-        foreach(Part part in connectedParts)
-        {
-            part.removeConnectedPart(this);
-        }
-        connectedParts = new List<Part>();
+	public void disconnect ()
+	{
+		foreach (Part part in connectedParts) {
+			part.removeConnectedPart (this);
+		}
+		connectedParts = new List<Part> ();
 
-        foreach(Segment segment in segments)
-        {
-            segment.disconnect();
-        }
-    }
+		foreach (Segment segment in segments) {
+			segment.disconnect ();
+		}
+	}
 
-    public void unplace()
-    {
-        disablePhysics();
-        resetPhysics();
-        robot.updateParts();
-        setState(Part.State.Connectable);
-        evaluateState();
-    }
+	public void unplace ()
+	{
+		disablePhysics ();
+		resetPhysics ();
+		robot.updateParts ();
+		setState (Part.State.Connectable);
+		evaluateState ();
+	}
 
-    public void deploy()
-    {
-        if (!template)
-        {
-            foreach (Segment cpt in segments)
-            {
-                cpt.deploy();
-            }
-            setState(State.Placed);
-        }
-    }
-    
-    public void activate()
-    {
-        foreach (Segment cpt in segments)
-        {
-            cpt.activate();
-        }
-        setState(State.Placed);
-    }
+	public void deploy ()
+	{
+		if (!template) {
+			foreach (Segment cpt in segments) {
+				cpt.deploy ();
+			}
+			setState (State.Placed);
+		}
+	}
 
-    public void reset()
-    {
-        foreach (Segment cpt in segments)
-        {
-            cpt.reset();
-        }
-        setState(State.Placed);
-    }
+	public void activate ()
+	{
+		foreach (Segment cpt in segments) {
+			cpt.activate ();
+		}
+		setState (State.Placed);
+	}
 
-    public void trigger()
-    {
-        foreach (Controllable controllable in controllables)
-        {
-            controllable.trigger();
-        }
-    }
+	public void reset ()
+	{
+		foreach (Segment cpt in segments) {
+			cpt.reset ();
+		}
+		setState (State.Placed);
+	}
 
-    public void triggerStop()
-    {
-        foreach (Controllable controllable in controllables)
-        {
-            controllable.triggerStop();
-        }
-    }
+	public void trigger ()
+	{
+		foreach (Controllable controllable in controllables) {
+			controllable.trigger ();
+		}
+	}
 
-    public void joystick(Vector2 input)
-    {
-        foreach (Controllable controllable in controllables)
-        {
-            controllable.joystick(input);
-        }
-    }
+	public void triggerStop ()
+	{
+		foreach (Controllable controllable in controllables) {
+			controllable.triggerStop ();
+		}
+	}
 
-    public void joystickStop()
-    {
-        foreach (Controllable controllable in controllables)
-        {
-            controllable.joystickStop();
-        }
-    }
+	public void joystick (Vector2 input)
+	{
+		foreach (Controllable controllable in controllables) {
+			controllable.joystick (input);
+		}
+	}
 
-    public void setState(State _state)
-    {
-        state = _state;
-        switch (_state)
-        {
-            case State.Connectable:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(true);
-                }
-                setSegmentMaterials(assetManager.connectableMaterial);
-                break;
-            case State.Unconnectable:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(true);
-                }
-                setSegmentMaterials(assetManager.unconnectableMaterial);
-                break;
-            case State.Free:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(true);
-                }
-                setSegmentMaterials(assetManager.freeMaterial);
-                break;
-            case State.Placed:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(false);
-                }
-                setSegmentDefaultMaterials();
-                break;
-            case State.MarkedForDelete:
-                if (scalable)
-                {
-                    scaler.gameObject.SetActive(false);
-                }
-                setSegmentMaterials(assetManager.deleteMaterial);
-                break;
-        }
-    }
-    
-    public void setSegmentMaterials(Material material)
-    {
-        foreach (MaterialHandler materialHandler in materialHandlers)
-        {
-            materialHandler.loadMaterial(material);
-        }
-    }
+	public void joystickStop ()
+	{
+		foreach (Controllable controllable in controllables) {
+			controllable.joystickStop ();
+		}
+	}
 
-    public void setSegmentDefaultMaterials()
-    {
-        foreach (MaterialHandler materialHandler in materialHandlers)
-        {
-            materialHandler.loadDefault();
-        }
-    }
-    
-    public void highlight()
-    {
-        highlighted = true;
-        setSegmentMaterials(assetManager.highlightMaterial);
-    }
+	public void setState (State _state)
+	{
+		state = _state;
+		switch (_state) {
+		case State.Connectable:
+			if (scalable) {
+				scaler.gameObject.SetActive (true);
+			}
+			setSegmentMaterials (assetManager.connectableMaterial);
+			audioSource.clip = soundManager.greenBGM;
+			audioSource.loop = true;
+			audioSource.Play ();
+			break;
+		case State.Unconnectable:
+			if (scalable) {
+				scaler.gameObject.SetActive (true);
+			}
+			setSegmentMaterials (assetManager.unconnectableMaterial);
+			audioSource.clip = soundManager.redBGM;
+			audioSource.loop = true;
+			audioSource.Play ();
+			break;
+		case State.Free:
+			if (scalable) {
+				scaler.gameObject.SetActive (true);
+			}
+			setSegmentMaterials (assetManager.freeMaterial);
+			audioSource.loop = false;
+			audioSource.Stop ();
+			break;
+		case State.Placed:
+			if (scalable) {
+				scaler.gameObject.SetActive (false);
+			}
+			setSegmentDefaultMaterials ();
+			audioSource.loop = false;
+			audioSource.Stop ();
+			break;
+		case State.MarkedForDelete:
+			if (scalable) {
+				scaler.gameObject.SetActive (false);
+			}
+			setSegmentMaterials (assetManager.deleteMaterial);
+			audioSource.loop = false;
+			audioSource.Stop ();
+			break;
+		}
+	}
 
-    public void online()
-    {
+	public void setSegmentMaterials (Material material)
+	{
+		foreach (MaterialHandler materialHandler in materialHandlers) {
+			materialHandler.loadMaterial (material);
+		}
+	}
+
+	public void setSegmentDefaultMaterials ()
+	{
+		foreach (MaterialHandler materialHandler in materialHandlers) {
+			materialHandler.loadDefault ();
+		}
+	}
+
+	public void highlight ()
+	{
+		highlighted = true;
+		setSegmentMaterials (assetManager.highlightMaterial);
+	}
+
+	public void online ()
+	{
 		if (this.template)
-        	trigger();
-    }
+			trigger ();
+	}
 
-    public void offline()
-    {
+	public void offline ()
+	{
 		if (this.template)
-       		triggerStop();
-    }
+			triggerStop ();
+	}
 
-    public void unhighlight()
-    {
-        highlighted = false;
-        setSegmentDefaultMaterials();
-    }
+	public void unhighlight ()
+	{
+		highlighted = false;
+		setSegmentDefaultMaterials ();
+	}
 
-    public void markForDelete()
-    {
-        markedForDelete = true;
-        setState(State.MarkedForDelete);
-        List<Part> connected = getConnectedParts();
-        foreach(Part part in connected)
-        {
-            if (!part.markedForDelete)
-            {
-                part.markForDelete();
-            }
-        }
-    }
+	public void markForDelete ()
+	{
+		markedForDelete = true;
+		setState (State.MarkedForDelete);
+		List<Part> connected = getConnectedParts ();
+		foreach (Part part in connected) {
+			if (!part.markedForDelete) {
+				part.markForDelete ();
+			}
+		}
+	}
 
-    public void unmarkForDelete()
-    {
-        markedForDelete = false;
-        setState(State.Connectable);
-        List<Part> connected = getConnectedParts();
-        foreach (Part part in connected)
-        {
-            if (part.markedForDelete)
-            {
-                part.unmarkForDelete();
-            }
-        }
-    }
+	public void unmarkForDelete ()
+	{
+		markedForDelete = false;
+		setState (State.Connectable);
+		List<Part> connected = getConnectedParts ();
+		foreach (Part part in connected) {
+			if (part.markedForDelete) {
+				part.unmarkForDelete ();
+			}
+		}
+	}
 
-    public void evaluateState()
-    {
-        if (markedForDelete)
-        {
-            setState(State.MarkedForDelete);
-        }
-        else if (template)
-        {
-            activate();
-        } 
-        else if (placed)
-        {
+	public void evaluateState ()
+	{
+		if (markedForDelete) {
+			setState (State.MarkedForDelete);
+		} else if (template) {
+			activate ();
+		} else if (placed) {
 
-        }
-        else
-        {
-            if (hasSegmentOverlap())
-            {
-                setState(State.Unconnectable);
-                return;
-            }
-            if (hasTouchingSegments())
-            {
-                setState(State.Connectable);
-                return;
-            }
-            setState(State.Free);
-        }
-    }
+		} else {
+			if (hasSegmentOverlap ()) {
+				setState (State.Unconnectable);
+				return;
+			}
+			if (hasTouchingSegments ()) {
+				setState (State.Connectable);
+				return;
+			}
+			setState (State.Free);
+		}
+	}
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 
 	}
 
-    public bool hasTouchingSegments()
-    {
-        if (segments == null)
-        {
-            return false;
-        }
-        for (int i = 0; i < segments.Length; i++)
-        {
-            if (segments[i].touchingSegments.Count > 0)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+	public bool hasTouchingSegments ()
+	{
+		if (segments == null) {
+			return false;
+		}
+		for (int i = 0; i < segments.Length; i++) {
+			if (segments [i].touchingSegments.Count > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public bool hasSegmentOverlap()
-    {
-        if (segments == null)
-        {
-            return false;
-        }
-        for (int i = 0; i < segments.Length; i++)
-        {
-            List<Segment> tCpts = segments[i].touchingSegments;
-            foreach (Segment a in tCpts)
-            {
-                foreach (Segment b in tCpts)
-                {
-                    if (!a.Equals(b) && a.parent.Equals(b.parent))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
+	public bool hasSegmentOverlap ()
+	{
+		if (segments == null) {
+			return false;
+		}
+		for (int i = 0; i < segments.Length; i++) {
+			List<Segment> tCpts = segments [i].touchingSegments;
+			foreach (Segment a in tCpts) {
+				foreach (Segment b in tCpts) {
+					if (!a.Equals (b) && a.parent.Equals (b.parent)) {
+						return true;
+					}
+				}
+			}
+		}
 
-        if (segments.Length > 1)
-        {
-            for (int i = 0; i < segments.Length - 1; i++)
-            {
-                for (int j = 1; j < segments.Length; j++)
-                {
-                    if (i != j)
-                    {
-                        if (hasTouchingSegmentOverlap(segments[i], segments[j]))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
+		if (segments.Length > 1) {
+			for (int i = 0; i < segments.Length - 1; i++) {
+				for (int j = 1; j < segments.Length; j++) {
+					if (i != j) {
+						if (hasTouchingSegmentOverlap (segments [i], segments [j])) {
+							return true;
+						}
+					}
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    bool hasTouchingSegmentOverlap(Segment a, Segment b)
-    {
-        foreach (Segment aC in a.touchingSegments)
-        {
-            foreach (Segment bC in b.touchingSegments)
-            {
-                if (aC.Equals(bC))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	bool hasTouchingSegmentOverlap (Segment a, Segment b)
+	{
+		foreach (Segment aC in a.touchingSegments) {
+			foreach (Segment bC in b.touchingSegments) {
+				if (aC.Equals (bC)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+		
 
 }

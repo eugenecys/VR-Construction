@@ -18,7 +18,8 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
 	public AudioClip buildBGM { get; private set; }
-	public AudioClip startBGM { get; private set; }
+	public AudioClip greenBGM { get; private set; }
+	public AudioClip redBGM { get; private set; }
 
     public void playSound(AudioClip sound)
     {
@@ -87,8 +88,9 @@ public class SoundManager : Singleton<SoundManager>
         trashSound = _loadSoundClip("ConstructionRoom-Trash", 0);
         releaseSound = _loadSoundClip("ConstructionRoom-ButtonRelease", 0);
         pickupSound = _loadSoundClip("ConstructionRoom-Pickup", 0);
-		buildBGM = _loadSoundClip ("ConstructionRoom-Green", 0);
-		startBGM = _loadSoundClip ("ConstructionRoom-Drone", 0);
+		buildBGM = _loadSoundClip ("ConstructionRoom-Drone", 0);
+		greenBGM = _loadSoundClip ("ConstructionRoom-Green", 0);
+		redBGM = _loadSoundClip ("ConstructionRoom-Red", 0);
     }
 
     private AudioClip _loadSoundClip(string filename, int i)

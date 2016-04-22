@@ -184,6 +184,7 @@ public class Builder : MonoBehaviour
 						contactObject = null;
 					} else {
 						MoveComponent (part);
+						currentPart = contactObject;
 						//PullComponent (contactObject);
 						contactObject = null;
 					}
@@ -205,13 +206,13 @@ public class Builder : MonoBehaviour
 	public void PullComponent (GameObject part)
 	{
 		currentPart = part;
-		StartCoroutine (PullingComponent (part.GetComponent<Part>().spawnZOffset));
+		StartCoroutine (PullingComponent (part.GetComponent<Part>().distanceFromController));
 	}
 
 
-	IEnumerator PullingComponent (float zOffset)
+	IEnumerator PullingComponent (float distanceFromController)
 	{
-		UpdatePullPosition (zOffset);
+		UpdatePullPosition (distanceFromController);
 
 		while (currentPart) {
 			if (Vector3.Distance (pullPosition, currentPart.transform.position) > 0.1f && Vector3.Distance (pullPosition, currentPart.transform.position) < Mathf.Infinity ) {
@@ -224,9 +225,8 @@ public class Builder : MonoBehaviour
 		}
 	}
 
-	private void UpdatePullPosition(float zOffset) {
-		pullPosition = pullPoint.position;
-		pullPosition.z += zOffset;
+	private void UpdatePullPosition(float distanceFromController) {
+		pullPosition = pullPoint.position + pullPoint.forward.normalized * distanceFromController;
 	}
 
 
