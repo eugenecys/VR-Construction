@@ -13,7 +13,7 @@ public class ScoreManager :  Singleton<ScoreManager>{
         set { score = value; }
     }
 
-	public int[] highScores;
+	private int[] highScores = new int[10];
 
     public void AddScore() {
 		score += 100;
@@ -43,6 +43,10 @@ public class ScoreManager :  Singleton<ScoreManager>{
 			} else {
 				continue;
 			}
+		}
+
+		for (int i = 0; i < 10; i++) {
+			PlayerPrefs.SetInt ((i + 1).ToString (), highScores [i] );
 		}
 	}
 

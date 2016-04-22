@@ -8,8 +8,8 @@ public class BlinkMechanic : MonoBehaviour
 	public Transform head; 
 
 	// variables for shift teleporting
-	public float shiftSpeed = 1f;
-	private float shiftStopDist = 0.2f;
+	private float shiftSpeed = 50f;
+	private float shiftStopDist = 0.1f;
 
 	private Vector3 oldCenter = Vector3.zero;
 	private Vector3 newCenter = Vector3.zero;
@@ -40,8 +40,8 @@ public class BlinkMechanic : MonoBehaviour
 
 	IEnumerator ShiftTeleport ()
 	{
-		Vector3 dir = newCenter - this.transform.position;
 		while (true) {
+			Vector3 dir = newCenter - trackingSpace.transform.position;
 			if (dir.magnitude > shiftStopDist) {
 				// still moving to our destination
 				trackingSpace.transform.Translate (dir * shiftSpeed * Time.deltaTime, Space.World);

@@ -90,7 +90,6 @@ public class GameManager : Singleton<GameManager> {
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
 			break;
 		}
-
 		SpawnRobotBase (selectedBase);
 		ShowRoom ();
 	
