@@ -33,6 +33,7 @@ public class GameManager : Singleton<GameManager> {
         state = GameState.Play;
 		city.SetActive (true); 
 		UIManager.Instance.DeployRobot ();
+		TimeManager.Instance.StartDeployCountdown ();
     }
 
     public void build()

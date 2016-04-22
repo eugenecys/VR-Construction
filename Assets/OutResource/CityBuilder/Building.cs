@@ -44,7 +44,8 @@ public class Building : MonoBehaviour {
 		ts[1].GetComponent<collapsingPart>().SetFalling(0.4f, OuterMtrl, WindowMtrl);
 		ts[2].GetComponent<collapsingPart>().SetFalling(0.6f, OuterMtrl, WindowMtrl);
 		ts[3].GetComponent<collapsingPart>().SetFalling(0.8f, OuterMtrl, WindowMtrl);
-		
+
+		ScoreManager.Instance.AddScore ();
 		Destroy (gameObject);
 	}
 

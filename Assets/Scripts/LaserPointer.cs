@@ -55,13 +55,24 @@ public class LaserPointer : MonoBehaviour {
 		pointer.GetComponent<MeshRenderer>().material = pointerMat;
 
 	}
-	
+
+	private bool building = false;
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (GameManager.Instance.state == GameManager.GameState.Play) {
 			pointer.gameObject.SetActive (false); 
+			if (building) {
+				building = false;
+				active = false;
+				pointer.transform.localScale = new Vector3(thickness, thickness, 0f);
+			}
 		}
 		else {
+			if (!building) {
+				building = true;
+				active = true;
+				pointer.transform.localScale = new Vector3(thickness, thickness, length);
+			}
 			pointer.gameObject.SetActive (true);
 			if (active) {
 				if (pointer.transform.localScale.z == 0f) {
