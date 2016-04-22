@@ -17,6 +17,7 @@ public class UIManager :  Singleton<UIManager> {
 	public Text ScoreUI; 
 	public Text TimeUI;
 	public GameObject HighScoreUI;
+	public Text EndScoreUI;
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
@@ -27,6 +28,9 @@ public class UIManager :  Singleton<UIManager> {
 	void Awake () {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
 			StartUI.SetActive (true);
+			HighScoreUI.gameObject.SetActive (true);
+			EndScoreUI.enabled = false;
+			HighScoreUI.gameObject.GetComponent<UIMovementVR> ().enabled = false;
 		}
 	}
 	
@@ -38,6 +42,10 @@ public class UIManager :  Singleton<UIManager> {
 	public void StartGame() {
 		StartUI.SetActive (false);
 		SelectBaseUI.SetActive (true);
+
+		HighScoreUI.SetActive (false);
+		EndScoreUI.enabled = true;
+		HighScoreUI.gameObject.GetComponent<UIMovementVR> ().enabled = true;
 	}
 
 	public void SelectBaseOne() {
@@ -107,7 +115,7 @@ public class UIManager :  Singleton<UIManager> {
 			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
 			rank.text += PlayerPrefs.GetInt((i+1).ToString()).ToString();
 		}
-		HighScoreUI.transform.GetChild (10).GetComponent<Text> ().text += finalScore.ToString();
+		EndScoreUI.text += finalScore.ToString();
 	
 	}
 }

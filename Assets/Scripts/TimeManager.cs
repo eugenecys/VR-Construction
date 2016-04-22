@@ -11,7 +11,7 @@ public class TimeManager : Singleton<TimeManager> {
     private float curTime;
 	private float countdown;
 	private bool deployed = false;
-
+	private bool gameOver = false;
 	// Use this for initialization
 	void Start () {
         curTime = 0;
@@ -25,8 +25,9 @@ public class TimeManager : Singleton<TimeManager> {
 			if (countdown > 0 && deployed) {
 				countdown -= 1;
 				timer.text = "Time to destroy: " + countdown.ToString();
-			} else if (countdown == 0 && deployed) {
+			} else if (countdown == 0 && deployed && !gameOver) {
 				GameManager.Instance.EndGame ();
+				gameOver = true;
 				//Undeploy ();
 			}
             curTime = 0;
