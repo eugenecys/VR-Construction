@@ -32,7 +32,7 @@ public class LaserPointer : MonoBehaviour {
 	private Builder builder; 
 
 	private float raycastZOffset = -1.5f;
-
+	private float laserZOffset = 0.15f;
 	void Awake() {
 		builder = this.gameObject.GetComponent<Builder> ();
 	}
@@ -60,9 +60,11 @@ public class LaserPointer : MonoBehaviour {
 		laser = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		laser.transform.parent = holder.transform;
 		laser.transform.localScale = new Vector3(thickness, thickness, length);
-		laser.transform.localPosition = new Vector3(0f, 0f, length/2f + raycastZOffset);
+		laser.transform.localPosition = new Vector3(0f, 0f, length/2f+laserZOffset);
 		laser.transform.localRotation = Quaternion.identity;
 		laser.GetComponent<MeshRenderer>().material = pointerMat;
+		laser.GetComponent<BoxCollider> ().enabled = false;
+	
 
 	}
 
@@ -75,6 +77,7 @@ public class LaserPointer : MonoBehaviour {
 				building = false;
 				active = false;
 				pointer.transform.localScale = new Vector3(thickness, thickness, 0f);
+				laser.transform.localScale = new Vector3(thickness, thickness, 0f);
 			}
 		}
 		else {
@@ -82,16 +85,19 @@ public class LaserPointer : MonoBehaviour {
 				building = true;
 				active = true;
 				pointer.transform.localScale = new Vector3(thickness, thickness, length);
+				laser.transform.localScale = new Vector3(thickness, thickness, length);
 			}
 			pointer.gameObject.SetActive (true);
 			if (active) {
 				if (pointer.transform.localScale.z == 0f) {
 					pointer.transform.localScale = new Vector3(thickness, thickness, length);
+					laser.transform.localScale = new Vector3(thickness, thickness, length);
 				}
 				CastLaser ();
 			} else {
 				if (pointer.transform.localScale.z > 0f) {
 					pointer.transform.localScale = new Vector3 (thickness, thickness, 0f);
+					laser.transform.localScale = new Vector3(thickness, thickness, 0f);
 				}
 			}
 		}
@@ -193,8 +199,9 @@ public class LaserPointer : MonoBehaviour {
 		}
 
 		pointer.transform.localScale = new Vector3(thickness, thickness, dist);
-		
-		pointer.transform.localPosition = new Vector3(0f, 0f, dist/2f);
+		laser.transform.localScale = new Vector3(thickness, thickness, dist);
+		pointer.transform.localPosition = new Vector3(0f, 0f, dist/2);
+		laser.transform.localPosition = new Vector3(0f, 0f, dist/2f + laserZOffset);
 
 	}
 
