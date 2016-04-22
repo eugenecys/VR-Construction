@@ -21,6 +21,8 @@ public class LaserPointer : MonoBehaviour {
 	public float length = 100f; 
 	public GameObject holder;
 	public GameObject pointer;
+	private GameObject laser; 
+
 	public Material pointerMat;
 
 	public LayerMask laserMask; 
@@ -52,7 +54,15 @@ public class LaserPointer : MonoBehaviour {
 		box.isTrigger = true;
 		//box.size = new Vector3 (5f, 5f, 1f);
 
-		pointer.GetComponent<MeshRenderer>().material = pointerMat;
+		//pointer.GetComponent<MeshRenderer>().material = pointerMat;
+		pointer.GetComponent<MeshRenderer>().enabled = false;
+
+		laser = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		laser.transform.parent = holder.transform;
+		laser.transform.localScale = new Vector3(thickness, thickness, length);
+		laser.transform.localPosition = new Vector3(0f, 0f, length/2f + raycastZOffset);
+		laser.transform.localRotation = Quaternion.identity;
+		laser.GetComponent<MeshRenderer>().material = pointerMat;
 
 	}
 
