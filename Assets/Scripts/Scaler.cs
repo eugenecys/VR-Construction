@@ -4,6 +4,9 @@ using System.Collections;
 public class Scaler : MonoBehaviour {
     
     public GameObject target;
+    public float maxLimit;
+    public float minLimit;
+
     private ScaleArrow scaleObject;
     private Vector3 initialScale;
     private float distMultiplier;
@@ -177,6 +180,8 @@ public class Scaler : MonoBehaviour {
                 target.transform.localScale = initialScale * newLength / initialDist;
             }
             else {
+                float multi = newLength / initialDist;
+                if (multi > maxLimit || multi < minLimit) return; 
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
