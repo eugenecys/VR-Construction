@@ -8,7 +8,7 @@ public class OmniTool : MonoBehaviour
 	public Builder builder;
 	public PlayMode playMode;
 	public UIControls ui;
-
+	public BlinkMechanic blink;
 	public enum Side
 	{
 		Left,
@@ -32,6 +32,7 @@ public class OmniTool : MonoBehaviour
 			inputManager.registerFunction (touchpadUp, ViveInputManager.InputType.LeftTouchpadUp);
 			inputManager.registerFunction (applicationmenuUp, ViveInputManager.InputType.LeftApplicationMenuUp);
 			inputManager.registerFunction (touchpadAxis, ViveInputManager.InputType.LeftTouchpadAxis);
+			inputManager.registerFunction (gripDown, ViveInputManager.InputType.LeftGripDown);
 		} else {
 			inputManager.registerFunction (triggerDown, ViveInputManager.InputType.RightTriggerDown);
 			inputManager.registerFunction (touchpadDown, ViveInputManager.InputType.RightTouchpadDown);
@@ -40,6 +41,7 @@ public class OmniTool : MonoBehaviour
 			inputManager.registerFunction (touchpadUp, ViveInputManager.InputType.RightTouchpadUp);
 			inputManager.registerFunction (applicationmenuUp, ViveInputManager.InputType.RightApplicationMenuUp);
 			inputManager.registerFunction (touchpadAxis, ViveInputManager.InputType.RightTouchpadAxis);
+			inputManager.registerFunction (gripDown, ViveInputManager.InputType.RightGripDown);
 		}
 	}
 
@@ -127,6 +129,20 @@ public class OmniTool : MonoBehaviour
 	public void applicationmenuUp (params object[] args)
 	{
 
+	}
+
+	public void gripDown(params object[] args) {
+		switch (gameManager.state) {
+		case GameManager.GameState.Build:
+			break;
+		case GameManager.GameState.Play:
+			blink.gripDown ();
+			break;
+		case GameManager.GameState.Start:
+			break;
+		case GameManager.GameState.SelectBase:
+			break;
+		}
 	}
     
 	// Use this for initialization
