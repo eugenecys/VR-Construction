@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class TimeManager : Singleton<TimeManager> {
 
-    public int consTime = 60;
     public int deployTime = 90;
 
     public Text timer;
@@ -16,7 +15,7 @@ public class TimeManager : Singleton<TimeManager> {
 	// Use this for initialization
 	void Start () {
         curTime = 0;
-		countdown = consTime;
+		countdown = deployTime;
 	}
 	
 	// Update is called once per frame
@@ -25,8 +24,8 @@ public class TimeManager : Singleton<TimeManager> {
         {
 			if (countdown > 0 && deployed) {
 				countdown -= 1;
-				timer.text = "Time to destroy: " + deployTime.ToString();
-			} else {
+				timer.text = "Time to destroy: " + countdown.ToString();
+			} else if (countdown == 0 && deployed) {
 				Undeploy ();
 			}
             curTime = 0;

@@ -20,6 +20,6 @@ public class ScoreManager :  Singleton<ScoreManager>{
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 }

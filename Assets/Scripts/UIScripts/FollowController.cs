@@ -29,6 +29,7 @@ public class FollowController : MonoBehaviour {
 			Quaternion newRot = controller.rotation;
 			Vector3 newEulur = newRot.eulerAngles;
 			newEulur.x += 90f;
+			newEulur.z = 0f;
 			newRot.eulerAngles = newEulur;
 			ui.rotation = newRot;
 			Vector3 targetPosition = controller.position + controller.up.normalized * distanceAboveController;
