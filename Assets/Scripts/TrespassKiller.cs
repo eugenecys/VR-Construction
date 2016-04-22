@@ -15,7 +15,7 @@ public class TrespassKiller : MonoBehaviour {
 
     void OnTriggerEnter(Collider col) {
         if (col.CompareTag("Component")) {
-            Destroy(col.gameObject);
+			Destroy(col.transform.root.gameObject);
         }
     }
 }
