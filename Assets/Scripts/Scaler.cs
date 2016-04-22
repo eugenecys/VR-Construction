@@ -174,14 +174,15 @@ public class Scaler : MonoBehaviour {
 	    if (scaling)
         {
             float newLength = 0;
+            float multi = newLength / initialDist;
+            if (multi > maxLimit || multi < minLimit) return;
             if (uniformScale)
             {
                 newLength = scaleObject.transform.localPosition.magnitude;
                 target.transform.localScale = initialScale * newLength / initialDist;
             }
             else {
-                float multi = newLength / initialDist;
-                if (multi > maxLimit || multi < minLimit) return; 
+                
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
