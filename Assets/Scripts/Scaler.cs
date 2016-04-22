@@ -174,10 +174,10 @@ public class Scaler : MonoBehaviour {
 	    if (scaling)
         {
             float newLength = 0;
-            float multi = newLength / initialDist;
-            if (multi > maxLimit || multi < minLimit) return;
+            Vector3 localScale = target.transform.localScale;
             if (uniformScale)
             {
+                if (localScale.x > maxLimit || localScale.x < minLimit) return;
                 newLength = scaleObject.transform.localPosition.magnitude;
                 target.transform.localScale = initialScale * newLength / initialDist;
             }
@@ -186,14 +186,17 @@ public class Scaler : MonoBehaviour {
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
+                        if (localScale.x > maxLimit || localScale.x < minLimit) return;
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
                         target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Y:
+                        if (localScale.y > maxLimit || localScale.y < minLimit) return;
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Z:
+                        if (localScale.z > maxLimit || localScale.z < minLimit) return;
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y, initialScale.z * newLength / initialDist);
                         break;
