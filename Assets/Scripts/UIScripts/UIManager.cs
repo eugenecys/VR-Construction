@@ -120,7 +120,20 @@ public class UIManager :  Singleton<UIManager> {
 		Text rank; 
 		for (int i = 0; i < 10; i++) {
 			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
-			rank.text += PlayerPrefs.GetInt((i+1).ToString()).ToString();
+			switch (i+1) {
+			case(1):
+				rank.text = "1st : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				break;
+			case(2):
+				rank.text = "2nd : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				break;
+			case(3):
+				rank.text = "3rd : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				break;
+			default:
+				rank.text = (i+1).ToString + "th : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				break;
+			}
 		}
 	}
 }

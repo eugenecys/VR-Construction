@@ -13,6 +13,7 @@ public class BlinkMechanic : MonoBehaviour
 
 	private Vector3 oldCenter = Vector3.zero;
 	private Vector3 newCenter = Vector3.zero;
+	private Transform baseBody;
 
 	// Use this for initialization
 	void Start ()
@@ -27,7 +28,8 @@ public class BlinkMechanic : MonoBehaviour
 
 	public void gripDown ()
 	{
-		BlinkTo (Robot.Instance.transform.GetChild(0).transform.position);
+		baseBody = Robot.Instance.gameObject.GetComponentInChildren<Base>().gameObject.transform;
+		BlinkTo (baseBody.position);
 	}
 
 	private void BlinkTo (Vector3 robotPos)
