@@ -32,10 +32,10 @@ public class ScoreManager :  Singleton<ScoreManager>{
 	private void UpdateHighScores() {
 		int rank = 0;
 		// update the rank itself, and move all ranks >= rank down by 1. 
-		for (int i= 9; i >= 0; i--) {
+		for (int i= 0; i < 10; i++) {
 			if (endScore >= highScores [i]) {
-				//  move all other scores down by 1
-				for (int j = 9; j > i; j++) {
+				//  move all scores down by 1
+				for (int j = 9; j > i; j--) {
 					highScores [j] = highScores [j - 1];
 				}
 				highScores [i] = endScore;

@@ -28,6 +28,7 @@ public class UIManager :  Singleton<UIManager> {
 	void Awake () {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
 			StartUI.SetActive (true);
+			UpdateHighScores ();
 			HighScoreUI.gameObject.SetActive (true);
 			EndScoreUI.enabled = false;
 			HighScoreUI.gameObject.GetComponent<UIMovementVR> ().enabled = false;
@@ -110,12 +111,16 @@ public class UIManager :  Singleton<UIManager> {
 	public void EndGame(int finalScore) {
 		ShowTime (false);
 		HighScoreUI.SetActive (true);
+		UpdateHighScores ();
+		EndScoreUI.text += finalScore.ToString();
+	
+	}
+
+	private void UpdateHighScores() {
 		Text rank; 
 		for (int i = 0; i < 10; i++) {
 			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
 			rank.text += PlayerPrefs.GetInt((i+1).ToString()).ToString();
 		}
-		EndScoreUI.text += finalScore.ToString();
-	
 	}
 }
