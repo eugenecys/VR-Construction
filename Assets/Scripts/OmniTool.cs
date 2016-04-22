@@ -47,8 +47,10 @@ public class OmniTool : MonoBehaviour
 
 	public void applicationmenuDown (params object[] args)
 	{
-		builder.menu ();
-		gameManager.state = GameManager.GameState.Build;
+		if (gameManager.debug) {
+			builder.menu ();
+			gameManager.state = GameManager.GameState.Build;
+		}
 	}
 
 	public void touchpadAxis (params object[] args)
@@ -171,19 +173,23 @@ public class OmniTool : MonoBehaviour
 			triggerUp ();
 		}
 
-		if (Input.GetKeyDown (KeyCode.I)) {
+		if (Input.GetKeyDown (KeyCode.I) && side == Side.Left) {
 			GameManager.Instance.StartGame ();
 		}
-		if (Input.GetKeyDown (KeyCode.O)) {
+		if (Input.GetKeyDown (KeyCode.O) && side == Side.Left) {
 			UIManager.Instance.SelectBaseOne ();
 		}
 
-		if (Input.GetKeyDown (KeyCode.P)) {
+		if (Input.GetKeyDown (KeyCode.P) && side == Side.Left) {
 			UIManager.Instance.SelectBaseTwo ();
 		}
 
-		if (Input.GetKeyDown (KeyCode.D)) {
+		if (Input.GetKeyDown (KeyCode.D) && side == Side.Left) {
 			Deployer.Instance.deploy ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.B) && side == Side.Left) {
+			blink.gripDown ();
 		}
 	}
 }
