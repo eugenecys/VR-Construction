@@ -8,7 +8,7 @@ public class BlinkMechanic : MonoBehaviour
 	public Transform head; 
 
 	// variables for shift teleporting
-	private float shiftSpeed = 50f;
+	private float shiftSpeed = 5f;
 	private float shiftStopDist = 0.1f;
 
 	private Vector3 oldCenter = Vector3.zero;

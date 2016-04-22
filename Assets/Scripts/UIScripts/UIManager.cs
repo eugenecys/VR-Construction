@@ -131,7 +131,7 @@ public class UIManager :  Singleton<UIManager> {
 				rank.text = "3rd : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			default:
-				rank.text = (i+1).ToString + "th : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = (i+1).ToString() + "th : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			}
 		}
