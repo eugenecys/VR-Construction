@@ -23,7 +23,9 @@ public class UIKeyboard : Singleton<UIKeyboard> {
 	private void UpdateName(char letter) {
 		if (currentIndex < maxNameSize) {
 			name [currentIndex] = letter;
-			currentIndex++;
+			if (currentIndex < maxNameSize -1 ) {
+				currentIndex++;
+			}
 			playerName.text = new string (name);
 		}
 	}

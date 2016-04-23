@@ -5,18 +5,24 @@ public class UIControls : MonoBehaviour {
 
 
 	private LaserPointer laser; 
+	private bool triggered = false;
+
 	// Use this for initialization
 	void Start () {
 		laser = this.gameObject.GetComponent<LaserPointer> ();
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update () { 
 		
 	}
 
 	public void triggerDown()
 	{
+		if (triggered) {
+			return;
+		}
+		triggered = true;
 		if (laser.previousContact != null) {
 			UIKey keyBtn = laser.previousContact.GetComponent<UIKey> ();
 			VRButton vrBtn = laser.previousContact.GetComponent<VRButton> ();
@@ -35,6 +41,10 @@ public class UIControls : MonoBehaviour {
 	}
 
 	public void triggerUp() {
+		if (!triggered) {
+			return;
+		}
+		triggered = false;
 
 	}
 }

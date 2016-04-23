@@ -149,6 +149,7 @@ public class GameManager : Singleton<GameManager> {
 
 	public void SubmitHighScore(string playerName) {
 		ScoreManager.Instance.SetEndName (playerName);
+		UIManager.Instance.NameSubmitted ();
 	}
 }
 

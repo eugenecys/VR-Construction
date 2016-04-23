@@ -47,7 +47,7 @@ public class OmniTool : MonoBehaviour
 
 	public void applicationmenuDown (params object[] args)
 	{
-		if (gameManager.debug) {
+		if (gameManager.debug && gameManager.state == GameManager.GameState.Play) {
 			builder.menu ();
 			gameManager.state = GameManager.GameState.Build;
 		}
@@ -76,6 +76,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			ui.triggerDown ();
 			break;
+		case GameManager.GameState.End:
+			ui.triggerDown ();
+			break;
 		}
 	}
 
@@ -94,6 +97,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			ui.triggerUp ();
 			break;
+		case GameManager.GameState.End:
+			ui.triggerUp ();
+			break;
 		}
 	}
 
@@ -108,6 +114,8 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.Start:
 			break;
 		case GameManager.GameState.SelectBase:
+			break;
+		case GameManager.GameState.End:
 			break;
 		}
 	}
@@ -124,6 +132,8 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.Start:
 			break;
 		case GameManager.GameState.SelectBase:
+			break;
+		case GameManager.GameState.End:
 			break;
 		}
 	}
@@ -143,6 +153,8 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.Start:
 			break;
 		case GameManager.GameState.SelectBase:
+			break;
+		case GameManager.GameState.End:
 			break;
 		}
 	}
