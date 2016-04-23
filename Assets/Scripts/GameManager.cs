@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager> {
 
     public GameState state;
     public GameObject city;
+	public Transform trackingSpace;
 
 	public GameObject RobotBases;
 
@@ -134,10 +135,12 @@ public class GameManager : Singleton<GameManager> {
 
 	public void EndGame() {
 		state = GameState.End;
-		//Building[] buildings = city.GetComponentsInChildren<Building> ();
-		//foreach (Building building in buildings) {
-		//	building.SelfDestruct ();
-		//}
+		Building[] buildings = city.GetComponentsInChildren<Building> ();
+		foreach (Building building in buildings) {
+			if (Vector3.Distance (trackingSpace.position, building.transform.position) < 10.0f) {
+				building.SelfDestruct ();
+			}
+		}
 		if (ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score)) {
 			// then we have a new high score
 			UIManager.Instance.EndGame (ScoreManager.Instance._score, true);

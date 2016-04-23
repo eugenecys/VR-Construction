@@ -22,7 +22,7 @@ public class ScoreManager :  Singleton<ScoreManager>{
     }
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		GetPlayerPrefs ();
 	}
 	
@@ -74,7 +74,8 @@ public class ScoreManager :  Singleton<ScoreManager>{
 				PlayerPrefs.SetInt ((i + 1).ToString (), 0);
 			}
 			for (int i = 0; i < 10; i++) {
-				PlayerPrefs.SetString ((i + 1).ToString () + "Name", "Placeholder");
+				Debug.Log ("gets here");
+				PlayerPrefs.SetString ((i + 1).ToString () + "Name", "_____");
 			}
 		}
 

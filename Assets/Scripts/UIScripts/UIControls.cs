@@ -29,7 +29,6 @@ public class UIControls : MonoBehaviour {
 			BaseButton baseBtn = laser.previousContact.GetComponent<BaseButton> ();
 			if (keyBtn) {
 				keyBtn.keySelected ();
-				Debug.Log ("pressed keyboard");
 			}
 			else if (vrBtn) {
 				vrBtn.btnFunction.Invoke ();

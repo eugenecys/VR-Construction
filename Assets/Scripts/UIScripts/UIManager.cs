@@ -103,6 +103,7 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
+		EndScoreUI.transform.position += GameManager.Instance.trackingSpace.position;
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
 		ShowScore (false);
@@ -129,16 +130,16 @@ public class UIManager :  Singleton<UIManager> {
 			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
 			switch (i+1) {
 			case(1):
-				rank.text = "1st - " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + " : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = "1st    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			case(2):
-				rank.text = "2nd - " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + " : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = " 2nd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			case(3):
-				rank.text = "3rd - " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + " : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = "3rd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			default:
-				rank.text = (i+1).ToString() + "th - " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + " : " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = (i+1).ToString() + "th    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			}
 		}
