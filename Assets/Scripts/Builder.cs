@@ -206,8 +206,6 @@ public class Builder : MonoBehaviour
 	public void PullComponent (GameObject part)
 	{
 		currentPart = part;
-		Debug.Log (part);
-		Debug.Log (part.GetComponent<Part>());
 		StartCoroutine (PullingComponent (part.GetComponent<Part>().distanceFromController));
 	}
 
