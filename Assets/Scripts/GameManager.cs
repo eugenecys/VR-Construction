@@ -15,7 +15,8 @@ public class GameManager : Singleton<GameManager> {
 		End
     }
 
-	private AudioSource audioSource;
+	private AudioSource musicSource;
+	private AudioSource dialogueSource;
 	private SoundManager soundManager; 
 	private Robot robot;
 
@@ -36,6 +37,7 @@ public class GameManager : Singleton<GameManager> {
 		city.SetActive (true); 
 		UIManager.Instance.DeployRobot ();
 		TimeManager.Instance.StartDeployCountdown ();
+		PlayDialogue (soundManager.cityDialogue);
     }
 
     public void build()
@@ -51,13 +53,15 @@ public class GameManager : Singleton<GameManager> {
     void Awake()
     {
 		//state = GameState.Start;
+		AudioSource[] sources = this.GetComponents<AudioSource>();
+		musicSource = sources [0];
+		dialogueSource = sources [1];
 
-		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
 		robot = Robot.Instance;
-		audioSource.clip = soundManager.buildBGM;
-		audioSource.loop = true;
-		audioSource.Play ();
+
+		PlayMusic(soundManager.buildBGM);
+		PlayDialogue (soundManager.startDialogue);
 
 		if (state == GameState.Start) {
 			HideRoom ();
@@ -92,7 +96,10 @@ public class GameManager : Singleton<GameManager> {
 		}
 		SpawnRobotBase (selectedBase);
 		ShowRoom ();
-	
+
+		StopDialogue ();
+		PlayDialogue (soundManager.constructionDialogue);
+		Invoke ("ReadyDeployButton", 20.0f);
 	}
 
 
@@ -112,7 +119,9 @@ public class GameManager : Singleton<GameManager> {
 		foreach (GameObject component in RoomComponents) {
 			component.SetActive (true);
 		}
-		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+		if (debug) {
+			Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+		}
 		//RenderSettings.ambientIntensity = 1f;
 	}
 
@@ -153,6 +162,31 @@ public class GameManager : Singleton<GameManager> {
 	public void SubmitHighScore(string playerName) {
 		ScoreManager.Instance.SetEndName (playerName);
 		UIManager.Instance.NameSubmitted ();
+	}
+
+	public void PlayDialogue(AudioClip clip) {
+		dialogueSource.clip = clip;
+		dialogueSource.Play ();
+	}
+
+	public void StopDialogue() {
+		dialogueSource.Stop ();
+	}
+
+	public void PlayMusic(AudioClip clip) {
+		musicSource.clip = clip;
+		musicSource.loop = true;
+		musicSource.Play ();
+	}
+
+	public void StopMusic() {
+		musicSource.Stop ();
+	}
+
+	private void ReadyDeployButton() {
+		dialogueSource.clip = soundManager.deployDialogue;
+		dialogueSource.Play ();
+		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
 	}
 }
 

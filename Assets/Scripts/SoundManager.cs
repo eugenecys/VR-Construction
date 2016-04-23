@@ -21,6 +21,12 @@ public class SoundManager : Singleton<SoundManager>
 	public AudioClip greenBGM { get; private set; }
 	public AudioClip redBGM { get; private set; }
 
+
+	public AudioClip startDialogue { get; private set; }
+	public AudioClip constructionDialogue { get; private set; }
+	public AudioClip deployDialogue { get; private set; }
+	public AudioClip cityDialogue { get; private set; }
+
     public void playSound(AudioClip sound)
     {
         foreach (AudioSource AS in _audioSource)
@@ -79,18 +85,21 @@ public class SoundManager : Singleton<SoundManager>
         }
 
         //Loads a file from Resources/Sounds folder
-        //wheelSound = _loadSoundClip("wheelSound", 0);
-        wheelSound = _loadSoundClip("ConstructionRoom-Engine_Running", 0);
-        machinegunSound = _loadSoundClip("Cannon-SingleShot", 0);
-        laserSound = _loadSoundClip("Laser", 0);
-        attachSound = _loadSoundClip("ConstructionRoom-Drop", 0);
-        cannonSound = _loadSoundClip("Cannon-SingleShot", 0);
-        trashSound = _loadSoundClip("ConstructionRoom-Trash", 0);
-        releaseSound = _loadSoundClip("ConstructionRoom-ButtonRelease", 0);
-        pickupSound = _loadSoundClip("ConstructionRoom-Pickup", 0);
-		buildBGM = _loadSoundClip ("ConstructionRoom-Drone", 0);
-		greenBGM = _loadSoundClip ("ConstructionRoom-Green", 0);
-		redBGM = _loadSoundClip ("ConstructionRoom-Red", 0);
+        wheelSound = _loadSoundClip("SFX/ConstructionRoom-Engine_Running", 0);
+		machinegunSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
+		laserSound = _loadSoundClip("SFX/Laser", 0);
+		attachSound = _loadSoundClip("SFX/ConstructionRoom-Drop", 0);
+		cannonSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
+		trashSound = _loadSoundClip("SFX/ConstructionRoom-Trash", 0);
+		releaseSound = _loadSoundClip("SFX/ConstructionRoom-ButtonRelease", 0);
+		pickupSound = _loadSoundClip("SFX/ConstructionRoom-Pickup", 0);
+		buildBGM = _loadSoundClip ("SFX/ConstructionRoom-Drone", 0);
+		greenBGM = _loadSoundClip ("SFX/ConstructionRoom-Green", 0);
+		redBGM = _loadSoundClip ("SFX/ConstructionRoom-Red", 0);
+		startDialogue = _loadSoundClip ("Dialogue/StartDialogue", 0);
+		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
+		deployDialogue = _loadSoundClip ("Dialogue/DeployDialogue", 0);
+		cityDialogue = _loadSoundClip ("Dialogue/CityDialogue", 0);
     }
 
     private AudioClip _loadSoundClip(string filename, int i)
