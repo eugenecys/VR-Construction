@@ -25,6 +25,8 @@ public class Scaler : MonoBehaviour {
     private ScaleArrow Z;
     private ScaleArrow Zn;
 
+    private Weapon wp;
+
     public void initScale(ScaleArrow arrow)
     {
         scaleObject = arrow;
@@ -170,7 +172,7 @@ public class Scaler : MonoBehaviour {
     
 	// Use this for initialization
 	void Start () {
-	
+        wp = target.GetComponentInChildren<Weapon>();
 	}
 	
 	// Update is called once per frame
@@ -179,11 +181,13 @@ public class Scaler : MonoBehaviour {
         {
             float newLength = 0;
             float multi = 0;
+            
             if (uniformScale)
             {
                 newLength = scaleObject.transform.localPosition.magnitude;
                 multi = newLength / initialDist;
                 if (initialScale.x * multi > maxX || initialScale.y * multi > maxY || initialScale.z * multi > maxZ) {
+                    SetScale(maxX / initialScale.x);
                     initialScale = new Vector3(maxX, maxY, maxZ);
                     return;
                 }
@@ -197,6 +201,7 @@ public class Scaler : MonoBehaviour {
                         multi = newLength / initialDist;
                         if (initialScale.x * multi > maxX)
                         {
+                            SetScale(maxX / initialScale.x);
                             initialScale = new Vector3(maxX, initialScale.y, initialScale.z);
                             return;
                         }
@@ -206,7 +211,8 @@ public class Scaler : MonoBehaviour {
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         multi = newLength / initialDist;
                         if (initialScale.y * multi > maxY)
-                        {
+                        {                     
+                            SetScale(maxY / initialScale.y);
                             initialScale = new Vector3(initialScale.x, maxY, initialScale.z);
                             return;
                         }
@@ -217,6 +223,7 @@ public class Scaler : MonoBehaviour {
                         multi = newLength / initialDist;
                         if (initialScale.z * multi > maxZ)
                         {
+                            SetScale(maxZ / initialScale.z);
                             initialScale = new Vector3(initialScale.x, initialScale.y, maxZ);
                             return;
                         }
@@ -224,6 +231,14 @@ public class Scaler : MonoBehaviour {
                         break;
                 }
             }
+                SetScale(multi);
         }
 	}
+
+    void SetScale(float multi) {
+        if (wp)
+        {
+            wp.Multi = multi;
+        }
+    }
 }

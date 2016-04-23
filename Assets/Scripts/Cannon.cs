@@ -48,6 +48,7 @@ public class Cannon : Weapon {
     {
         audioSource.Play();
         GameObject sObj = Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
+        sObj.transform.localScale *= multi;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);

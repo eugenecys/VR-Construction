@@ -45,6 +45,7 @@ public class MachineGun : Weapon {
     protected override void Fire()
     {
         GameObject sObj = Instantiate(ammo, transform.position, Quaternion.identity) as GameObject;
+        sObj.transform.localScale *= multi;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
