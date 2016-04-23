@@ -22,7 +22,6 @@ public class GameManager : Singleton<GameManager> {
     public GameState state;
     public GameObject city;
 
-
 	public GameObject RobotBases;
 
 	public GameObject selectedBase;
@@ -135,9 +134,21 @@ public class GameManager : Singleton<GameManager> {
 
 	public void EndGame() {
 		state = GameState.End;
-		ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score);
-		UIManager.Instance.EndGame (ScoreManager.Instance._score);
+		//Building[] buildings = city.GetComponentsInChildren<Building> ();
+		//foreach (Building building in buildings) {
+		//	building.SelfDestruct ();
+		//}
+		if (ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score)) {
+			// then we have a new high score
+			UIManager.Instance.EndGame (ScoreManager.Instance._score, true);
+		} else {
+			UIManager.Instance.EndGame (ScoreManager.Instance._score, false);
+		}
+
 	}
-		
+
+	public void SubmitHighScore(string playerName) {
+		ScoreManager.Instance.SetEndName (playerName);
+	}
 }
 

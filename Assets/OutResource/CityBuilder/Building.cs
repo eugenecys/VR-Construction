@@ -49,6 +49,28 @@ public class Building : MonoBehaviour {
 		Destroy (gameObject);
 	}
 
+
+	public void SelfDestruct(){
+		//Connect with Rechard things;;
+		string cloneBuildingName =  originName + "_Collapse";
+		GameObject collapseClone = (GameObject)Instantiate (Resources.Load(cloneBuildingName), transform.position , Quaternion.identity);
+		Transform[] ts = collapseClone.GetComponentsInChildren<Transform>();
+
+		//temporary removement for correcting import error
+		//SoundManager.Instance.sfxPlay3D(SFXType.BUILDING_EXPLOSION, transform);
+
+		float height = this.GetComponent<BoxCollider>().size.z;
+
+		ts[0].GetComponent<collapsableBuidling>().SetCollapse(0.2f, height);
+		ts[0].GetComponent<collapsableBuidling>().Destroy(2.0f);
+		ts[1].GetComponent<collapsingPart>().SetFalling(0.4f, OuterMtrl, WindowMtrl);
+		ts[2].GetComponent<collapsingPart>().SetFalling(0.6f, OuterMtrl, WindowMtrl);
+		ts[3].GetComponent<collapsingPart>().SetFalling(0.8f, OuterMtrl, WindowMtrl);
+
+		Destroy (gameObject);
+	}
+
+
 	void OnTriggerEnter(Collider coll) {
 		/*
 		if (coll.tag == "character") {
