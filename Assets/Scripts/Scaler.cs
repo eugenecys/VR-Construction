@@ -4,8 +4,6 @@ using System.Collections;
 public class Scaler : MonoBehaviour {
     
     public GameObject target;
-    public float maxLimit;
-    public float minLimit;
     public float maxX;
     public float maxY;
     public float maxZ;
@@ -180,44 +178,48 @@ public class Scaler : MonoBehaviour {
 	    if (scaling)
         {
             float newLength = 0;
-            Vector3 localScale = target.transform.localScale;
+            float multi = 0;
             if (uniformScale)
             {
-                if (localScale.x > maxLimit || localScale.x < minLimit) {
-                    localScale = localScale.x > maxLimit ? new Vector3(maxLimit, maxLimit, maxLimit) : new Vector3(minLimit, minLimit, minLimit);
+                newLength = scaleObject.transform.localPosition.magnitude;
+                multi = newLength / initialDist;
+                if (initialScale.x * multi > maxX || initialScale.y * multi > maxY || initialScale.z * multi > maxZ) {
+                    initialScale = new Vector3(maxX, maxY, maxZ);
                     return;
                 }
-                newLength = scaleObject.transform.localPosition.magnitude;
                 target.transform.localScale = initialScale * newLength / initialDist;
             }
             else {
-                
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
-                        if (localScale.x > maxX || localScale.x < minX) {
-                            localScale.x = localScale.x > maxX ? maxX: minX;
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
+                        multi = newLength / initialDist;
+                        if (initialScale.x * multi > maxX)
+                        {
+                            initialScale = new Vector3(maxX, initialScale.y, initialScale.z);
                             return;
                         }
-                        newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
                         target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Y:
-                        if (localScale.y > maxY || localScale.y < minY)
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
+                        multi = newLength / initialDist;
+                        if (initialScale.y * multi > maxY)
                         {
-                            localScale.y = localScale.y > maxY ? maxY : minY;
+                            initialScale = new Vector3(initialScale.x, maxY, initialScale.z);
                             return;
                         }
-                        newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Z:
-                        if (localScale.z > maxZ || localScale.z < minZ)
+                        newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
+                        multi = newLength / initialDist;
+                        if (initialScale.z * multi > maxZ)
                         {
-                            localScale.z = localScale.z > maxZ ? maxZ : minZ;
+                            initialScale = new Vector3(initialScale.x, initialScale.y, maxZ);
                             return;
                         }
-                        newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y, initialScale.z * newLength / initialDist);
                         break;
                 }
