@@ -188,7 +188,7 @@ public class Base : Segment, Controllable
 		rightForce = 1;
         setLeftSpeed(leftSpeed, leftForce);
 		setRightSpeed(rightSpeed, rightForce);
-        audioSource.Play();
+        //audioSource.Play();
     }
 
 	void setLeftSpeed(float speed, float force)

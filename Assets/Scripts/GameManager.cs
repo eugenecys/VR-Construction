@@ -60,8 +60,7 @@ public class GameManager : Singleton<GameManager> {
 		soundManager = SoundManager.Instance;
 		robot = Robot.Instance;
 
-		PlayMusic(soundManager.buildBGM);
-		PlayDialogue (soundManager.startDialogue);
+
 
 		if (state == GameState.Start) {
 			HideRoom ();
@@ -71,7 +70,8 @@ public class GameManager : Singleton<GameManager> {
 
 	// Use this for initialization
 	void Start () {
-		
+		PlayMusic(soundManager.buildBGM);
+		PlayDialogue (soundManager.startDialogue);
 	}
 	
 	// Update is called once per frame
