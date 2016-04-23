@@ -6,6 +6,12 @@ public class Scaler : MonoBehaviour {
     public GameObject target;
     public float maxLimit;
     public float minLimit;
+    public float maxX;
+    public float maxY;
+    public float maxZ;
+    public float minX;
+    public float minY;
+    public float minZ;
 
     private ScaleArrow scaleObject;
     private Vector3 initialScale;
@@ -189,26 +195,26 @@ public class Scaler : MonoBehaviour {
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
-                        if (localScale.x > maxLimit || localScale.x < minLimit) {
-                            localScale.x = localScale.x > maxLimit ? maxLimit : minLimit;
+                        if (localScale.x > maxX || localScale.x < minX) {
+                            localScale.x = localScale.x > maxX ? maxX: minX;
                             return;
                         }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
                         target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Y:
-                        if (localScale.y > maxLimit || localScale.y < minLimit)
+                        if (localScale.y > maxY || localScale.y < minY)
                         {
-                            localScale.y = localScale.y > maxLimit ? maxLimit : minLimit;
+                            localScale.y = localScale.y > maxY ? maxY : minY;
                             return;
                         }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Z:
-                        if (localScale.z > maxLimit || localScale.z < minLimit)
+                        if (localScale.z > maxZ || localScale.z < minZ)
                         {
-                            localScale.z = localScale.z > maxLimit ? maxLimit : minLimit;
+                            localScale.z = localScale.z > maxZ ? maxZ : minZ;
                             return;
                         }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
