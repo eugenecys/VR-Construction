@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour, Controllable {
     protected bool isFiring = false;
     protected float fireCountDown;
 
-    protected float multi = 0;
+    protected float multi = 1;
 
     public float Multi {
         get { return multi; }
