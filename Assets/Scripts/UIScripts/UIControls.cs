@@ -18,15 +18,18 @@ public class UIControls : MonoBehaviour {
 	public void triggerDown()
 	{
 		if (laser.previousContact != null) {
+			UIKey keyBtn = laser.previousContact.GetComponent<UIKey> ();
 			VRButton vrBtn = laser.previousContact.GetComponent<VRButton> ();
-			if (vrBtn) {
-				vrBtn.btnFunction.Invoke ();
-			} else {
-				BaseButton baseBtn = laser.previousContact.GetComponent<BaseButton> ();
-				if (baseBtn) {
-					baseBtn.btnFunction.Invoke ();
-				}
+			BaseButton baseBtn = laser.previousContact.GetComponent<BaseButton> ();
+			if (keyBtn) {
+				keyBtn.keySelected ();
 			}
+			else if (vrBtn) {
+				vrBtn.btnFunction.Invoke ();
+			} else if (baseBtn){
+				baseBtn.btnFunction.Invoke ();
+			} 
+
 		}
 	}
 

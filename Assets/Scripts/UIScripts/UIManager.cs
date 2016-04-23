@@ -9,7 +9,6 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject StartUI;
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
-	public GameObject DeployedUI;
 	public GameObject PickUpUI;
 	public GameObject ScaleUI;
 	public GameObject MovementUI;
@@ -17,7 +16,8 @@ public class UIManager :  Singleton<UIManager> {
 	public Text ScoreUI; 
 	public Text TimeUI;
 	public GameObject HighScoreUI;
-	public Text EndScoreUI;
+	public GameObject EndScoreUI;
+	public GameObject UIKeyboard; 
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool scaledForFirstTime = false;
@@ -30,8 +30,6 @@ public class UIManager :  Singleton<UIManager> {
 			StartUI.SetActive (true);
 			UpdateHighScores ();
 			HighScoreUI.gameObject.SetActive (true);
-			EndScoreUI.enabled = false;
-			HighScoreUI.gameObject.GetComponent<UIMovementVR> ().enabled = false;
 		}
 	}
 	
@@ -45,8 +43,6 @@ public class UIManager :  Singleton<UIManager> {
 		SelectBaseUI.SetActive (true);
 
 		HighScoreUI.SetActive (false);
-		EndScoreUI.enabled = true;
-		HighScoreUI.gameObject.GetComponent<UIMovementVR> ().enabled = true;
 	}
 
 	public void SelectBaseOne() {
@@ -65,7 +61,6 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void DeployRobot() {
 		BuildingUI.SetActive (false);
-		DeployedUI.SetActive (true);
 		ShowPickUpControls(false);
 		ShowScaleControls(false);
 		ShowScore (true);
@@ -74,7 +69,6 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void UndeployRobot() {
 		BuildingUI.SetActive (true);
-		DeployedUI.SetActive (false);
 		ShowScore (false);
 		ShowTime (false);
 	}
@@ -108,12 +102,25 @@ public class UIManager :  Singleton<UIManager> {
 	}
 		
 
-	public void EndGame(int finalScore) {
+	public void EndGame(int finalScore, bool updatedHighScores) {
+		EndScoreUI.SetActive (true);
+		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
+		ShowScore (false);
 		ShowTime (false);
-		HighScoreUI.SetActive (true);
+
+		if (!updatedHighScores) {
+			EndScoreUI.transform.GetChild (0).gameObject.SetActive (true);
+			HighScoreUI.SetActive (true);
+		} else {
+			EndScoreUI.transform.GetChild (1).gameObject.SetActive (true);
+			UIKeyboard.SetActive (true);
+		}
+	}
+
+	public void NameSubmitted() {
+		UIKeyboard.SetActive (false); 
 		UpdateHighScores ();
-		EndScoreUI.text += finalScore.ToString();
-	
+		HighScoreUI.SetActive (true);
 	}
 
 	private void UpdateHighScores() {
