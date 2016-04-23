@@ -12,6 +12,7 @@ public class RobotIndicator : MonoBehaviour {
     public GameObject indicator;
 	public GameObject inContainer;
     public GameObject headSet;
+    public float raySize;
     public float rayLen;
     public float height;
     // Use this for initialization
@@ -47,20 +48,15 @@ public class RobotIndicator : MonoBehaviour {
 
     void IndicatorActivate() {
 		Ray ray = new Ray(headSet.transform.position, robotTran.position);
-        RaycastHit hit;
-		Debug.DrawRay (headSet.transform.position,robotTran.position, Color.red);
-        if (Physics.Raycast(ray, out hit, rayLen))
-        {
+        RaycastHit[] hits = Physics.CapsuleCastAll(headSet.transform.position, robotTran.position, raySize,(robotTran.position-headSet.transform.position).normalized, rayLen);
+        //Debug.DrawRay (headSet.transform.position,robotTran.position, Color.red);
+        foreach (var hit in hits) {
             if (hit.transform.CompareTag("building"))
             {
-				mesh.enabled = true;
+                mesh.enabled = true;
+                break;
             }
-            else {
-				mesh.enabled = false;
-            }
-        }
-        else {
-			mesh.enabled = false;
+            mesh.enabled = false;
         }
     }
 }
