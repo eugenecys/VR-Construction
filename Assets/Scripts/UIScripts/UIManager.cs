@@ -103,7 +103,7 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
-		EndScoreUI.transform.position += GameManager.Instance.trackingSpace.position;
+		EndScoreUI.transform.parent.transform.position += GameManager.Instance.trackingSpace.position;
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
 		ShowScore (false);
