@@ -191,10 +191,6 @@ public class Builder : MonoBehaviour
 				}
 			} else {
 				scaleArrow.followDrag (transform);
-				if (!UIManager.scaledForFirstTime) {
-					UIManager.Instance.ShowScaleControls (false);
-					UIManager.scaledForFirstTime = true;
-				}
 			}
 			if (laser) {
 				laser.active = false;
@@ -289,7 +285,6 @@ public class Builder : MonoBehaviour
 
 		if (!UIManager.pickedUpForFirstTime) {
 			UIManager.Instance.ShowPickUpControls (false);
-			UIManager.Instance.ShowScaleControls (true);
 			UIManager.pickedUpForFirstTime = true;
 		}
 

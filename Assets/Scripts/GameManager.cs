@@ -60,8 +60,6 @@ public class GameManager : Singleton<GameManager> {
 		soundManager = SoundManager.Instance;
 		robot = Robot.Instance;
 
-
-
 		if (state == GameState.Start) {
 			HideRoom ();
 
@@ -83,6 +81,8 @@ public class GameManager : Singleton<GameManager> {
 		state = GameState.SelectBase;
 		RobotBases.SetActive (true);
 		UIManager.Instance.StartGame ();
+		StopDialogue ();
+		PlayDialogue (soundManager.selectBaseDialogue);
 	}
 
 	public void SelectBase(int robotBase) {

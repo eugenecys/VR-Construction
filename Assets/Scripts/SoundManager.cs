@@ -23,6 +23,7 @@ public class SoundManager : Singleton<SoundManager>
 
 
 	public AudioClip startDialogue { get; private set; }
+	public AudioClip selectBaseDialogue { get; private set; }
 	public AudioClip constructionDialogue { get; private set; }
 	public AudioClip deployDialogue { get; private set; }
 	public AudioClip cityDialogue { get; private set; }
@@ -97,6 +98,7 @@ public class SoundManager : Singleton<SoundManager>
 		greenBGM = _loadSoundClip ("SFX/ConstructionRoom-Green", 0);
 		redBGM = _loadSoundClip ("SFX/ConstructionRoom-Red", 0);
 		startDialogue = _loadSoundClip ("Dialogue/StartDialogue", 0);
+		selectBaseDialogue = _loadSoundClip ("Dialogue/SelectBaseDialogue", 0);
 		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
 		deployDialogue = _loadSoundClip ("Dialogue/DeployDialogue", 0);
 		cityDialogue = _loadSoundClip ("Dialogue/CityDialogue", 0);

@@ -31,7 +31,6 @@ public class Robot : Singleton<Robot>, Controllable {
             {
                 part.trigger();
 				if (!UIManager.firedForFirstTime) {
-					UIManager.Instance.ShowScaleControls (false);
 					UIManager.Instance.ShowWeaponsControls (false);
 					UIManager.firedForFirstTime = true;
 				}

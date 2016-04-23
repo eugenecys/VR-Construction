@@ -10,7 +10,6 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
 	public GameObject PickUpUI;
-	public GameObject ScaleUI;
 	public GameObject MovementUI;
 	public GameObject WeaponsUI;
 	public Text ScoreUI; 
@@ -20,7 +19,6 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject UIKeyboard; 
 
 	public static bool pickedUpForFirstTime = false;
-	public static bool scaledForFirstTime = false;
 	public static bool movedForFirstTime = false;
 	public static bool firedForFirstTime = false;
 
@@ -41,7 +39,6 @@ public class UIManager :  Singleton<UIManager> {
 	public void StartGame() {
 		StartUI.SetActive (false);
 		SelectBaseUI.SetActive (true);
-
 		HighScoreUI.SetActive (false);
 	}
 
@@ -62,7 +59,8 @@ public class UIManager :  Singleton<UIManager> {
 	public void DeployRobot() {
 		BuildingUI.SetActive (false);
 		ShowPickUpControls(false);
-		ShowScaleControls(false);
+		ScoreUI.GetComponent<FollowController> ().controller = Robot.Instance.gameObject.GetComponentInChildren<Base> ().transform;
+		TimeUI.GetComponent<FollowController> ().controller = Robot.Instance.gameObject.GetComponentInChildren<Base> ().transform;
 		ShowScore (true);
 		ShowTime (true);
 	}
@@ -77,10 +75,6 @@ public class UIManager :  Singleton<UIManager> {
 		PickUpUI.SetActive (val);
 	}
 
-	public void ShowScaleControls(bool val) {
-		ScaleUI.SetActive (val);
-	}
-		
 	public void ShowWeaponsControls(bool val) {
 		WeaponsUI.SetActive (val);
 	}

@@ -74,7 +74,6 @@ public class ScoreManager :  Singleton<ScoreManager>{
 				PlayerPrefs.SetInt ((i + 1).ToString (), 0);
 			}
 			for (int i = 0; i < 10; i++) {
-				Debug.Log ("gets here");
 				PlayerPrefs.SetString ((i + 1).ToString () + "Name", "_____");
 			}
 		}
