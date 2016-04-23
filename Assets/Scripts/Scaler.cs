@@ -177,7 +177,10 @@ public class Scaler : MonoBehaviour {
             Vector3 localScale = target.transform.localScale;
             if (uniformScale)
             {
-                if (localScale.x > maxLimit || localScale.x < minLimit) return;
+                if (localScale.x > maxLimit || localScale.x < minLimit) {
+                    localScale = localScale.x > maxLimit ? new Vector3(maxLimit, maxLimit, maxLimit) : new Vector3(minLimit, minLimit, minLimit);
+                    return;
+                }
                 newLength = scaleObject.transform.localPosition.magnitude;
                 target.transform.localScale = initialScale * newLength / initialDist;
             }
@@ -186,17 +189,28 @@ public class Scaler : MonoBehaviour {
                 switch (scaleObject.direction)
                 {
                     case ScaleArrow.Direction.X:
-                        if (localScale.x > maxLimit || localScale.x < minLimit) return;
+                        if (localScale.x > maxLimit || localScale.x < minLimit) {
+                            localScale.x = localScale.x > maxLimit ? maxLimit : minLimit;
+                            return;
+                        }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.x);
                         target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Y:
-                        if (localScale.y > maxLimit || localScale.y < minLimit) return;
+                        if (localScale.y > maxLimit || localScale.y < minLimit)
+                        {
+                            localScale.y = localScale.y > maxLimit ? maxLimit : minLimit;
+                            return;
+                        }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
                         break;
                     case ScaleArrow.Direction.Z:
-                        if (localScale.z > maxLimit || localScale.z < minLimit) return;
+                        if (localScale.z > maxLimit || localScale.z < minLimit)
+                        {
+                            localScale.z = localScale.z > maxLimit ? maxLimit : minLimit;
+                            return;
+                        }
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.z);
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y, initialScale.z * newLength / initialDist);
                         break;
