@@ -216,7 +216,8 @@ public class Builder : MonoBehaviour
 
 		while (currentPart) {
 			if (Vector3.Distance (pullPosition, currentPart.transform.position) > 0.1f && Vector3.Distance (pullPosition, currentPart.transform.position) < Mathf.Infinity ) {
-				currentPart.transform.Translate ((pullPosition - currentPart.transform.position) * Time.deltaTime * pullSpeed, Space.World);
+				currentPart.transform.position = Vector3.Lerp (currentPart.transform.position, pullPosition, Time.deltaTime * pullSpeed);
+				//currentPart.transform.Translate ((pullPosition - currentPart.transform.position) * Time.deltaTime * pullSpeed, Space.World);
 			} else {
 				currentPart = null;
 				StopCoroutine ("PullingComponent");
@@ -284,7 +285,7 @@ public class Builder : MonoBehaviour
 		sObj.transform.parent = this.transform;
 		Part spawnedPart = sObj.GetComponent<Part> ();
 		spawnedPart.template = false;
-		spawnedPart.evaluateState (true);
+		spawnedPart.evaluateState (false);
 		audioSource.PlayOneShot (soundManager.pickupSound);
 
 		if (!UIManager.pickedUpForFirstTime) {

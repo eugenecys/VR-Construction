@@ -37,7 +37,6 @@ public class BlinkMechanic : MonoBehaviour
 
 		oldCenter = trackingSpace.transform.position;
 		newCenter = robotPos;
-		Debug.Log ("gets here3");
 		StartCoroutine (ShiftTeleport ());
 	}
 
@@ -46,7 +45,6 @@ public class BlinkMechanic : MonoBehaviour
 		while (true) {
 			Vector3 dir = newCenter - trackingSpace.transform.position;
 			if (dir.magnitude > shiftStopDist) {
-				Debug.Log ("gets here4");
 				// still moving to our destination
 				trackingSpace.transform.Translate (dir * shiftSpeed * Time.deltaTime, Space.World);
 			} else {
