@@ -7,15 +7,23 @@ public class LightingManager : Singleton<LightingManager> {
 	public Light baseLight2;
 	public Light[] roomLights;
 
+	private AudioSource audioSource;
+
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		foreach (Light light in roomLights) {
 			light.enabled = false;
 		}
 		baseLight1.enabled = false;
 		baseLight2.enabled = false;
 	}
-	
+
+	// sounds all go into start
+	void Start() {
+		
+		audioSource = this.GetComponent<AudioSource> ();
+		audioSource.clip = SoundManager.Instance.lightOnSound;
+	}
 	// Update is called once per frame
 	void Update () {
 	
@@ -31,13 +39,14 @@ public class LightingManager : Singleton<LightingManager> {
 	}
 
 	public void SelectedBase() {
+		audioSource.Play ();
 		StopAllCoroutines ();
 		baseLight1.enabled = false;
 		baseLight2.enabled = false;
 		foreach (Light light in roomLights) {
 			light.enabled = true;
-			light.intensity = 0f;
-			StartCoroutine(EnableLightingSlowly (light));
+			//light.intensity = 0f;
+			//StartCoroutine(EnableLightingSlowly (light));
 		}
 
 	}

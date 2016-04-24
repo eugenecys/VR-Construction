@@ -50,6 +50,8 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.UndeployRobot ();
 	}
 
+
+	// Use this for initialization
 	void Awake ()
 	{
 		//state = GameState.Start;
@@ -65,7 +67,7 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	// Use this for initialization
+	// sounds all go into start
 	void Start ()
 	{
 		PlayMusic (soundManager.buildBGM);

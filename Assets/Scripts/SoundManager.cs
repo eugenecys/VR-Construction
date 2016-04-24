@@ -8,6 +8,7 @@ public class SoundManager : Singleton<SoundManager>
     //Change the number of audio sources as needed
     private int _audioSourceCount = 10;
 
+	// sfx sounds
     public AudioClip wheelSound { get; private set; }
     public AudioClip machinegunSound { get; private set; }
     public AudioClip laserSound { get; private set; }
@@ -17,11 +18,14 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip trashSound { get; private set; }
     public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
+	public AudioClip lightOnSound { get; private set; }
+
+	// bgm sounds
 	public AudioClip buildBGM { get; private set; }
 	public AudioClip greenBGM { get; private set; }
 	public AudioClip redBGM { get; private set; }
 
-
+	// dialogue sounds
 	public AudioClip startDialogue { get; private set; }
 	public AudioClip selectBaseDialogue { get; private set; }
 	public AudioClip constructionDialogue { get; private set; }
@@ -94,6 +98,7 @@ public class SoundManager : Singleton<SoundManager>
 		trashSound = _loadSoundClip("SFX/ConstructionRoom-Trash", 0);
 		releaseSound = _loadSoundClip("SFX/ConstructionRoom-ButtonRelease", 0);
 		pickupSound = _loadSoundClip("SFX/ConstructionRoom-Pickup", 0);
+		lightOnSound = _loadSoundClip ("SFX/LightOn", 0);
 		buildBGM = _loadSoundClip ("SFX/ConstructionRoom-Drone", 0);
 		greenBGM = _loadSoundClip ("SFX/ConstructionRoom-Green", 0);
 		redBGM = _loadSoundClip ("SFX/ConstructionRoom-Red", 0);
