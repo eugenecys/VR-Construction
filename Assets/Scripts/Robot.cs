@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Robot : Singleton<Robot>, Controllable {
 
     Part[] parts;
-
+	Weapon[] weapons;
     public enum State
     {
         Inactive,
@@ -126,5 +126,10 @@ public class Robot : Singleton<Robot>, Controllable {
     public void updateParts()
     {
         parts = GetComponentsInChildren<Part>();
+		weapons = GetComponentsInChildren<Weapon> ();
+		currentPowerLevel = 1000;
+		foreach (Weapon weapon in weapons) {
+			currentPowerLevel -= weapon.powerUsed;
+		}
     }
 }
