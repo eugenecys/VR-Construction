@@ -65,7 +65,7 @@ public class SuperBlast : MonoBehaviour
         _fx.outerParticleSys.gameObject.SetActive(true);
         _fx.outerParticleSys.startLifetime = dist / 100f; //hard code
         _fx.outerParticleSys.gameObject.transform.localScale =
-            new Vector3(blastSize/2, _fx.outerParticleSys.gameObject.transform.localScale.y, blastSize/2);
+            new Vector3(blastSize/5, _fx.outerParticleSys.gameObject.transform.localScale.y, blastSize/5);
         //_fx.startParticleSys.sh
         if(!_fx.outerParticleSys.isPlaying)
             _fx.outerParticleSys.Play();

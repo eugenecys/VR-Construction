@@ -8,8 +8,8 @@ public class MachineGun : Weapon {
     private System.Random rand;
     public GameObject ammo;
     public float ammoVelocity;
-    public float scatterRadius = 0.1f;
-    public float scatterAngle = 10f;
+    public float scatterRadius = 0.00f;
+    public float scatterAngle = 1f;
 
     private AudioSource audioSource;
     private SoundManager soundManager;
@@ -49,16 +49,18 @@ public class MachineGun : Weapon {
     protected override void Fire()
     {
         int radialAngle = rand.Next(0, 360);
-        float dx = Mathf.Cos(radialAngle * Mathf.PI / 180);
-        float dy = Mathf.Sin(radialAngle * Mathf.PI / 180);
-        float dist = rand.Next(0, 100) * scatterRadius / 100;
-        Vector3 scatter = new Vector3(dx * dist, dy * dist, 0);
-        GameObject sObj = Instantiate(ammo, transform.position + scatter, Quaternion.identity) as GameObject;
+        float dx = Mathf.Cos(1.0f * radialAngle * Mathf.PI / 180);
+		//Debug.Log (dx);
+		float dy = Mathf.Sin(1.0f * radialAngle * Mathf.PI / 180);
+		//Debug.Log (dy);
+		float dist = rand.Next(0, 100) * scatterRadius * transform.localScale.x / 100;
+		GameObject sObj = Instantiate(ammo, transform.position + transform.right * dx * dist + transform.up * dx * dist, Quaternion.identity) as GameObject;
         sObj.transform.localScale *= multi;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
-        Vector3 trajectory = new Vector3(Mathf.Tan(scatterAngle * Mathf.PI / 180) * dx, Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy, 1);
-		rb.velocity = ammoVelocity * Vector3.forward;
-        eventManager.addEvent(() => Destroy(sObj), 2f, true);
+		Vector3 trajectory = Mathf.Tan(scatterAngle * Mathf.PI / 180) * dx * transform.right + 
+			Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy * transform.up + 
+			transform.forward;
+		rb.velocity = ammoVelocity * trajectory;
         audioSource.Play();
     }
 
