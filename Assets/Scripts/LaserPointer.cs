@@ -54,7 +54,6 @@ public class LaserPointer : MonoBehaviour {
 		box.isTrigger = true;
 		//box.size = new Vector3 (5f, 5f, 1f);
 
-		//pointer.GetComponent<MeshRenderer>().material = pointerMat;
 		pointer.GetComponent<MeshRenderer>().enabled = false;
 
 		laser = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -148,7 +147,6 @@ public class LaserPointer : MonoBehaviour {
 
 	void CastLaser ()
 	{
-
 		float dist = length;
 
 		Ray raycast = new Ray(holder.transform.position, transform.forward);

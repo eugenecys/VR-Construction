@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
+
+
 public class ScoreManager :  Singleton<ScoreManager>{
 
     private static int score = 0;
@@ -30,6 +32,7 @@ public class ScoreManager :  Singleton<ScoreManager>{
 	void Update () {
 		
 	}
+
 
 	private void UpdateHighScores() {
 		
@@ -98,5 +101,9 @@ public class ScoreManager :  Singleton<ScoreManager>{
 	public void SetEndName(string playername) {
 		endName = playername;
 		UpdateHighScores ();
+	}
+
+	public void ResetHighScores() {
+		PlayerPrefs.DeleteAll ();
 	}
 }
