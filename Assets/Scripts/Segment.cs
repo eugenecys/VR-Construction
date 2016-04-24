@@ -200,12 +200,10 @@ public abstract class Segment : MonoBehaviour
 		touchingSegments = new List<Segment> ();
 		if (!parent.placed) {
 			this.isConnectedToRobot = false;
-			Debug.Log ("gets here 5.1");
 		}
 		if (parent.template) {
 			parent.unhighlight ();
 		} else {
-			Debug.Log ("gets here 5");
 			parent.evaluateState (this.isConnectedToRobot);
 		}
 

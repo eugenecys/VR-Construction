@@ -147,7 +147,6 @@ public class Part : MonoBehaviour, Interactable
 	public void place ()
 	{
 		if (connectable) {
-			Debug.Log ("gets here 3");
 			bool isPartOfRobot = false;
 			foreach (Segment segment in segments) {
 				segment.connect ();
@@ -162,7 +161,6 @@ public class Part : MonoBehaviour, Interactable
 			}
 			resetPhysics ();
 		} else if (free) {
-			Debug.Log ("gets here 4");
 			deploy (false);
 			//audioSource.PlayOneShot (soundManager.attachSound);
 			//this.transform.parent = robot.transform;
@@ -198,8 +196,11 @@ public class Part : MonoBehaviour, Interactable
 			foreach (Segment cpt in segments) {
 				cpt.deploy ();
 			}
-			if (isPartOfRobot)
+			if (isPartOfRobot) {
 				setState (State.Placed);
+			} else {
+
+			}
 		}
 	}
 
@@ -367,24 +368,19 @@ public class Part : MonoBehaviour, Interactable
 		} else if (placed) {
 
 		} else {
-			Debug.Log ("gets here 6");
 			if (partOfRobot && !canConnectWeapon()) {
 				setState (State.Unconnectable);
-				Debug.Log ("gets here 6.1");
 				return;
 			}
 			if (hasSegmentOverlap ()) {
 				setState (State.Unconnectable);
-				Debug.Log ("gets here 6.15");
 				return;
 			}
 			if (hasTouchingSegments ()) {
 				setState (State.Connectable);
-				Debug.Log ("gets here 6.2");
 				return;
 			}
 			setState (State.Free);
-			Debug.Log ("gets here 6.3");
 		}
 	}
 
