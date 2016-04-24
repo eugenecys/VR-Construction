@@ -5,10 +5,10 @@ using System;
 [RequireComponent(typeof(AudioSource))]
 
 public class MachineGun : Weapon {
-    private Random rand;
+    private System.Random rand;
     public GameObject ammo;
     public float ammoVelocity;
-    public float scatterRadius = 0.5f;
+    public float scatterRadius = 0.1f;
     public float scatterAngle = 10f;
 
     private AudioSource audioSource;
@@ -20,7 +20,7 @@ public class MachineGun : Weapon {
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = soundManager.cannonSound;
-        rand = new Random();
+        rand = new System.Random();
     }
     
     // Use this for initialization
