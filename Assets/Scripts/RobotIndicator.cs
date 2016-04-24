@@ -36,7 +36,7 @@ public class RobotIndicator : MonoBehaviour {
 
 			m_indicator = Instantiate (indicator, inContainer.transform.position, Quaternion.identity) as GameObject;
 			m_indicator.transform.SetParent (inContainer.transform);
-			mesh = m_indicator.GetComponent<MeshRenderer> ();
+			mesh = m_indicator.GetComponentInChildren<MeshRenderer> ();
 
 		} else if (isIndicated && gameManager.state == GameManager.GameState.Play) {
 			m_indicator.GetComponent<Animator> ().SetBool ("jump", true);
