@@ -151,16 +151,15 @@ public class Part : MonoBehaviour, Interactable
 			bool isPartOfRobot = false;
 			foreach (Segment segment in segments) {
 				segment.connect ();
-				Debug.Log (segment.transform.root.tag);
-				Debug.Log (segment.transform.root);
-				if (segment.transform.root.tag == "Robot") {
+				Debug.Log (segment.isConnectedToRobot);
+				if (segment.isConnectedToRobot) {
 					isPartOfRobot = true;
 				}
 			}
 			deploy (isPartOfRobot);
 			audioSource.PlayOneShot (soundManager.attachSound);
 			if (isPartOfRobot) {
-				Debug.Log ("gets here");
+				Debug.Log ("gets here2");
 				this.transform.parent = robot.transform;
 			}
 			resetPhysics ();

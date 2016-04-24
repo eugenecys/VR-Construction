@@ -195,7 +195,9 @@ public abstract class Segment : MonoBehaviour {
 			if (segment == null) {
 				segment = other.GetComponentInParent<Segment> ();
 			}
-
+			if (segment.isConnectedToRobot) {
+				this.isConnectedToRobot = true;
+			}
 			updateTouchingSegments (segment);
 			parent.evaluateState ();
 		} 
@@ -206,6 +208,9 @@ public abstract class Segment : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         touchingSegments = new List<Segment>();
+		if (!parent.placed) {
+			this.isConnectedToRobot = false;
+		}
         if (parent.template)
         {
             parent.unhighlight();
