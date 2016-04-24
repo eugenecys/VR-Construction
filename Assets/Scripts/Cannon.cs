@@ -6,6 +6,7 @@ public class Cannon : Weapon {
     public GameObject ammo;
     public float ammoVelocity;
     public GameObject dirCoordinator;
+	public ParticleSystem explosion;
     private AudioSource audioSource;
     private SoundManager soundManager;
     // Use this for initialization
@@ -52,6 +53,8 @@ public class Cannon : Weapon {
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         rb.velocity = ammoVelocity * dirCoordinator.transform.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
+		explosion.Emit (300);
+
     }
 
     protected override void AmmoScale(float scale)

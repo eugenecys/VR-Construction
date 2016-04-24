@@ -4,7 +4,7 @@ using System.Collections;
 public class Projectile : MonoBehaviour {
     private ScoreManager scoreManager;
 	public float destroyTime;
-
+	private GameObject dObj;
     void Awake() {
         scoreManager = ScoreManager.Instance;
     }
@@ -22,10 +22,17 @@ public class Projectile : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 
-    void OnTriggerEnter(Collider col) {
+    void OnCollisionEnter(Collision col) {
         if (col.transform.tag == "building") {
-            col.transform.gameObject.SendMessage("GiveAttack");
-            scoreManager.AddScore();
+			dObj = col.gameObject;
+			Invoke ("DestroyBuilding", 0.1f);
         }
     }
+
+	void DestroyBuilding () {
+		if (dObj != null) {
+			dObj.SendMessage ("GiveAttack");
+			scoreManager.AddScore ();
+		}
+	}
 }
