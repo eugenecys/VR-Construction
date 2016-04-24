@@ -147,17 +147,23 @@ public class Part : MonoBehaviour, Interactable
 	public void place ()
 	{
 		if (connectable) {
+			bool isPartOfRobot = false;
 			foreach (Segment segment in segments) {
 				segment.connect ();
+				if (segment.transform.root.tag == "Robot") {
+					isPartOfRobot = true;
+				}
 			}
 			deploy ();
 			audioSource.PlayOneShot (soundManager.attachSound);
-			this.transform.parent = robot.transform;
+			if (isPartOfRobot) {
+				this.transform.parent = robot.transform;
+			}
 			resetPhysics ();
 		} else if (free) {
 			deploy ();
-			audioSource.PlayOneShot (soundManager.attachSound);
-			this.transform.parent = robot.transform;
+			//audioSource.PlayOneShot (soundManager.attachSound);
+			//this.transform.parent = robot.transform;
 			resetPhysics ();
 		}
 		robot.updateParts ();
