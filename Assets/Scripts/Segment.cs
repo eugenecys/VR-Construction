@@ -19,6 +19,7 @@ public abstract class Segment : MonoBehaviour {
 
     protected bool active;
     
+	public bool isConnectedToRobot = false;
     public void connect()
     {
         foreach (Segment touchingSegment in touchingSegments)

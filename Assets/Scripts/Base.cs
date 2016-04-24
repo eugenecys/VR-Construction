@@ -67,6 +67,7 @@ public class Base : Segment, Controllable
         active = false;
         parent.evaluateState();
         init();
+		isConnectedToRobot = true;
     }
 
     protected override void init()

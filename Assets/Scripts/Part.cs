@@ -147,21 +147,25 @@ public class Part : MonoBehaviour, Interactable
 	public void place ()
 	{
 		if (connectable) {
+			Debug.Log ("gets here1");
 			bool isPartOfRobot = false;
 			foreach (Segment segment in segments) {
 				segment.connect ();
+				Debug.Log (segment.transform.root.tag);
+				Debug.Log (segment.transform.root);
 				if (segment.transform.root.tag == "Robot") {
 					isPartOfRobot = true;
 				}
 			}
-			deploy ();
+			deploy (isPartOfRobot);
 			audioSource.PlayOneShot (soundManager.attachSound);
 			if (isPartOfRobot) {
+				Debug.Log ("gets here");
 				this.transform.parent = robot.transform;
 			}
 			resetPhysics ();
 		} else if (free) {
-			deploy ();
+			deploy (false);
 			//audioSource.PlayOneShot (soundManager.attachSound);
 			//this.transform.parent = robot.transform;
 			resetPhysics ();
@@ -190,13 +194,14 @@ public class Part : MonoBehaviour, Interactable
 		evaluateState ();
 	}
 
-	public void deploy ()
+	public void deploy (bool isPartOfRobot)
 	{
 		if (!template) {
 			foreach (Segment cpt in segments) {
 				cpt.deploy ();
 			}
-			setState (State.Placed);
+			if (isPartOfRobot)
+				setState (State.Placed);
 		}
 	}
 
