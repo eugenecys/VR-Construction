@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.DeployRobot ();
 		TimeManager.Instance.StartDeployCountdown ();
 		PlayDialogue (soundManager.cityDialogue);
+
 	}
 
 	public void build ()
