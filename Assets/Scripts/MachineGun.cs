@@ -8,8 +8,8 @@ public class MachineGun : Weapon {
     private System.Random rand;
     public GameObject ammo;
     public float ammoVelocity;
-    public float scatterRadius = 0.00f;
-    public float scatterAngle = 1f;
+	public float scatterRadius;
+	public float scatterAngle;
 
     private AudioSource audioSource;
     private SoundManager soundManager;
@@ -48,13 +48,12 @@ public class MachineGun : Weapon {
 
     protected override void Fire()
     {
-        int radialAngle = rand.Next(0, 360);
+		int radialAngle = rand.Next(0, 360);
         float dx = Mathf.Cos(1.0f * radialAngle * Mathf.PI / 180);
-		//Debug.Log (dx);
 		float dy = Mathf.Sin(1.0f * radialAngle * Mathf.PI / 180);
-		//Debug.Log (dy);
-		float dist = rand.Next(0, 100) * scatterRadius * transform.localScale.x / 100;
-		GameObject sObj = Instantiate(ammo, transform.position + transform.right * dx * dist + transform.up * dx * dist, Quaternion.identity) as GameObject;
+		float dist = scatterRadius * transform.localScale.x / 100 * rand.Next(0, 100) ;
+		Vector3 scatter = transform.right * dx * dist + transform.up * dy * dist;
+		GameObject sObj = Instantiate(ammo, transform.position + scatter, Quaternion.identity) as GameObject;
         sObj.transform.localScale *= multi;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
 		Vector3 trajectory = Mathf.Tan(scatterAngle * Mathf.PI / 180) * dx * transform.right + 
