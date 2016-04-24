@@ -190,7 +190,7 @@ public class Part : MonoBehaviour, Interactable
 		resetPhysics ();
 		robot.updateParts ();
 		setState (Part.State.Connectable);
-		evaluateState ();
+		evaluateState (false);
 	}
 
 	public void deploy (bool isPartOfRobot)
@@ -359,7 +359,7 @@ public class Part : MonoBehaviour, Interactable
 		}
 	}
 
-	public void evaluateState ()
+	public void evaluateState (bool partOfRobot)
 	{
 		if (markedForDelete) {
 			setState (State.MarkedForDelete);
@@ -368,6 +368,10 @@ public class Part : MonoBehaviour, Interactable
 		} else if (placed) {
 
 		} else {
+			if (partOfRobot && !canConnectWeapon()) {
+				setState (State.Unconnectable);
+				return;
+			}
 			if (hasSegmentOverlap ()) {
 				setState (State.Unconnectable);
 				return;
@@ -380,6 +384,8 @@ public class Part : MonoBehaviour, Interactable
 		}
 	}
 
+
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -391,6 +397,28 @@ public class Part : MonoBehaviour, Interactable
 	{
 
 	}
+
+	public bool canConnectWeapon() {
+		// go through all connected parts and see if any weapon in there. 
+		int powerLevel = 0;
+		Weapon weapon = this.GetComponentInChildren<Weapon> ();
+		if (weapon) {
+			powerLevel += weapon.powerUsed;
+		}
+		foreach (Part connected in connectedParts) {
+			weapon = connected.GetComponentInChildren<Weapon> ();
+			if (weapon) {
+				powerLevel += weapon.powerUsed;
+			}
+		}
+		// compare it against current power level 
+		if (powerLevel > robot.currentPowerLevel) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 
 	public bool hasTouchingSegments ()
 	{

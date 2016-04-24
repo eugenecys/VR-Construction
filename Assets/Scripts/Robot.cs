@@ -15,6 +15,9 @@ public class Robot : Singleton<Robot>, Controllable {
 
     public State state;
 
+	public int maxPowerLevel = 1000;
+	public int currentPowerLevel = 1000;
+
     public void destroy()
     {
         foreach (Transform child in transform)

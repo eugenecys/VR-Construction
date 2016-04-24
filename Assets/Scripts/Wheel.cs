@@ -37,7 +37,7 @@ public class Wheel : Segment, Controllable {
 	void Start()
 	{
 		active = false;
-		parent.evaluateState();
+		parent.evaluateState(false);
 		init();
 	}
 

@@ -64,10 +64,11 @@ public class Base : Segment, Controllable
 
     void Start()
     {
-        active = false;
-        parent.evaluateState();
-        init();
+
 		isConnectedToRobot = true;
+        active = false;
+		parent.evaluateState(isConnectedToRobot);
+        init();
     }
 
     protected override void init()

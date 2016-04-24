@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour, Controllable {
 
     public float coolDown;
     public float fireInteval;
+	public int powerUsed = 0;
 
     protected bool isInCD = false;
     protected bool isFiring = false;

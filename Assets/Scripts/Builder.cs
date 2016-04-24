@@ -283,7 +283,7 @@ public class Builder : MonoBehaviour
 		sObj.transform.parent = this.transform;
 		Part spawnedPart = sObj.GetComponent<Part> ();
 		spawnedPart.template = false;
-		spawnedPart.evaluateState ();
+		spawnedPart.evaluateState (true);
 		audioSource.PlayOneShot (soundManager.pickupSound);
 
 		if (!UIManager.pickedUpForFirstTime) {

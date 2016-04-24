@@ -23,7 +23,7 @@ public class Connector : Segment {
     void Start()
     {
         active = false;
-        parent.evaluateState();
+		parent.evaluateState(false);
         init();
     }
 

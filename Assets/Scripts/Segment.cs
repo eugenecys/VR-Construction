@@ -199,7 +199,7 @@ public abstract class Segment : MonoBehaviour {
 				this.isConnectedToRobot = true;
 			}
 			updateTouchingSegments (segment);
-			parent.evaluateState ();
+			parent.evaluateState (this.isConnectedToRobot);
 		} 
 
 
@@ -217,7 +217,7 @@ public abstract class Segment : MonoBehaviour {
         }
         else
         {
-            parent.evaluateState();
+			parent.evaluateState(this.isConnectedToRobot);
         }
 
     }
