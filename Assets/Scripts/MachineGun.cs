@@ -57,7 +57,7 @@ public class MachineGun : Weapon {
         sObj.transform.localScale *= multi;
         Rigidbody rb = sObj.GetComponent<Rigidbody>();
         Vector3 trajectory = new Vector3(Mathf.Tan(scatterAngle * Mathf.PI / 180) * dx, Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy, 1);
-        rb.velocity = ammoVelocity * trajectory;
+		rb.velocity = ammoVelocity * Vector3.forward;
         eventManager.addEvent(() => Destroy(sObj), 2f, true);
         audioSource.Play();
     }
