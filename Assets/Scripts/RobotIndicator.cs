@@ -48,7 +48,7 @@ public class RobotIndicator : MonoBehaviour {
 
     void IndicatorActivate() {
 		Ray ray = new Ray(headSet.transform.position, robotTran.position);
-        RaycastHit[] hits = Physics.CapsuleCastAll(headSet.transform.position, robotTran.position, raySize,(robotTran.position-headSet.transform.position).normalized, rayLen);
+		RaycastHit[] hits = Physics.CapsuleCastAll(headSet.transform.position, robotTran.position, raySize,(robotTran.position-headSet.transform.position).normalized, (robotTran.position-headSet.transform.position).magnitude );
         //Debug.DrawRay (headSet.transform.position,robotTran.position, Color.red);
         foreach (var hit in hits) {
             if (hit.transform.CompareTag("building"))
