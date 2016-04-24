@@ -38,12 +38,14 @@ public class MachineGun : Weapon {
     public override void trigger()
     {
         isFiring = true;
+		PlayMachineGunSound ();
         //throw new NotImplementedException();
     }
 
     public override void triggerStop()
     {
         isFiring = false;
+		StopMachineGunSound ();
     }
 
     protected override void Fire()
@@ -60,12 +62,21 @@ public class MachineGun : Weapon {
 			Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy * transform.up + 
 			transform.forward;
 		rb.velocity = ammoVelocity * trajectory;
-        audioSource.Play();
+       
     }
 
     protected override void AmmoScale(float scale)
     {
         ammo.transform.localScale *= scale;
     }
+
+	private void PlayMachineGunSound() {
+		audioSource.Play ();
+		audioSource.loop = true;
+	}
+
+	private void StopMachineGunSound() {
+		audioSource.Stop ();
+	}
 
 }
