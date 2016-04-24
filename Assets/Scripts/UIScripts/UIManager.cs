@@ -96,7 +96,10 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
-		EndScoreUI.transform.parent.transform.position += GameManager.Instance.trackingSpace.position;
+		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward * 2f;
+		newEndUIPos.y = EndScoreUI.transform.parent.transform.position.y;
+		EndScoreUI.transform.parent.transform.position = newEndUIPos;
+
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
 		ShowScore (false);

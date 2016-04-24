@@ -31,7 +31,7 @@ public class BaseButton : MonoBehaviour, Interactable {
 
 	public void highlight ()
 
-	{	baseLight.color = Color.red;
+	{	baseLight.color = Color.green;
 		highlighted = true;
 	}
 
