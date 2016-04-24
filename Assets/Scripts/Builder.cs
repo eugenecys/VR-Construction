@@ -30,6 +30,7 @@ public class Builder : MonoBehaviour
 
 	private LaserPointer laser;
 
+
 	public enum ColliderState
 	{
 		Far,

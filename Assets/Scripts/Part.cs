@@ -147,11 +147,9 @@ public class Part : MonoBehaviour, Interactable
 	public void place ()
 	{
 		if (connectable) {
-			Debug.Log ("gets here1");
 			bool isPartOfRobot = false;
 			foreach (Segment segment in segments) {
 				segment.connect ();
-				Debug.Log (segment.isConnectedToRobot);
 				if (segment.isConnectedToRobot) {
 					isPartOfRobot = true;
 				}
@@ -159,7 +157,6 @@ public class Part : MonoBehaviour, Interactable
 			deploy (isPartOfRobot);
 			audioSource.PlayOneShot (soundManager.attachSound);
 			if (isPartOfRobot) {
-				Debug.Log ("gets here2");
 				this.transform.parent = robot.transform;
 			}
 			resetPhysics ();
@@ -395,7 +392,7 @@ public class Part : MonoBehaviour, Interactable
 	// Update is called once per frame
 	void Update ()
 	{
-
+		CheckIfPartNeedsToBeDestroyed ();
 	}
 
 	public bool canConnectWeapon() {
@@ -475,6 +472,17 @@ public class Part : MonoBehaviour, Interactable
 		}
 		return false;
 	}
-		
 
+	private bool checkedInPlay = false; 
+
+	private void CheckIfPartNeedsToBeDestroyed() {
+		if (GameManager.Instance.state == GameManager.GameState.Play) {
+			if (!checkedInPlay) {
+				if (this.transform.root.tag != "Robot") {
+					GameObject.Destroy (this.gameObject);
+				}
+				checkedInPlay = true;
+			}
+		}
+	}
 }
