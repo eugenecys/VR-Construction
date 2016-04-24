@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -207,6 +208,10 @@ public class GameManager : Singleton<GameManager>
 		dialogueSource.clip = soundManager.deployDialogue;
 		dialogueSource.Play ();
 		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+	}
+
+	public void RestartGame() {
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
 }
 

@@ -17,6 +17,7 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject HighScoreUI;
 	public GameObject EndScoreUI;
 	public GameObject UIKeyboard; 
+	public GameObject RestartGame; 
 
 	public static bool pickedUpForFirstTime = false;
 	public static bool movedForFirstTime = false;
@@ -104,16 +105,19 @@ public class UIManager :  Singleton<UIManager> {
 		if (!updatedHighScores) {
 			EndScoreUI.transform.GetChild (0).gameObject.SetActive (true);
 			HighScoreUI.SetActive (true);
+			RestartGame.SetActive (true);
 		} else {
 			EndScoreUI.transform.GetChild (1).gameObject.SetActive (true);
 			UIKeyboard.SetActive (true);
 		}
+	
 	}
 
 	public void NameSubmitted() {
 		UIKeyboard.SetActive (false); 
 		UpdateHighScores ();
 		HighScoreUI.SetActive (true);
+		RestartGame.SetActive (true);
 	}
 
 	private void UpdateHighScores() {
@@ -122,16 +126,19 @@ public class UIManager :  Singleton<UIManager> {
 			rank = HighScoreUI.transform.GetChild (i).GetComponent<Text> ();
 			switch (i+1) {
 			case(1):
-				rank.text = "1st    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = " 1st    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			case(2):
-				rank.text = " 2nd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = "  2nd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			case(3):
-				rank.text = "3rd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = " 3rd    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				break;
+			case(10):
+				rank.text = "10th    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			default:
-				rank.text = (i+1).ToString() + "th    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
+				rank.text = " " + (i+1).ToString() + "th    " + PlayerPrefs.GetString ((i + 1).ToString () + "Name") + "    " + PlayerPrefs.GetInt ((i + 1).ToString ()).ToString ();
 				break;
 			}
 		}
