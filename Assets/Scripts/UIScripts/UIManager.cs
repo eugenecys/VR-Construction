@@ -96,7 +96,7 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
-		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward * 2f;
+		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward.normalized * 2f;
 		newEndUIPos.y = EndScoreUI.transform.parent.transform.position.y;
 		EndScoreUI.transform.parent.transform.position = newEndUIPos;
 
