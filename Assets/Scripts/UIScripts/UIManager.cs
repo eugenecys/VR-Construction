@@ -59,8 +59,6 @@ public class UIManager :  Singleton<UIManager> {
 	public void DeployRobot() {
 		BuildingUI.SetActive (false);
 		ShowPickUpControls(false);
-		//ScoreUI.GetComponent<FollowController> ().controller = Robot.Instance.gameObject.GetComponentInChildren<Base> ().transform;
-		//TimeUI.GetComponent<FollowController> ().controller = Robot.Instance.gameObject.GetComponentInChildren<Base> ().transform;
 		ShowScore (true);
 		ShowTime (true);
 	}
