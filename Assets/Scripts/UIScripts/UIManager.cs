@@ -97,8 +97,9 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
 		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward.normalized * 2f;
-		newEndUIPos.y = EndScoreUI.transform.parent.transform.position.y;
-		EndScoreUI.transform.parent.transform.position = newEndUIPos;
+		newEndUIPos.y = EndScoreUI.transform.parent.position.y;
+		EndScoreUI.transform.parent.position = newEndUIPos;
+		EndScoreUI.transform.parent.Rotate(new Vector3(0f,90f,0f));
 
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
