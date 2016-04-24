@@ -16,7 +16,8 @@ public class Part : MonoBehaviour, Interactable
 		Connectable,
 		Free,
 		Placed,
-		MarkedForDelete
+		MarkedForDelete,
+		PlacedAir
 	}
 
 	public bool controllable;
@@ -199,7 +200,7 @@ public class Part : MonoBehaviour, Interactable
 			if (isPartOfRobot) {
 				setState (State.Placed);
 			} else {
-
+				setState (State.PlacedAir);
 			}
 		}
 	}
@@ -291,6 +292,14 @@ public class Part : MonoBehaviour, Interactable
 				scaler.gameObject.SetActive (false);
 			}
 			setSegmentMaterials (assetManager.deleteMaterial);
+			audioSource.loop = false;
+			audioSource.Stop ();
+			break;
+		case State.PlacedAir:
+			if (scalable) {
+				scaler.gameObject.SetActive (false);
+			}
+			setSegmentDefaultMaterials ();
 			audioSource.loop = false;
 			audioSource.Stop ();
 			break;

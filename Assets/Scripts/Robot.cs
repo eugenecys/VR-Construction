@@ -94,7 +94,7 @@ public class Robot : Singleton<Robot>, Controllable {
         parts = GetComponentsInChildren<Part>();
         foreach (Part part in parts)
         {
-            part.online();
+			part.activate ();
         }
     }
 
@@ -107,6 +107,16 @@ public class Robot : Singleton<Robot>, Controllable {
             part.reset();
         }
     }
+
+	public void online()
+	{
+		state = State.Active;
+		parts = GetComponentsInChildren<Part>();
+		foreach (Part part in parts)
+		{
+			part.online ();
+		}
+	}
 
     void Awake ()
     {
