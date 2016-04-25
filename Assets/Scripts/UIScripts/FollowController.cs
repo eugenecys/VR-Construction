@@ -30,7 +30,7 @@ public class FollowController : MonoBehaviour
 		if (rotateWithController) {
 			Quaternion newRot = controller.rotation;
 			Vector3 newEulur = newRot.eulerAngles;
-			newEulur.x += 90f;
+			newEulur.x += 45f;
 			newEulur.z = 0f;
 			newRot.eulerAngles = newEulur;
 			ui.rotation = newRot;

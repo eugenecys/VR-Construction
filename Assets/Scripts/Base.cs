@@ -102,6 +102,7 @@ public class Base : Segment, Controllable
 			case Robot.State.Deployed:
 				on ();
 				audioSource.Play ();
+				audioSource.volume = 0.1f;
 				audioSource.loop = true;
 				break;
 			}
