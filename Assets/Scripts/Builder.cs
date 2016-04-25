@@ -61,14 +61,11 @@ public class Builder : MonoBehaviour
 	public void placeParts ()
 	{
 		foreach (Part part in childParts) {
-			Debug.Log ("gets here 1");
 			part.place ();
 			if (part.placed) {
-				Debug.Log ("gets here 1.5");
 				part.transform.parent = robot.transform;
 				part.resetPhysics ();
 			} else {
-				Debug.Log ("gets here 2");
 				part.transform.parent = null;
 				part.resetPhysics ();
 			}

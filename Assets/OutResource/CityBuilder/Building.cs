@@ -49,9 +49,9 @@ public class Building : MonoBehaviour {
 	}
 
     private void DisplayScore() {
-        float height = GetComponent<BoxCollider>().size.y;
-        GameObject scoreText = Instantiate(Resources.Load("Prefabs/BuildingScore"), transform.position + new Vector3(0, height, 0), Quaternion.identity) as GameObject;
-        scoreText.GetComponent<ScoreText>().SelfDestroy(1f);
+		float height = 6f; //GetComponent<BoxCollider>().size.y;
+        //GameObject scoreText = Instantiate(Resources.Load("Prefabs/BuildingScore"), transform.position + new Vector3(0, height, 0), Quaternion.identity) as GameObject;
+       //scoreText.GetComponent<ScoreText>().SelfDestroy(1f);
     }
 
 	public void SelfDestruct(){

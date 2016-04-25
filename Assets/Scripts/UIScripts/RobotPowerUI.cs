@@ -22,7 +22,7 @@ public class RobotPowerUI : MonoBehaviour {
 	}
 
 	private void UpdatePowerLevel() {
-		float powerRatio = (robot.currentPowerLevel / robot.maxPowerLevel);
+		float powerRatio = (robot.currentPowerLevel*1f) / (1f*robot.maxPowerLevel);
 		if (powerRatio <= lowPower) {
 			battery.enabled = false;
 			empty.enabled = true;
