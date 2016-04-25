@@ -6,7 +6,6 @@ using System.Collections;
 public class Building : MonoBehaviour {
 	
 	public string originName;
-    
 
 	[SerializeField] Material OuterMtrl; 
 	[SerializeField] Material WindowMtrl;
@@ -44,11 +43,16 @@ public class Building : MonoBehaviour {
 		ts[1].GetComponent<collapsingPart>().SetFalling(0.4f, OuterMtrl, WindowMtrl);
 		ts[2].GetComponent<collapsingPart>().SetFalling(0.6f, OuterMtrl, WindowMtrl);
 		ts[3].GetComponent<collapsingPart>().SetFalling(0.8f, OuterMtrl, WindowMtrl);
-
 		ScoreManager.Instance.AddScore ();
+        DisplayScore();
 		Destroy (gameObject);
 	}
 
+    private void DisplayScore() {
+        float height = GetComponent<BoxCollider>().size.y;
+        GameObject scoreText = Instantiate(Resources.Load("Prefabs/BuildingScore"), transform.position + new Vector3(0, height, 0), Quaternion.identity) as GameObject;
+        scoreText.GetComponent<ScoreText>().SelfDestroy(1f);
+    }
 
 	public void SelfDestruct(){
 		//Connect with Rechard things;;
