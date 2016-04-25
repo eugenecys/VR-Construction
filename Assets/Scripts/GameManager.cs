@@ -7,7 +7,7 @@ public class GameManager : Singleton<GameManager>
 {
 
 	public bool debug = true;
-
+	public bool bigBang = true;
 	public enum GameState
 	{
 		Build,
@@ -160,14 +160,19 @@ public class GameManager : Singleton<GameManager>
 	public void EndGame ()
 	{
 		state = GameState.End;
-		Building[] buildings = city.GetComponentsInChildren<Building> ();
-		foreach (Building building in buildings) {
-			if (Vector3.Distance (trackingSpace.position, building.transform.position) < 10.0f) {
-				building.SelfDestruct ();
+		if (bigBang) {
+			GameObject bigbang = Instantiate (Resources.Load ("Prefabs/Big Bang", typeof(GameObject))) as GameObject;
+		} else {
+			Building[] buildings = city.GetComponentsInChildren<Building> ();
+			foreach (Building building in buildings) {
+				if (Vector3.Distance (trackingSpace.position, building.transform.position) < 10.0f) {
+					building.SelfDestruct ();
+				}
 			}
 		}
 
 		this.GetComponent<RobotIndicator> ().m_indicator.SetActive (false);
+
 
 		if (ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score)) {
 			// then we have a new high score
@@ -175,6 +180,7 @@ public class GameManager : Singleton<GameManager>
 		} else {
 			UIManager.Instance.EndGame (ScoreManager.Instance._score, false);
 		}
+
 
 	}
 
