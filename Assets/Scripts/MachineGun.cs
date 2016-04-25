@@ -19,7 +19,7 @@ public class MachineGun : Weapon {
         eventManager = EventManager.Instance;
         soundManager = SoundManager.Instance;
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = soundManager.cannonSound;
+		audioSource.clip = soundManager.machinegunSound;
         rand = new System.Random();
     }
     
@@ -38,14 +38,14 @@ public class MachineGun : Weapon {
     public override void trigger()
     {
         isFiring = true;
-		PlayMachineGunSound ();
+		//PlayMachineGunSound ();
         //throw new NotImplementedException();
     }
 
     public override void triggerStop()
     {
         isFiring = false;
-		StopMachineGunSound ();
+		//StopMachineGunSound ();
     }
 
     protected override void Fire()
@@ -62,7 +62,7 @@ public class MachineGun : Weapon {
 			Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy * transform.up + 
 			transform.forward;
 		rb.velocity = ammoVelocity * trajectory;
-       
+		PlayMachineGunSound ();
     }
 
     protected override void AmmoScale(float scale)
@@ -71,8 +71,9 @@ public class MachineGun : Weapon {
     }
 
 	private void PlayMachineGunSound() {
-		audioSource.Play ();
+		audioSource.volume = 0.2f;
 		audioSource.loop = true;
+		audioSource.Play ();
 	}
 
 	private void StopMachineGunSound() {
