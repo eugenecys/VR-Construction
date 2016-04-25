@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using UnityEditor;
+
 
 [CustomEditor(typeof(ScoreManager))]
 public class ScoreReset : Editor{
@@ -18,13 +20,15 @@ public class ScoreReset : Editor{
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
-
 		ScoreManager myScript = (ScoreManager)target;
 		if(GUILayout.Button("Reset High Scores"))
 		{
 			myScript.ResetHighScores ();
 		}
+
 	}
 
 }
+
+#endif
 
