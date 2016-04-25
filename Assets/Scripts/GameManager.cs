@@ -166,6 +166,9 @@ public class GameManager : Singleton<GameManager>
 				building.SelfDestruct ();
 			}
 		}
+
+		this.GetComponent<RobotIndicator> ().m_indicator.SetActive (false);
+
 		if (ScoreManager.Instance.SetEndScore (ScoreManager.Instance._score)) {
 			// then we have a new high score
 			UIManager.Instance.EndGame (ScoreManager.Instance._score, true);
