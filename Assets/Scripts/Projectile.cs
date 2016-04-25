@@ -24,15 +24,9 @@ public class Projectile : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
         if (col.transform.tag == "building") {
-			dObj = col.gameObject;
-			Invoke ("DestroyBuilding", 0.1f);
+			col.gameObject.SendMessage ("GiveAttack");
+			scoreManager.AddScore ();
         }
     }
 
-	void DestroyBuilding () {
-		if (dObj != null) {
-			dObj.SendMessage ("GiveAttack");
-			scoreManager.AddScore ();
-		}
-	}
 }
