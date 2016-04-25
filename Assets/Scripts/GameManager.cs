@@ -209,6 +209,7 @@ public class GameManager : Singleton<GameManager>
 		dialogueSource.clip = soundManager.deployDialogue;
 		dialogueSource.Play ();
 		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+		UIManager.Instance.deployText.enabled = true;
 	}
 
 	public void RestartGame() {
