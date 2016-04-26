@@ -28,6 +28,7 @@ public class UIManager :  Singleton<UIManager> {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
 			StartUI.SetActive (true);
 			UpdateHighScores ();
+			HighScoreUI.transform.parent.GetComponent<RotateToLookAtCam> ().enabled = false;
 			HighScoreUI.gameObject.SetActive (true);
 		}
 	}
@@ -96,9 +97,11 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
+		
 		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward.normalized * 2f;
 		newEndUIPos.y = EndScoreUI.transform.parent.position.y;
 		EndScoreUI.transform.parent.position = newEndUIPos;
+		EndScoreUI.transform.parent.GetComponent<RotateToLookAtCam> ().enabled = true;
 
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
