@@ -8,6 +8,8 @@ public class SoundManager : Singleton<SoundManager>
     //Change the number of audio sources as needed
     private int _audioSourceCount = 10;
 
+    public List<GameObject> sfxToBeRemove = new List<GameObject>();
+
 	// sfx sounds
     public AudioClip wheelSound { get; private set; }
     public AudioClip machinegunSound { get; private set; }
@@ -19,9 +21,10 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
 	public AudioClip lightOnSound { get; private set; }
+    public AudioClip[] explosions { get; private set; }
 
-	// bgm sounds
-	public AudioClip buildBGM { get; private set; }
+    // bgm sounds
+    public AudioClip buildBGM { get; private set; }
 	public AudioClip greenBGM { get; private set; }
 	public AudioClip redBGM { get; private set; }
 
@@ -107,6 +110,10 @@ public class SoundManager : Singleton<SoundManager>
 		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
 		deployDialogue = _loadSoundClip ("Dialogue/DeployDialogue", 0);
 		cityDialogue = _loadSoundClip ("Dialogue/CityDialogue", 0);
+        explosions[0] = _loadSoundClip("SFX/Explosion01", 0);
+        explosions[1] = _loadSoundClip("SFX/Explosion02", 0);
+        explosions[2] = _loadSoundClip("SFX/Explosion03", 0);
+        explosions[3] = _loadSoundClip("SFX/Explosion04", 0);
     }
 
     private AudioClip _loadSoundClip(string filename, int i)
@@ -126,6 +133,38 @@ public class SoundManager : Singleton<SoundManager>
         }
         AS.Stop();
         AS.volume = 1;
+    }
+
+    public void AudioPlay(AudioClip clip, Transform emitter)
+    {
+        //Create an empty game object
+        GameObject go = new GameObject("Audio: " + clip.name);
+        go.transform.position = emitter.position;
+        go.transform.parent = emitter;
+
+        //Create the source
+        AudioSource source = go.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.Play();
+
+        StartCoroutine(AudioDestory(go, source.clip.length));
+        //Destroy(go, clip.length+5f);
+    }
+
+    IEnumerator AudioDestory(GameObject go, float t)
+    {
+        yield return new WaitForSeconds(t);
+        sfxToBeRemove.Add(go);
+
+    }
+
+    void RemoveSFX()
+    {
+        foreach (GameObject go in sfxToBeRemove)
+        {
+            Destroy(go);
+        }
+        sfxToBeRemove.Clear();
     }
 
 }
