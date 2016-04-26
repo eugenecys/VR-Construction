@@ -3,6 +3,7 @@ using System.Collections;
 
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(ParticleSystem))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class Explosion : MonoBehaviour {
     
@@ -13,7 +14,8 @@ public class Explosion : MonoBehaviour {
     private int particleCount = 3000;
 	private float startupTime = 0.5f;
 	private float spawnTime;
-    private SphereCollider sp;
+	public SphereCollider sp;
+	private Rigidbody rb;
     private float initialRadius;
 	bool exploding;
 
@@ -21,6 +23,7 @@ public class Explosion : MonoBehaviour {
     {
         particleSystem.Emit(particleCount);
         initialRadius = sp.radius;
+		rb.velocity = Vector3.zero;
 		StartCoroutine (boom());
     }
 
@@ -34,10 +37,9 @@ public class Explosion : MonoBehaviour {
             yield return null;
         }
 		sp.radius = initialRadius;
-		Destroy (this.gameObject);
     }
 
-	void OnCollisionEnter() {
+	void OnTriggerEnter() {
 		if (!exploding && Time.time > (spawnTime + startupTime)) {
 			exploding = true;
 			explode ();
@@ -46,7 +48,7 @@ public class Explosion : MonoBehaviour {
 
     void Awake()
     {
-        sp = GetComponent<SphereCollider>();
+		rb = GetComponent<Rigidbody> ();
         
     }
 
