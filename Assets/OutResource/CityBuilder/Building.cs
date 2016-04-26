@@ -35,7 +35,7 @@ public class Building : MonoBehaviour {
 
         //temporary removement for correcting import error
         SoundManager sound = SoundManager.Instance;
-        sound.AudioPlay(sound.explosions[UnityEngine.Random.Range(0,4)], transform);
+		sound.AudioPlay(Resources.Load("Sounds/SFX/Explosion0"+UnityEngine.Random.Range(1,5).ToString()) as AudioClip, transform);
 
 		float height = this.GetComponent<BoxCollider>().size.z;
 		
