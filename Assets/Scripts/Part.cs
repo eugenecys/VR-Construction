@@ -377,6 +377,7 @@ public class Part : MonoBehaviour, Interactable
 		} else if (placed) {
 
 		} else {
+			
 			if (partOfRobot && !canConnectWeapon()) {
 				setState (State.Unconnectable);
 				return;
@@ -406,7 +407,7 @@ public class Part : MonoBehaviour, Interactable
 	{
 		CheckIfPartNeedsToBeDestroyed ();
 	}
-
+		
 	public bool canConnectWeapon() {
 		// go through all connected parts and see if any weapon in there. 
 		int powerLevel = 0;

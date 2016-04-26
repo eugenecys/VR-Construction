@@ -91,7 +91,7 @@ public class SoundManager : Singleton<SoundManager>
 
         //Loads a file from Resources/Sounds folder
         wheelSound = _loadSoundClip("SFX/ConstructionRoom-Engine_Running", 0);
-		machinegunSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
+		machinegunSound = _loadSoundClip("SFX/MachineGun-Loop", 0);
 		laserSound = _loadSoundClip("SFX/Laser", 0);
 		attachSound = _loadSoundClip("SFX/ConstructionRoom-Drop", 0);
 		cannonSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
