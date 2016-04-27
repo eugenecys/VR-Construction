@@ -386,11 +386,18 @@ public class Part : MonoBehaviour, Interactable
 		} else if (placedInAir) {
 
 		} else {
-			
+
+
 			if (partOfRobot && !canConnectWeapon()) {
 				setState (State.Unconnectable);
 				return;
 			}
+
+			if (touchingBase()) {
+				setState (State.Unconnectable);
+				return;
+			}
+
 			if (hasSegmentOverlap ()) {
 				setState (State.Unconnectable);
 				return;
@@ -415,6 +422,26 @@ public class Part : MonoBehaviour, Interactable
 	void Update ()
 	{
 		CheckIfPartNeedsToBeDestroyed ();
+	}
+
+	private bool insideBase = false;
+
+	void OnTriggerStay(Collider col) {
+		if (col.gameObject.layer == 10) {
+			// part touching base unconnectable layer 
+			insideBase = true;
+		}
+	}
+
+	void OnTriggerExit(Collider col) {
+		if (col.gameObject.layer == 10) {
+			// part exiting base unconnectable layer 
+			insideBase = false;
+		}
+	}
+
+	public bool touchingBase() {
+		return insideBase;
 	}
 		
 	public bool canConnectWeapon() {
