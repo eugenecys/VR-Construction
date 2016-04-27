@@ -161,7 +161,7 @@ public class GameManager : Singleton<GameManager>
 		Part robotPart = robotBase.GetComponent<Part> ();
 		if (robotPart) {
 			GameObject prefab = Resources.Load ("Prefabs/" + robotPart.name) as GameObject;
-			GameObject sObj = Object.Instantiate (prefab, new Vector3 (0f, robotBase.transform.localScale.y / 2f, 0f), robotBase.transform.rotation) as GameObject;
+			GameObject sObj = Object.Instantiate (prefab, new Vector3 (0.25f, robotBase.transform.localScale.y / 2f, 0f), robotBase.transform.rotation) as GameObject;
 
 			sObj.transform.parent = robot.transform;
 			Part spawnedPart = sObj.GetComponent<Part> ();
