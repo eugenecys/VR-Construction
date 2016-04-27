@@ -24,6 +24,7 @@ public class Base : Segment, Controllable
 	public Type baseType;
 	private float baseSpeed;
 	private float baseForce;
+	private float turnSpeed = 5f;
 
 	// Use this for initialization
 	void Awake ()
@@ -168,11 +169,11 @@ public class Base : Segment, Controllable
 		float leftForce = 0;
 		float rightForce = 0;
 		if (coordinates.x > 0) {
-			leftSpeed = magnitude * direction;
+			leftSpeed = magnitude * direction * turnSpeed;
 			rightSpeed = coordinates.y;
 
 		} else {
-			rightSpeed = magnitude * direction;
+			rightSpeed = magnitude * direction * turnSpeed;
 			leftSpeed = coordinates.y;
 		}
 		leftForce = 1;

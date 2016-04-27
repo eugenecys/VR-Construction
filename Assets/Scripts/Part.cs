@@ -40,6 +40,13 @@ public class Part : MonoBehaviour, Interactable
 		}
 	}
 
+	public bool placedInAir {
+		get {
+			return state.Equals (State.PlacedAir);
+		}
+	}
+
+
 	public bool connectable {
 		get {
 			return state.Equals (State.Connectable);
@@ -375,6 +382,8 @@ public class Part : MonoBehaviour, Interactable
 		} else if (template) {
 			activate ();
 		} else if (placed) {
+
+		} else if (placedInAir) {
 
 		} else {
 			
