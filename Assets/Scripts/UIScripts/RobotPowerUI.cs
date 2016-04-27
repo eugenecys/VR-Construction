@@ -19,6 +19,7 @@ public class RobotPowerUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		robot = Robot.Instance;
 	}
 	
 	// Update is called once per frame
