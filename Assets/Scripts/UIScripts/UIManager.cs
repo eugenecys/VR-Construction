@@ -19,9 +19,9 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject UIKeyboard; 
 	public GameObject RestartGame; 
 	public Text deployText;
-	public static bool pickedUpForFirstTime = false;
-	public static bool movedForFirstTime = false;
-	public static bool firedForFirstTime = false;
+	public bool pickedUpForFirstTime = false;
+	public bool movedForFirstTime = false;
+	public bool firedForFirstTime = false;
 
 	// Use this for initialization
 	void Awake () {
