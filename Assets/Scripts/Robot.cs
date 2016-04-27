@@ -116,7 +116,7 @@ public class Robot : Singleton<Robot>, Controllable {
 		parts = GetComponentsInChildren<Part>();
 		foreach (Part part in parts)
 		{
-			part.online ();
+			//part.online ();
 		}
 	}
 

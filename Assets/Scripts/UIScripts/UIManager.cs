@@ -63,12 +63,16 @@ public class UIManager :  Singleton<UIManager> {
 	public void DeployRobot() {
 		BuildingUI.SetActive (false);
 		ShowPickUpControls(false);
+		ShowWeaponsControls (true);
+		ShowMovementControls (true);
 		ShowScore (true);
 		ShowTime (true);
 	}
 
 	public void UndeployRobot() {
 		BuildingUI.SetActive (true);
+		ShowWeaponsControls (false);
+		ShowMovementControls (false);
 		ShowScore (false);
 		ShowTime (false);
 	}
