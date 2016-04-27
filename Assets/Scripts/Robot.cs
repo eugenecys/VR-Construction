@@ -15,6 +15,8 @@ public class Robot : Singleton<Robot>, Controllable {
 
     public State state;
 
+	public int strongerPowerLevel = 1500;
+	public int weakerPowerLevel = 1000;
 	public int maxPowerLevel = 1000;
 	public int currentPowerLevel = 1000;
 
@@ -121,6 +123,7 @@ public class Robot : Singleton<Robot>, Controllable {
     void Awake ()
     {
         parts = new Part[0];
+
     }
     
 	// Use this for initialization

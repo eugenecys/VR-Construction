@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 
 	public bool debug = true;
 	public bool bigBang = true;
+
 	public enum GameState
 	{
 		Build,
@@ -101,9 +102,11 @@ public class GameManager : Singleton<GameManager>
 		switch (robotBase) {
 		case(1):
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseOne;
+			SetWeaponPowerLevels (true);
 			break;
 		case(2):
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
+			SetWeaponPowerLevels (false);
 			break;
 		}
 		SpawnRobotBase (selectedBase);
@@ -113,6 +116,16 @@ public class GameManager : Singleton<GameManager>
 		StopDialogue ();
 		PlayDialogue (soundManager.constructionDialogue);
 		Invoke ("ReadyDeployButton", 20.0f);
+	}
+
+	private void SetWeaponPowerLevels(bool strongerBase) {
+		if (strongerBase) {
+			robot.maxPowerLevel = robot.strongerPowerLevel;
+			robot.currentPowerLevel = robot.strongerPowerLevel;
+		} else {
+			robot.maxPowerLevel = robot.weakerPowerLevel;
+			robot.currentPowerLevel = robot.weakerPowerLevel;
+		}
 	}
 
 

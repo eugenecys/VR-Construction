@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UIManager :  Singleton<UIManager> {
 
 	 
-
+	public RobotPowerUI robotPowerUi;
 	public GameObject StartUI;
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
@@ -49,6 +49,7 @@ public class UIManager :  Singleton<UIManager> {
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
 		ShowPickUpControls (true);
+		robotPowerUi.SetWeaponPowerPercentages (); 
 	}
 
 	public void SelectBaseTwo() {
@@ -56,6 +57,7 @@ public class UIManager :  Singleton<UIManager> {
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
 		ShowPickUpControls (true);
+		robotPowerUi.SetWeaponPowerPercentages ();  
 	}
 
 	public void DeployRobot() {

@@ -8,14 +8,17 @@ public class RobotPowerUI : MonoBehaviour {
 	public Image fill; 
 	public Image empty;
 	public Text robotPower;
+	public Text cannonPower;
+	public Text laserPower;
+	public Text drillPower;
+	public Text gunPower;
 
 	private Robot robot; 
 
 	[Range(0f,1f)] public float lowPower = 0.3f;
 
 	// Use this for initialization
-	void Start () {
-		robot = Robot.Instance;
+	void Awake () {
 	}
 	
 	// Update is called once per frame
@@ -33,6 +36,14 @@ public class RobotPowerUI : MonoBehaviour {
 			empty.enabled = false;
 		} 
 		fill.fillAmount = powerRatio;
-		robotPower.text = "Robot\nPower : " + ((int)(powerRatio * 100f)).ToString () + "%";
+		robotPower.text = "Power\nAvailable : " + ((int)(powerRatio * 100f)).ToString () + "%";
+	}
+
+	public void SetWeaponPowerPercentages() {
+		robot = Robot.Instance;
+		cannonPower.text = "Cannon\nPower : " + ((int) ((300f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		laserPower.text = "Laser\nPower : " + ((int) ((500f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		gunPower.text = "Machine Gun\nPower : " + ((int) ((100f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		drillPower.text = "Drill\nPower : " + ((int) ((50f/robot.maxPowerLevel) *100f)).ToString() + "%";
 	}
 }
