@@ -393,7 +393,7 @@ public class Part : MonoBehaviour, Interactable
 				return;
 			}
 
-			if (touchingBase()) {
+			if (insideBase) {
 				setState (State.Unconnectable);
 				return;
 			}
@@ -438,10 +438,6 @@ public class Part : MonoBehaviour, Interactable
 			// part exiting base unconnectable layer 
 			insideBase = false;
 		}
-	}
-
-	public bool touchingBase() {
-		return insideBase;
 	}
 		
 	public bool canConnectWeapon() {
