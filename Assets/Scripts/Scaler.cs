@@ -14,7 +14,10 @@ public class Scaler : MonoBehaviour {
     private ScaleArrow scaleObject;
     private Vector3 initialScale;
     private float distMultiplier;
+
+	[SerializeField]
     private float initialDist;
+
     private bool scaling;
     private ScaleArrow[] scaleArrows;
     public bool uniformScale;
