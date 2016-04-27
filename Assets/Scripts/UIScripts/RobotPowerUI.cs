@@ -41,9 +41,9 @@ public class RobotPowerUI : MonoBehaviour {
 
 	public void SetWeaponPowerPercentages() {
 		robot = Robot.Instance;
-		cannonPower.text = "Cannon\nPower : " + ((int) ((300f/robot.maxPowerLevel) *100f)).ToString() + "%";
-		laserPower.text = "Laser\nPower : " + ((int) ((500f/robot.maxPowerLevel) *100f)).ToString() + "%";
-		gunPower.text = "Machine Gun\nPower : " + ((int) ((100f/robot.maxPowerLevel) *100f)).ToString() + "%";
-		drillPower.text = "Drill\nPower : " + ((int) ((50f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		cannonPower.text = ((int) ((300f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		laserPower.text = ((int) ((500f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		gunPower.text = ((int) ((100f/robot.maxPowerLevel) *100f)).ToString() + "%";
+		drillPower.text = ((int) ((50f/robot.maxPowerLevel) *100f)).ToString() + "%";
 	}
 }
