@@ -41,6 +41,8 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.DeployRobot ();
 		TimeManager.Instance.StartDeployCountdown ();
 		PlayDialogue (soundManager.cityDialogue);
+		StopMusic ();
+		PlayMusic (soundManager.cityBGM);
 
 	}
 

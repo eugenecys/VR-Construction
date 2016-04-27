@@ -24,6 +24,7 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip buildBGM { get; private set; }
 	public AudioClip greenBGM { get; private set; }
 	public AudioClip redBGM { get; private set; }
+	public AudioClip cityBGM { get; private set; }
 
 	// dialogue sounds
 	public AudioClip startDialogue { get; private set; }
@@ -99,9 +100,14 @@ public class SoundManager : Singleton<SoundManager>
 		releaseSound = _loadSoundClip("SFX/ConstructionRoom-ButtonRelease", 0);
 		pickupSound = _loadSoundClip("SFX/ConstructionRoom-Pickup", 0);
 		lightOnSound = _loadSoundClip ("SFX/LightOn", 0);
-		buildBGM = _loadSoundClip ("SFX/ConstructionRoom-Drone", 0);
-		greenBGM = _loadSoundClip ("SFX/ConstructionRoom-Green", 0);
-		redBGM = _loadSoundClip ("SFX/ConstructionRoom-Red", 0);
+
+		// bgms 
+		buildBGM = _loadSoundClip ("BGM/ConstructionRoom-Drone", 0);
+		greenBGM = _loadSoundClip ("BGM/ConstructionRoom-Green", 0);
+		redBGM = _loadSoundClip ("BGM/ConstructionRoom-Red", 0);
+		cityBGM = _loadSoundClip ("BGM/City-BGM", 0);
+
+		// dialogues
 		startDialogue = _loadSoundClip ("Dialogue/StartDialogue", 0);
 		selectBaseDialogue = _loadSoundClip ("Dialogue/SelectBaseDialogue", 0);
 		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
