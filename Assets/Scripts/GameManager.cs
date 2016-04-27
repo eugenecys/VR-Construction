@@ -237,6 +237,7 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	public void RestartGame() {
+		ScoreManager.Instance._score = 0;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
 }

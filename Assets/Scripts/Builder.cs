@@ -65,7 +65,7 @@ public class Builder : MonoBehaviour
 			if (part.placed) {
 				part.transform.parent = robot.transform;
 				part.resetPhysics ();
-			} else {
+			} else if (part.placedInAir) {
 				part.transform.parent = null;
 				part.resetPhysics ();
 			}
@@ -288,9 +288,9 @@ public class Builder : MonoBehaviour
 		spawnedPart.evaluateState (false);
 		audioSource.PlayOneShot (soundManager.pickupSound);
 
-		if (!UIManager.pickedUpForFirstTime) {
+		if (!UIManager.Instance.pickedUpForFirstTime) {
 			UIManager.Instance.ShowPickUpControls (false);
-			UIManager.pickedUpForFirstTime = true;
+			UIManager.Instance.pickedUpForFirstTime = true;
 		}
 
 		return sObj;
