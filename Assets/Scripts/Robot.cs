@@ -140,7 +140,7 @@ public class Robot : Singleton<Robot>, Controllable {
     {
         parts = GetComponentsInChildren<Part>();
 		weapons = GetComponentsInChildren<Weapon> ();
-		currentPowerLevel = 1000;
+		currentPowerLevel = maxPowerLevel;
 		foreach (Weapon weapon in weapons) {
 			currentPowerLevel -= weapon.powerUsed;
 		}
