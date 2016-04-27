@@ -65,7 +65,7 @@ public class Builder : MonoBehaviour
 			if (part.placed) {
 				part.transform.parent = robot.transform;
 				part.resetPhysics ();
-			} else {
+			} else if (part.placedInAir) {
 				part.transform.parent = null;
 				part.resetPhysics ();
 			}
