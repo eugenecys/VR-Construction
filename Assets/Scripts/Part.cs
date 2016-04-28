@@ -185,16 +185,9 @@ public class Part : MonoBehaviour, Interactable
 			part.removeConnectedPart (this);
 		}
 		connectedParts = new List<Part> ();
-		bool isWeapon = false;
-		if (GetComponentInChildren<Weapon> ()) {
-			isWeapon = true;
-		}
-		bool hasPlayed = false;
+	
 		foreach (Segment segment in segments) {
-			if (segment.isConnectedToRobot && isWeapon && !hasPlayed) {
-				audioSource.PlayOneShot (soundManager.powerDownSound);
-				hasPlayed = true;
-			}
+			
 			segment.disconnect ();
 		}
 	}

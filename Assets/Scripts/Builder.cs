@@ -242,9 +242,18 @@ public class Builder : MonoBehaviour
 	public void MoveComponent (Part part)
 	{
 		part.disconnect ();
+		bool poweredDown = false;
+		if (part.transform.GetComponentInChildren<Weapon> () && part.transform == robot.transform) {
+			poweredDown = true;
+		}
+
 		part.transform.parent = this.transform;
 		part.unplace ();
-		audioSource.PlayOneShot (soundManager.pickupSound);
+		if (poweredDown) {
+			audioSource.PlayOneShot (soundManager.powerDownSound);
+		} else {
+			audioSource.PlayOneShot (soundManager.pickupSound);
+		}
 	}
 
 	public GameObject SpawnComponent (Part part)
