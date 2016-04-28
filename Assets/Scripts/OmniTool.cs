@@ -159,6 +159,16 @@ public class OmniTool : MonoBehaviour
 		}
 	}
     
+	public void vibrate(float strength)
+	{
+		if (side == Side.Left) {
+			SteamVR_Controller.Input (ViveInputManager.Instance.leftControllerIndex).TriggerHapticPulse ((ushort)(Constants.HAPTIC_STRENGTH * strength));
+		} else {
+			SteamVR_Controller.Input (ViveInputManager.Instance.rightControllerIndex).TriggerHapticPulse ((ushort)(Constants.HAPTIC_STRENGTH * strength));
+		}
+	}
+
+
 	// Use this for initialization
 	void Start ()
 	{

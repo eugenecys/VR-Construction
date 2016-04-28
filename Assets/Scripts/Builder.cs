@@ -29,7 +29,7 @@ public class Builder : MonoBehaviour
 	public bool triggered = false;
 
 	private LaserPointer laser;
-
+	private OmniTool omniTool;
 
 	public enum ColliderState
 	{
@@ -63,6 +63,7 @@ public class Builder : MonoBehaviour
 		foreach (Part part in childParts) {
 			part.place ();
 			if (part.placed) {
+				omniTool.vibrate (1f);
 				part.transform.parent = robot.transform;
 				part.resetPhysics ();
 			} else if (part.placedInAir) {
@@ -105,6 +106,7 @@ public class Builder : MonoBehaviour
 		laser = this.GetComponent<LaserPointer> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
+		omniTool = this.GetComponent<OmniTool> ();
 	}
 
 	// Use this for initialization

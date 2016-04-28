@@ -8,8 +8,8 @@ public class ViveInputManager : Singleton<ViveInputManager>
     public SteamVR_TrackedObject leftControllerObject;
     public SteamVR_TrackedObject rightControllerObject;
 
-    int leftControllerIndex = -1;
-    int rightControllerIndex = -1;
+	public int leftControllerIndex = -1;
+    public int rightControllerIndex = -1;
 
     private bool leftTriggerOn;
     private bool leftTouchpadOn;
