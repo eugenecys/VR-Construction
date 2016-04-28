@@ -184,17 +184,17 @@ public class SuperBlast : MonoBehaviour
         }
 
         //interact with building
-        hits = Physics.CapsuleCastAll(transform.position, target, blastSize, 
-            (target - transform.position).normalized, 
-            (target - transform.position).magnitude);
+        //hits = Physics.CapsuleCastAll(transform.position, target, blastSize, 
+        //    (target - transform.position).normalized, 
+        //    (target - transform.position).magnitude);
 		
-        foreach (var hit in hits)
-        {
-            if (hit.collider.gameObject.CompareTag("building"))
-            {
-                hit.collider.gameObject.SendMessage("GiveAttack");
-                scoreManager.AddScore();
-            }
-        }
+        //foreach (var hit in hits)
+        //{
+        //    if (hit.collider.gameObject.CompareTag("building"))
+        //    {
+        //        hit.collider.gameObject.SendMessage("GiveAttack");
+        //        scoreManager.AddScore();
+        //    }
+        //}
     }
 }
