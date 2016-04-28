@@ -6,7 +6,6 @@ public class RobotPowerUI : MonoBehaviour {
 
 	public Image battery;
 	public Image fill; 
-	public Image empty;
 	public Text robotPower;
 	public Text cannonPower;
 	public Text laserPower;
@@ -15,7 +14,6 @@ public class RobotPowerUI : MonoBehaviour {
 
 	private Robot robot; 
 
-	[Range(0f,1f)] public float lowPower = 0.3f;
 
 	// Use this for initialization
 	void Awake () {
@@ -28,16 +26,9 @@ public class RobotPowerUI : MonoBehaviour {
 	}
 
 	private void UpdatePowerLevel() {
-		float powerRatio = (robot.currentPowerLevel*1f) / (1f*robot.maxPowerLevel);
-		if (powerRatio <= lowPower) {
-			battery.enabled = false;
-			empty.enabled = true;
-		} else {
-			battery.enabled = true;
-			empty.enabled = false;
-		} 
+		float powerRatio = 1f - (robot.currentPowerLevel*1f) / (1f*robot.maxPowerLevel);
 		fill.fillAmount = powerRatio;
-		robotPower.text = "Power\nAvailable : " + ((int)(powerRatio * 100f)).ToString () + "%";
+		robotPower.text = ((int)(powerRatio * 100f)).ToString () + "%";
 	}
 
 	public void SetWeaponPowerPercentages() {
