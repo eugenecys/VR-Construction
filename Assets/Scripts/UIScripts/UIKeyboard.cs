@@ -23,9 +23,7 @@ public class UIKeyboard : Singleton<UIKeyboard> {
 	private void UpdateName(char letter) {
 		if (currentIndex < maxNameSize) {
 			name [currentIndex] = letter;
-			if (currentIndex < maxNameSize -1 ) {
-				currentIndex++;
-			}
+			currentIndex++;
 			playerName.text = new string (name);
 		}
 	}
@@ -35,14 +33,11 @@ public class UIKeyboard : Singleton<UIKeyboard> {
 	}
 
 	public void BackSpace() {
-		if (currentIndex >= 0 && currentIndex < maxNameSize) {
-			if (currentIndex > 0 && currentIndex < maxNameSize - 1) {
-				currentIndex--;
-			}
-			name [currentIndex] = ' ';
+		if (currentIndex > 0) {
+			name [currentIndex - 1] = ' ';
+			currentIndex--;
 			playerName.text = new string (name);
-
-		}
+		} 
 	}
 
 	public void SubmitName() {
