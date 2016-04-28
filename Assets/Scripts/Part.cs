@@ -163,15 +163,17 @@ public class Part : MonoBehaviour, Interactable
 				}
 			}
 			deploy (isPartOfRobot);
-			audioSource.PlayOneShot (soundManager.attachSound);
 			if (isPartOfRobot) {
+				if (GetComponentInChildren<Weapon> ()) {
+					audioSource.PlayOneShot (soundManager.powerUpSound);
+				} else {
+					audioSource.PlayOneShot (soundManager.attachSound);
+				}
 				this.transform.parent = robot.transform;
 			}
 			resetPhysics ();
 		} else if (free) {
 			deploy (false);
-			//audioSource.PlayOneShot (soundManager.attachSound);
-			//this.transform.parent = robot.transform;
 			resetPhysics ();
 		}
 		robot.updateParts ();
@@ -183,8 +185,16 @@ public class Part : MonoBehaviour, Interactable
 			part.removeConnectedPart (this);
 		}
 		connectedParts = new List<Part> ();
-
+		bool isWeapon = false;
+		if (GetComponentInChildren<Weapon> ()) {
+			isWeapon = true;
+		}
+		bool hasPlayed = false;
 		foreach (Segment segment in segments) {
+			if (segment.isConnectedToRobot && isWeapon && !hasPlayed) {
+				audioSource.PlayOneShot (soundManager.powerDownSound);
+				hasPlayed = true;
+			}
 			segment.disconnect ();
 		}
 	}

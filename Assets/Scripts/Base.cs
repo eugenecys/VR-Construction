@@ -26,7 +26,7 @@ public class Base : Segment, Controllable
 	private float baseForce;
 	public bool fast = false;
 	private float slowSpeed = 1f;
-	private float fastSpeed = 3f;
+	private float fastSpeed = 2.5f;
 
 	// Use this for initialization
 	void Awake ()

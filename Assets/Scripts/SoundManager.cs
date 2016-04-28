@@ -15,6 +15,8 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip hydraulicSound { get; private set; }
     public AudioClip attachSound { get; private set; }
     public AudioClip cannonSound { get; private set; }
+	public AudioClip powerUpSound { get; private set; }
+	public AudioClip powerDownSound { get; private set; }
     public AudioClip trashSound { get; private set; }
     public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
@@ -100,6 +102,8 @@ public class SoundManager : Singleton<SoundManager>
 		releaseSound = _loadSoundClip("SFX/ConstructionRoom-ButtonRelease", 0);
 		pickupSound = _loadSoundClip("SFX/ConstructionRoom-Pickup", 0);
 		lightOnSound = _loadSoundClip ("SFX/LightOn", 0);
+		powerUpSound = _loadSoundClip ("SFX/PowerUp01", 0);
+		powerDownSound = _loadSoundClip ("SFX/PowerDown01", 0);
 
 		// bgms 
 		buildBGM = _loadSoundClip ("BGM/ConstructionRoom-Drone", 0);
