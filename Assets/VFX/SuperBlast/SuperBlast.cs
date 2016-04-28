@@ -169,6 +169,7 @@ public class SuperBlast : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.O))
             Launch(Vector3.forward * 100);
+        _fx.energyCylinder.transform.localPosition = new Vector3(0, 0, _fx.energyCylinder.transform.localPosition.z);//hard code..
     }
 
     private void GenerateContacts(Vector3 target)
