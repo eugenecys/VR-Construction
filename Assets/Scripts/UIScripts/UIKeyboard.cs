@@ -35,12 +35,13 @@ public class UIKeyboard : Singleton<UIKeyboard> {
 	}
 
 	public void BackSpace() {
-		if (currentIndex >= 0) {
-			name [currentIndex] = ' ';
-			playerName.text = new string (name);
-			if (currentIndex > 0) {
+		if (currentIndex >= 0 && currentIndex < maxNameSize) {
+			if (currentIndex > 0 && currentIndex < maxNameSize - 1) {
 				currentIndex--;
 			}
+			name [currentIndex] = ' ';
+			playerName.text = new string (name);
+
 		}
 	}
 
