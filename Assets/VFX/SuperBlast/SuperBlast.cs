@@ -70,6 +70,7 @@ public class SuperBlast : MonoBehaviour
         if(!_fx.outerParticleSys.isPlaying)
             _fx.outerParticleSys.Play();
         float timer = 0f;
+		/*
         while (timer < dist / launchSpeed)
         {
             timer += Time.deltaTime;
@@ -77,7 +78,7 @@ public class SuperBlast : MonoBehaviour
                 Mathf.Clamp01(timer / (dist / launchSpeed)));
             yield return null;
         }
-
+        */
         //stage 1: wait
         yield return new WaitForSeconds(intervalTime);
 
@@ -107,6 +108,7 @@ public class SuperBlast : MonoBehaviour
         float radius = 0f;
         float kp = blastPID.x, ki = blastPID.y, kd = blastPID.z;
         timer = 0f;
+
         while (timer < blastTime)
         {
             float error = 0.1f * blastSize - radius;
