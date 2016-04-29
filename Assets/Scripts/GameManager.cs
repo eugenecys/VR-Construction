@@ -25,7 +25,10 @@ public class GameManager : Singleton<GameManager>
 	private Robot robot;
 
 	public GameState state;
+
 	public GameObject city;
+	public GameObject tutorialCity;
+
 	public Transform trackingSpace;
 
 	public GameObject RobotBases;
@@ -78,7 +81,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		PlayMusic (soundManager.buildBGM);
 		PlayDialogue (soundManager.startDialogue);
-		Invoke ("StartGame", 16f);
+		Invoke ("GoToTutorial", 16f);
 	}
 	
 	// Update is called once per frame
@@ -87,17 +90,32 @@ public class GameManager : Singleton<GameManager>
 		
 	}
 
-	public void StartGame ()
+	void GoToTutorial ()
 	{
-		if (state == GameState.Start) {
-			state = GameState.SelectBase;
-			RobotBases.SetActive (true);
-			LightingManager.Instance.StartGame ();
+		state = GameState.TutorialPlay;
+		tutorialCity.SetActive (true);
+		Deployer.Instance.cell.SetActive (false);
+		UIManager.Instance.DeployRobot ();
+		TimeManager.Instance.StartTutorialCountdown ();
 
-			UIManager.Instance.StartGame ();
-			StopDialogue ();
-			PlayDialogue (soundManager.selectBaseDialogue);
-		}
+		robot.ActivateTutorialRobot ();
+		//PlayDialogue (soundManager.cityDialogue);
+		StopMusic ();
+		PlayMusic (soundManager.cityBGM);
+	}
+
+	public void GoToSelectBase ()
+	{	
+		robot.DeactivateTutorialRobot ();
+		Deployer.Instance.cell.SetActive (true);
+		state = GameState.SelectBase;
+		RobotBases.SetActive (true);
+		LightingManager.Instance.StartGame ();
+
+		UIManager.Instance.StartGame ();
+		PlayMusic (soundManager.buildBGM);
+		StopDialogue ();
+		PlayDialogue (soundManager.selectBaseDialogue);
 	}
 
 	public void SelectBase (int robotBase)
@@ -121,7 +139,8 @@ public class GameManager : Singleton<GameManager>
 		Invoke ("ReadyDeployButton", 20.0f);
 	}
 
-	private void SetWeaponPowerLevels(bool strongerBase) {
+	private void SetWeaponPowerLevels (bool strongerBase)
+	{
 		if (strongerBase) {
 			robot.maxPowerLevel = robot.strongerPowerLevel;
 			robot.currentPowerLevel = robot.strongerPowerLevel;
@@ -237,7 +256,8 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.deployText.enabled = true;
 	}
 
-	public void RestartGame() {
+	public void RestartGame ()
+	{
 		ScoreManager.Instance._score = 0;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}

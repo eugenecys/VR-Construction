@@ -149,4 +149,17 @@ public class Robot : Singleton<Robot>, Controllable {
 	public void CreatePrefabFromRobot() {
 		PrefabUtility.CreatePrefab ("Assets/Resources/WeakRobot.prefab", this.gameObject);
 	}
+
+	public void ActivateTutorialRobot() {
+		activate ();
+		deploy ();
+		Base robotBase = GetComponentInChildren<Base> ();
+		if (robotBase) {
+			robotBase.on ();
+		}
+	}
+
+	public void DeactivateTutorialRobot() {
+		GameObject.Destroy (this.transform.GetChild (0));
+	}
 }
