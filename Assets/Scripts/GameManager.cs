@@ -90,14 +90,15 @@ public class GameManager : Singleton<GameManager>
 
 	}
 
-	void GoToTutorial ()
+	public void GoToTutorial ()
 	{
+		
 		state = GameState.TutorialPlay;
 		tutorialCity.SetActive (true);
 		Deployer.Instance.cell.SetActive (false);
-		UIManager.Instance.DeployRobot ();
+		UIManager.Instance.StartTutorial ();
 		TimeManager.Instance.StartTutorialCountdown ();
-
+		LightingManager.Instance.TutorialScene ();
 		robot.ActivateTutorialRobot ();
 		//PlayDialogue (soundManager.cityDialogue);
 		StopMusic ();
@@ -106,13 +107,14 @@ public class GameManager : Singleton<GameManager>
 
 	public void GoToSelectBase ()
 	{	
+		tutorialCity.SetActive (false);
 		robot.DeactivateTutorialRobot ();
 		Deployer.Instance.cell.SetActive (true);
 		state = GameState.SelectBase;
 		RobotBases.SetActive (true);
-		LightingManager.Instance.StartGame ();
+		LightingManager.Instance.SelectBaseScene();
 
-		UIManager.Instance.StartGame ();
+		UIManager.Instance.StartSelectingBase ();
 		PlayMusic (soundManager.buildBGM);
 		StopDialogue ();
 		PlayDialogue (soundManager.selectBaseDialogue);
@@ -132,7 +134,7 @@ public class GameManager : Singleton<GameManager>
 		}
 		SpawnRobotBase (selectedBase);
 		ShowRoom ();
-		LightingManager.Instance.SelectedBase ();
+		LightingManager.Instance.BuildScene();
 
 		StopDialogue ();
 		PlayDialogue (soundManager.constructionDialogue);

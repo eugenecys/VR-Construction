@@ -151,6 +151,7 @@ public class Robot : Singleton<Robot>, Controllable {
 	}
 
 	public void ActivateTutorialRobot() {
+		this.transform.GetChild (0).gameObject.SetActive (true);
 		activate ();
 		deploy ();
 		Base robotBase = GetComponentInChildren<Base> ();
@@ -160,6 +161,6 @@ public class Robot : Singleton<Robot>, Controllable {
 	}
 
 	public void DeactivateTutorialRobot() {
-		GameObject.Destroy (this.transform.GetChild (0));
+		GameObject.Destroy (this.transform.GetChild (0).gameObject);
 	}
 }

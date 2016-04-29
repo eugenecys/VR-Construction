@@ -196,19 +196,22 @@ public class OmniTool : MonoBehaviour
 	}
 
 	private void KeyControls() {
-		if (Input.GetKeyDown (KeyCode.R) && side == Side.Left) {
+		if (Input.GetKeyDown (KeyCode.W) && side == Side.Left) {
 			triggerDown ();
 		}
-		if (Input.GetKeyDown (KeyCode.E)  && side == Side.Left) {
+		if (Input.GetKeyDown (KeyCode.Q)  && side == Side.Left) {
 			triggerUp ();
 		}
-		if (Input.GetKeyDown (KeyCode.U)  && side == Side.Right) {
+		if (Input.GetKeyDown (KeyCode.R)  && side == Side.Right) {
 			triggerDown ();
 		}
-		if (Input.GetKeyDown (KeyCode.Y)  && side == Side.Right) {
+		if (Input.GetKeyDown (KeyCode.E)  && side == Side.Right) {
 			triggerUp ();
 		}
 
+		if (Input.GetKeyDown (KeyCode.U) && side == Side.Left) {
+			GameManager.Instance.GoToTutorial();
+		}
 		if (Input.GetKeyDown (KeyCode.I) && side == Side.Left) {
 			GameManager.Instance.GoToSelectBase();
 		}

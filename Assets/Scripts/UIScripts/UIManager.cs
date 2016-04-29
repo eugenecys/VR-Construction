@@ -38,10 +38,20 @@ public class UIManager :  Singleton<UIManager> {
 		UpdateScore ();
 	}
 		
-	public void StartGame() {
+	public void StartTutorial() {
 		StartUI.SetActive (false);
-		SelectBaseUI.SetActive (true);
+		//SelectBaseUI.SetActive (true);
 		HighScoreUI.SetActive (false);
+		ShowWeaponsControls (true);
+		ShowMovementControls (true);
+		ShowTime (true);
+	}
+
+	public void StartSelectingBase() {
+		SelectBaseUI.SetActive (true);
+		ShowWeaponsControls (false);
+		ShowMovementControls (false);
+		ShowTime (false);
 	}
 
 	public void SelectBaseOne() {
