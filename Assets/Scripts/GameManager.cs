@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 		Play,
 		Start,
 		SelectBase,
+		TutorialPlay,
 		End
 	}
 
@@ -43,6 +44,7 @@ public class GameManager : Singleton<GameManager>
 		PlayDialogue (soundManager.cityDialogue);
 		StopMusic ();
 		PlayMusic (soundManager.cityBGM);
+		robot.CreatePrefabFromRobot ();
 
 	}
 

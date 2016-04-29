@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEditor;
 public class Robot : Singleton<Robot>, Controllable {
 
     Part[] parts;
@@ -145,4 +145,8 @@ public class Robot : Singleton<Robot>, Controllable {
 			currentPowerLevel -= weapon.powerUsed;
 		}
     }
+
+	public void CreatePrefabFromRobot() {
+		PrefabUtility.CreatePrefab (this.gameObject);
+	}
 }
