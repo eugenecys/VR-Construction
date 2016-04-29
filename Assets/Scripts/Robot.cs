@@ -147,6 +147,6 @@ public class Robot : Singleton<Robot>, Controllable {
     }
 
 	public void CreatePrefabFromRobot() {
-		PrefabUtility.CreatePrefab (this.gameObject);
+		PrefabUtility.CreatePrefab ("Assets/Resources/WeakRobot.prefab", this.gameObject);
 	}
 }

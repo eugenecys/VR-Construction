@@ -370,7 +370,6 @@ public class Part : MonoBehaviour, Interactable
 	{
 		markedForDelete = false;
 		setState (State.Connectable);
-        evaluateState(false);
 		List<Part> connected = getConnectedParts ();
 		foreach (Part part in connected) {
 			if (part.markedForDelete) {

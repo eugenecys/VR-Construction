@@ -23,6 +23,7 @@ public class TrashCan : Singleton<TrashCan> {
         if (markedPart != null)
         {
             markedPart.unmarkForDelete();
+			markedPart.evaluateState (false);
             markedPart = null;
         }
     }
