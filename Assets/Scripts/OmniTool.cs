@@ -79,6 +79,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.End:
 			ui.triggerDown ();
 			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.triggerDown ();
+			break;
 		}
 	}
 
@@ -100,6 +103,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.End:
 			ui.triggerUp ();
 			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.triggerUp ();
+			break;
 		}
 	}
 
@@ -116,6 +122,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			break;
 		case GameManager.GameState.End:
+			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.touchPadDown (axis);
 			break;
 		}
 	}
@@ -134,6 +143,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			break;
 		case GameManager.GameState.End:
+			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.touchPadUp();
 			break;
 		}
 	}
@@ -156,9 +168,11 @@ public class OmniTool : MonoBehaviour
 			break;
 		case GameManager.GameState.End:
 			break;
+		case GameManager.GameState.TutorialPlay:
+			break;
 		}
 	}
-    
+
 	public void vibrate(float strength)
 	{
 		if (side == Side.Left) {
@@ -196,7 +210,7 @@ public class OmniTool : MonoBehaviour
 		}
 
 		if (Input.GetKeyDown (KeyCode.I) && side == Side.Left) {
-			GameManager.Instance.StartGame ();
+			GameManager.Instance.GoToSelectBase();
 		}
 		if (Input.GetKeyDown (KeyCode.O) && side == Side.Left) {
 			UIManager.Instance.SelectBaseOne ();
