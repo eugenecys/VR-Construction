@@ -35,10 +35,6 @@ public class Robot : Singleton<Robot>, Controllable {
 			if (part.controllable)
 			{
 				part.trigger();
-				if (!UIManager.Instance.firedForFirstTime) {
-					UIManager.Instance.ShowWeaponsControls (false);
-					UIManager.Instance.firedForFirstTime = true;
-				}
 			}
 		}
 	}
@@ -61,10 +57,7 @@ public class Robot : Singleton<Robot>, Controllable {
 			{
 				part.joystick(vec);
 
-				if (!UIManager.Instance.movedForFirstTime) {
-					UIManager.Instance.ShowMovementControls (false);
-					UIManager.Instance.movedForFirstTime = true;
-				}
+
 			}
 		}
 	}

@@ -20,8 +20,6 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject RestartGame; 
 	public Text deployText;
 	public bool pickedUpForFirstTime = false;
-	public bool movedForFirstTime = false;
-	public bool firedForFirstTime = false;
 
 	// Use this for initialization
 	void Awake () {
@@ -40,7 +38,6 @@ public class UIManager :  Singleton<UIManager> {
 		
 	public void StartTutorial() {
 		StartUI.SetActive (false);
-		//SelectBaseUI.SetActive (true);
 		HighScoreUI.SetActive (false);
 		ShowWeaponsControls (true);
 		ShowMovementControls (true);
@@ -73,8 +70,6 @@ public class UIManager :  Singleton<UIManager> {
 	public void DeployRobot() {
 		BuildingUI.SetActive (false);
 		ShowPickUpControls(false);
-		ShowWeaponsControls (true);
-		ShowMovementControls (true);
 		ShowScore (true);
 		ShowTime (true);
 	}

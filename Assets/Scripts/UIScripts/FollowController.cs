@@ -12,7 +12,7 @@ public class FollowController : MonoBehaviour
 	public float distanceAboveController = 0f;
 
 	public float followSpeed = 10f;
-
+	public float lookUpAngle = 45f;
 	private void Start ()
 	{
 		Vector3 controllerUp = (ui.position - controller.position).normalized;
@@ -30,7 +30,7 @@ public class FollowController : MonoBehaviour
 		if (rotateWithController) {
 			Quaternion newRot = controller.rotation;
 			Vector3 newEulur = newRot.eulerAngles;
-			newEulur.x += 45f;
+			newEulur.x += lookUpAngle;
 			newEulur.z = 0f;
 			newRot.eulerAngles = newEulur;
 			ui.rotation = newRot;
