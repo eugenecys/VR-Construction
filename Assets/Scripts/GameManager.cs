@@ -52,7 +52,9 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	private void secondCityDialogue() {
-		PlayDialogue (soundManager.cityDialogue02);
+		if (state == GameState.Play) {
+			PlayDialogue (soundManager.cityDialogue02);
+		}
 	}
 
 	public void build ()
@@ -112,55 +114,65 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	private void secondTutorialDialogue() {
-		PlayDialogue (soundManager.tutorialDialogue02);
+		if (state == GameState.TutorialPlay) {
+			PlayDialogue (soundManager.tutorialDialogue02);
+		}
 	}
 
 	private void EndTutorial() {
-		PlayDialogue (soundManager.tutorialDialogueEnd);
-		Invoke ("GoToSelectBase", 12f);
+		if (state == GameState.TutorialPlay) {
+			PlayDialogue (soundManager.tutorialDialogueEnd);
+			Invoke ("GoToSelectBase", 12f);
+		}
 	}
 		
 	public void GoToSelectBase ()
 	{	
-		tutorialCity.SetActive (false);
-		robot.DeactivateTutorialRobot ();
-		Deployer.Instance.cell.SetActive (true);
-		state = GameState.SelectBase;
-		RobotBases.SetActive (true);
-		LightingManager.Instance.SelectBaseScene();
+		if (state == GameState.TutorialPlay) {
+			tutorialCity.SetActive (false);
+			robot.DeactivateTutorialRobot ();
+			Deployer.Instance.cell.SetActive (true);
+			state = GameState.SelectBase;
+			RobotBases.SetActive (true);
+			LightingManager.Instance.SelectBaseScene ();
 
-		UIManager.Instance.StartSelectingBase ();
-		PlayMusic (soundManager.buildBGM);
-		StopDialogue ();
-		PlayDialogue (soundManager.selectBaseDialogue);
+			UIManager.Instance.StartSelectingBase ();
+			PlayMusic (soundManager.buildBGM);
+			StopDialogue ();
+			PlayDialogue (soundManager.selectBaseDialogue);
+		}
 	}
 
 	public void SelectBase (int robotBase)
 	{
-		switch (robotBase) {
-		case(1):
-			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseOne;
-			SetWeaponPowerLevels (true);
-			break;
-		case(2):
-			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
-			SetWeaponPowerLevels (false);
-			break;
-		}
-		SpawnRobotBase (selectedBase);
-		ShowRoom ();
-		LightingManager.Instance.BuildScene();
+		if (state == GameState.SelectBase) {
+			switch (robotBase) {
+			case(1):
+				selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseOne;
+				SetWeaponPowerLevels (true);
+				break;
+			case(2):
+				selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
+				SetWeaponPowerLevels (false);
+				break;
+			}
+			SpawnRobotBase (selectedBase);
+			ShowRoom ();
+			LightingManager.Instance.BuildScene ();
 
-		StopDialogue ();
-		PlayDialogue (soundManager.constructionDialogue);
-		Invoke ("ReadyDeployButton", 20.0f);
+			StopDialogue ();
+			PlayDialogue (soundManager.constructionDialogue);
+			Invoke ("ReadyDeployButton", 20.0f);
+		}
 	}
 
 	private void ReadyDeployButton ()
 	{
-		PlayDialogue (soundManager.deployDialogue);
-		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
-		UIManager.Instance.deployText.enabled = true;
+		if (state == GameState.Build) {
+			PlayDialogue (soundManager.deployDialogue);
+			Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+			UIManager.Instance.deployText.enabled = true;
+		}
 	}
 
 	private void SetWeaponPowerLevels (bool strongerBase)
