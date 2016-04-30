@@ -17,6 +17,8 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject HighScoreUI;
 	public GameObject EndScoreUI;
 	public GameObject UIKeyboard; 
+	public GameObject TutorialUI;
+
 	public GameObject RestartGame; 
 	public Text deployText;
 	public bool pickedUpForFirstTime = false;
@@ -37,14 +39,17 @@ public class UIManager :  Singleton<UIManager> {
 	}
 		
 	public void StartTutorial() {
+		RenderSettings.ambientIntensity = 1f;
 		StartUI.SetActive (false);
 		HighScoreUI.SetActive (false);
+		TutorialUI.SetActive (true);
 		ShowWeaponsControls (true);
 		ShowMovementControls (true);
 		ShowTime (true);
 	}
 
 	public void StartSelectingBase() {
+		TutorialUI.SetActive (false);
 		SelectBaseUI.SetActive (true);
 		ShowWeaponsControls (false);
 		ShowMovementControls (false);

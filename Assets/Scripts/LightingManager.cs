@@ -5,6 +5,8 @@ public class LightingManager : Singleton<LightingManager> {
 
 	public Light baseLight1;
 	public Light baseLight2;
+	public Light tutorialLight;
+
 	public Light[] roomLights;
 
 	private AudioSource audioSource;
@@ -16,6 +18,8 @@ public class LightingManager : Singleton<LightingManager> {
 		}
 		baseLight1.enabled = false;
 		baseLight2.enabled = false;
+		tutorialLight.enabled = false;
+		RenderSettings.ambientIntensity = 0f;
 	}
 
 	// sounds all go into start
@@ -30,15 +34,12 @@ public class LightingManager : Singleton<LightingManager> {
 	}
 
 	public void TutorialScene() {
-		foreach (Light light in roomLights) {
-			light.enabled = true;
-		}
+		RenderSettings.ambientIntensity = 1f;
+		tutorialLight.enabled = true;
 	}
 
 	public void SelectBaseScene() {
-		foreach (Light light in roomLights) {
-			light.enabled = false;
-		}
+		tutorialLight.enabled = false;
 		baseLight1.enabled = true;
 		baseLight1.intensity = 0f;
 		baseLight2.enabled = true;

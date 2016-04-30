@@ -63,15 +63,13 @@ public class LaserPointer : MonoBehaviour {
 		laser.transform.localRotation = Quaternion.identity;
 		laser.GetComponent<MeshRenderer>().material = pointerMat;
 		laser.GetComponent<BoxCollider> ().enabled = false;
-	
-
 	}
 
 	private bool building = false;
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (GameManager.Instance.state == GameManager.GameState.Play) {
-			pointer.gameObject.SetActive (false); 
+		if (GameManager.Instance.state == GameManager.GameState.Play || GameManager.Instance.state == GameManager.GameState.TutorialPlay || GameManager.Instance.state == GameManager.GameState.Start) {
+			holder.gameObject.SetActive (false); 
 			if (building) {
 				building = false;
 				active = false;
@@ -86,7 +84,7 @@ public class LaserPointer : MonoBehaviour {
 				pointer.transform.localScale = new Vector3(thickness, thickness, length);
 				laser.transform.localScale = new Vector3(thickness, thickness, length);
 			}
-			pointer.gameObject.SetActive (true);
+			holder.gameObject.SetActive (true);
 			if (active) {
 				if (pointer.transform.localScale.z == 0f) {
 					pointer.transform.localScale = new Vector3(thickness, thickness, length);

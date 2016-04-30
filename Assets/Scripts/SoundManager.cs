@@ -30,10 +30,14 @@ public class SoundManager : Singleton<SoundManager>
 
 	// dialogue sounds
 	public AudioClip startDialogue { get; private set; }
+	public AudioClip tutorialDialogue01 { get; private set; }
+	public AudioClip tutorialDialogue02 { get; private set; }
+	public AudioClip tutorialDialogueEnd { get; private set; }
 	public AudioClip selectBaseDialogue { get; private set; }
 	public AudioClip constructionDialogue { get; private set; }
 	public AudioClip deployDialogue { get; private set; }
-	public AudioClip cityDialogue { get; private set; }
+	public AudioClip cityDialogue01 { get; private set; }
+	public AudioClip cityDialogue02 { get; private set; }
 
     public void playSound(AudioClip sound)
     {
@@ -112,11 +116,16 @@ public class SoundManager : Singleton<SoundManager>
 		cityBGM = _loadSoundClip ("BGM/City-BGM", 0);
 
 		// dialogues
-		startDialogue = _loadSoundClip ("Dialogue/StartDialogue", 0);
-		selectBaseDialogue = _loadSoundClip ("Dialogue/SelectBaseDialogue", 0);
-		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
-		deployDialogue = _loadSoundClip ("Dialogue/DeployDialogue", 0);
-		cityDialogue = _loadSoundClip ("Dialogue/CityDialogue", 0);
+		startDialogue = _loadSoundClip ("Dialogue/Robotic/Start", 0);
+		tutorialDialogue01 = _loadSoundClip ("Dialogue/Robotic/Tutorial01", 0);
+		tutorialDialogue02 = _loadSoundClip ("Dialogue/Robotic/Tutorial02", 0);
+		tutorialDialogueEnd = _loadSoundClip ("Dialogue/Robotic/TutorialEnd", 0);
+		selectBaseDialogue = _loadSoundClip ("Dialogue/Robotic/SelectBase", 0);
+		constructionDialogue = _loadSoundClip ("Dialogue/Robotic/Construction", 0);
+		deployDialogue = _loadSoundClip ("Dialogue/Robotic/Deploy", 0);
+		cityDialogue01 = _loadSoundClip ("Dialogue/Robotic/City01", 0);
+		cityDialogue01 = _loadSoundClip ("Dialogue/Robotic/City02", 0);
+
     }
 
     private AudioClip _loadSoundClip(string filename, int i)

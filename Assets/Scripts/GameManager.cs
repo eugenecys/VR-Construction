@@ -28,6 +28,7 @@ public class GameManager : Singleton<GameManager>
 
 	public GameObject city;
 	public GameObject tutorialCity;
+	public GameObject cell;
 
 	public Transform trackingSpace;
 
@@ -44,10 +45,14 @@ public class GameManager : Singleton<GameManager>
 		city.SetActive (true); 
 		UIManager.Instance.DeployRobot ();
 		TimeManager.Instance.StartDeployCountdown ();
-		PlayDialogue (soundManager.cityDialogue);
+		PlayDialogue (soundManager.cityDialogue01);
+		Invoke ("secondCityDialogue", 15f); 
 		StopMusic ();
 		PlayMusic (soundManager.cityBGM);
+	}
 
+	private void secondCityDialogue() {
+		PlayDialogue (soundManager.cityDialogue02);
 	}
 
 	public void build ()
@@ -81,7 +86,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		PlayMusic (soundManager.buildBGM);
 		PlayDialogue (soundManager.startDialogue);
-		Invoke ("GoToTutorial", 16f);
+		Invoke ("GoToTutorial", 20f);
 	}
 
 	// Update is called once per frame
@@ -92,19 +97,29 @@ public class GameManager : Singleton<GameManager>
 
 	public void GoToTutorial ()
 	{
-		
-		state = GameState.TutorialPlay;
-		tutorialCity.SetActive (true);
-		Deployer.Instance.cell.SetActive (false);
-		UIManager.Instance.StartTutorial ();
-		TimeManager.Instance.StartTutorialCountdown ();
-		LightingManager.Instance.TutorialScene ();
-		robot.ActivateTutorialRobot ();
-		//PlayDialogue (soundManager.cityDialogue);
-		StopMusic ();
-		PlayMusic (soundManager.cityBGM);
+		if (state == GameState.Start) {
+			PlayDialogue (soundManager.tutorialDialogue01);
+			Invoke ("secondTutorialDialogue", 10f);
+			Invoke ("EndTutorial", 30f);
+			state = GameState.TutorialPlay;
+			tutorialCity.SetActive (true);
+			Deployer.Instance.cell.SetActive (false);
+			UIManager.Instance.StartTutorial ();
+
+			LightingManager.Instance.TutorialScene ();
+			robot.ActivateTutorialRobot ();
+		}
 	}
 
+	private void secondTutorialDialogue() {
+		PlayDialogue (soundManager.tutorialDialogue02);
+	}
+
+	private void EndTutorial() {
+		PlayDialogue (soundManager.tutorialDialogueEnd);
+		Invoke ("GoToSelectBase", 12f);
+	}
+		
 	public void GoToSelectBase ()
 	{	
 		tutorialCity.SetActive (false);
@@ -139,6 +154,13 @@ public class GameManager : Singleton<GameManager>
 		StopDialogue ();
 		PlayDialogue (soundManager.constructionDialogue);
 		Invoke ("ReadyDeployButton", 20.0f);
+	}
+
+	private void ReadyDeployButton ()
+	{
+		PlayDialogue (soundManager.deployDialogue);
+		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
+		UIManager.Instance.deployText.enabled = true;
 	}
 
 	private void SetWeaponPowerLevels (bool strongerBase)
@@ -250,13 +272,7 @@ public class GameManager : Singleton<GameManager>
 		musicSource.Stop ();
 	}
 
-	private void ReadyDeployButton ()
-	{
-		dialogueSource.clip = soundManager.deployDialogue;
-		dialogueSource.Play ();
-		Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
-		UIManager.Instance.deployText.enabled = true;
-	}
+
 
 	public void RestartGame ()
 	{

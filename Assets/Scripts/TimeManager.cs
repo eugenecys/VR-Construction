@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class TimeManager : Singleton<TimeManager> {
 
 	public int deployTime = 90;
-	public int tutorialTime = 45;
 
 	public Text timer;
 
@@ -13,7 +12,7 @@ public class TimeManager : Singleton<TimeManager> {
 	private float countdown;
 	private bool deployed = false;
 	private bool gameOver = false;
-	private bool tutorial = false;
+
 	// Use this for initialization
 	void Start () {
 		curTime = 0;
@@ -33,13 +32,7 @@ public class TimeManager : Singleton<TimeManager> {
 				gameOver = true;
 				deployed = false;
 				//Undeploy ();
-			} else if (countdown > 0 && tutorial) {
-				countdown -= 1;
-				timer.text = "Time to destroy: " + countdown.ToString ();
-			} else if (countdown == 0 && tutorial) {
-				GameManager.Instance.GoToSelectBase ();
-				tutorial = false;
-			}
+			} 
 			curTime = 0;
 		}
 		curTime += Time.deltaTime;
@@ -50,10 +43,6 @@ public class TimeManager : Singleton<TimeManager> {
 		deployed = true;
 	}
 
-	public void StartTutorialCountdown() {
-		countdown = tutorialTime;
-		tutorial = true;
-	}
 
 	private void Undeploy() {
 		Robot.Instance.destroy ();

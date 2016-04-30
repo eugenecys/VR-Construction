@@ -285,7 +285,8 @@ public class Part : MonoBehaviour, Interactable
 			if (scalable) {
 				scaler.gameObject.SetActive (true);
 			}
-			setSegmentMaterials (assetManager.freeMaterial);
+			//setSegmentMaterials (assetManager.freeMaterial);
+			setSegmentDefaultMaterials ();
 			audioSource.loop = false;
 			audioSource.Stop ();
 			break;
