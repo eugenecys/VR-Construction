@@ -20,7 +20,7 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject TutorialUI;
 
 	public GameObject RestartGame; 
-	public Text deployText;
+	public GameObject deployText;
 	public bool pickedUpForFirstTime = false;
 
 	// Use this for initialization

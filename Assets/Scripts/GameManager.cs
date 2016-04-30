@@ -176,7 +176,7 @@ public class GameManager : Singleton<GameManager>
 		if (state == GameState.Build) {
 			PlayDialogue (soundManager.deployDialogue);
 			Deployer.Instance.gameObject.GetComponent<SphereCollider> ().enabled = true;
-			UIManager.Instance.deployText.enabled = true;
+			UIManager.Instance.deployText.SetActive (true);
 		}
 	}
 
