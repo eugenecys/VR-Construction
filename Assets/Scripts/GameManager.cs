@@ -102,7 +102,7 @@ public class GameManager : Singleton<GameManager>
 		if (state == GameState.Start) {
 			PlayDialogue (soundManager.tutorialDialogue01);
 			Invoke ("secondTutorialDialogue", 10f);
-			Invoke ("EndTutorial", 30f);
+			Invoke ("EndTutorial", 25f);
 			state = GameState.TutorialPlay;
 			tutorialCity.SetActive (true);
 			Deployer.Instance.cell.SetActive (false);
