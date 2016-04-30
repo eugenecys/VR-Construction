@@ -29,13 +29,13 @@ public class UIControls : MonoBehaviour {
 			BaseButton baseBtn = laser.previousContact.GetComponent<BaseButton> ();
 			if (keyBtn) {
 				keyBtn.keySelected ();
-			}
-			else if (vrBtn) {
+			} else if (vrBtn) {
 				vrBtn.btnFunction.Invoke ();
-			} else if (baseBtn){
+			} else if (baseBtn) {
 				baseBtn.btnFunction.Invoke ();
 			} 
-
+		} else {
+			
 		}
 	}
 

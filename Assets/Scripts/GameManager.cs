@@ -295,5 +295,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		ScoreManager.Instance._score = 0;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+		state = GameState.TutorialPlay;
+		GoToSelectBase ();
 	}
 }
