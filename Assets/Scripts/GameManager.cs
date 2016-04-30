@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager>
 
 	public GameObject[] RoomComponents;
 
+	public bool tutorialOver = false;
 
 	public void play ()
 	{
@@ -102,7 +103,7 @@ public class GameManager : Singleton<GameManager>
 		if (state == GameState.Start) {
 			PlayDialogue (soundManager.tutorialDialogue01);
 			Invoke ("secondTutorialDialogue", 10f);
-			Invoke ("EndTutorial", 25f);
+			Invoke ("EndTutorial", 35f);
 			state = GameState.TutorialPlay;
 			tutorialCity.SetActive (true);
 			Deployer.Instance.cell.SetActive (false);
@@ -119,10 +120,14 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	private void EndTutorial() {
+	public void EndTutorial() {
 		if (state == GameState.TutorialPlay) {
-			PlayDialogue (soundManager.tutorialDialogueEnd);
-			Invoke ("GoToSelectBase", 12f);
+			if (tutorialOver) {
+				PlayDialogue (soundManager.tutorialDialogueEnd);
+				Invoke ("GoToSelectBase", 12f);
+			} else {
+				Invoke ("EndTutorial", 10f);
+			}
 		}
 	}
 		

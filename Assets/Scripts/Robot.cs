@@ -28,6 +28,7 @@ public class Robot : Singleton<Robot>, Controllable {
 		}
 	}
 
+	private bool fired = false;
 	public void trigger()
 	{
 		foreach (Part part in parts)
@@ -35,6 +36,11 @@ public class Robot : Singleton<Robot>, Controllable {
 			if (part.controllable)
 			{
 				part.trigger();
+				if (!fired) {
+					fired = true;
+				} else if (moved) {
+					GameManager.Instance.tutorialOver = true;
+				}
 			}
 		}
 	}
@@ -49,6 +55,9 @@ public class Robot : Singleton<Robot>, Controllable {
 			}
 		}
 	}
+
+	private bool moved = false;
+
 	public void joystick(Vector2 vec)
 	{
 		foreach (Part part in parts)
@@ -56,8 +65,11 @@ public class Robot : Singleton<Robot>, Controllable {
 			if (part.controllable)
 			{
 				part.joystick(vec);
-
-
+				if (!moved) {
+					moved = true;;
+				} else if (fired) {
+					GameManager.Instance.tutorialOver = true;
+				}
 			}
 		}
 	}
