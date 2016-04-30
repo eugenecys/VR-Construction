@@ -15,15 +15,18 @@ public class SoundManager : Singleton<SoundManager>
     public AudioClip hydraulicSound { get; private set; }
     public AudioClip attachSound { get; private set; }
     public AudioClip cannonSound { get; private set; }
+	public AudioClip powerUpSound { get; private set; }
+	public AudioClip powerDownSound { get; private set; }
     public AudioClip trashSound { get; private set; }
     public AudioClip releaseSound { get; private set; }
     public AudioClip pickupSound { get; private set; }
 	public AudioClip lightOnSound { get; private set; }
 
-	// bgm sounds
-	public AudioClip buildBGM { get; private set; }
+    // bgm sounds
+    public AudioClip buildBGM { get; private set; }
 	public AudioClip greenBGM { get; private set; }
 	public AudioClip redBGM { get; private set; }
+	public AudioClip cityBGM { get; private set; }
 
 	// dialogue sounds
 	public AudioClip startDialogue { get; private set; }
@@ -91,7 +94,7 @@ public class SoundManager : Singleton<SoundManager>
 
         //Loads a file from Resources/Sounds folder
         wheelSound = _loadSoundClip("SFX/ConstructionRoom-Engine_Running", 0);
-		machinegunSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
+		machinegunSound = _loadSoundClip("SFX/MachineGun-Loop", 0);
 		laserSound = _loadSoundClip("SFX/Laser", 0);
 		attachSound = _loadSoundClip("SFX/ConstructionRoom-Drop", 0);
 		cannonSound = _loadSoundClip("SFX/Cannon-SingleShot", 0);
@@ -99,9 +102,16 @@ public class SoundManager : Singleton<SoundManager>
 		releaseSound = _loadSoundClip("SFX/ConstructionRoom-ButtonRelease", 0);
 		pickupSound = _loadSoundClip("SFX/ConstructionRoom-Pickup", 0);
 		lightOnSound = _loadSoundClip ("SFX/LightOn", 0);
-		buildBGM = _loadSoundClip ("SFX/ConstructionRoom-Drone", 0);
-		greenBGM = _loadSoundClip ("SFX/ConstructionRoom-Green", 0);
-		redBGM = _loadSoundClip ("SFX/ConstructionRoom-Red", 0);
+		powerUpSound = _loadSoundClip ("SFX/PowerUp01", 0);
+		powerDownSound = _loadSoundClip ("SFX/PowerDown01", 0);
+
+		// bgms 
+		buildBGM = _loadSoundClip ("BGM/ConstructionRoom-Drone", 0);
+		greenBGM = _loadSoundClip ("BGM/ConstructionRoom-Green", 0);
+		redBGM = _loadSoundClip ("BGM/ConstructionRoom-Red", 0);
+		cityBGM = _loadSoundClip ("BGM/City-BGM", 0);
+
+		// dialogues
 		startDialogue = _loadSoundClip ("Dialogue/StartDialogue", 0);
 		selectBaseDialogue = _loadSoundClip ("Dialogue/SelectBaseDialogue", 0);
 		constructionDialogue = _loadSoundClip ("Dialogue/ConstructionDialogue", 0);
@@ -126,6 +136,27 @@ public class SoundManager : Singleton<SoundManager>
         }
         AS.Stop();
         AS.volume = 1;
+    }
+
+    public void AudioPlay(AudioClip clip, Transform emitter)
+    {
+        //Create an empty game object
+		GameObject go = Instantiate(Resources.Load("Prefabs/sound"),emitter.position,Quaternion.identity) as GameObject;
+        //go.transform.parent = emitter;
+
+        //Create the source
+		AudioSource source = go.GetComponent<AudioSource>();
+        source.clip = clip;
+        source.Play();
+
+        StartCoroutine(AudioDestory(go, source.clip.length));
+        //Destroy(go, clip.length+5f);
+    }
+
+    IEnumerator AudioDestory(GameObject go, float t)
+    {
+        yield return new WaitForSeconds(t);
+		Destroy (go);
     }
 
 }

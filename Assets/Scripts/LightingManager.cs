@@ -29,7 +29,16 @@ public class LightingManager : Singleton<LightingManager> {
 	
 	}
 
-	public void StartGame() {
+	public void TutorialScene() {
+		foreach (Light light in roomLights) {
+			light.enabled = true;
+		}
+	}
+
+	public void SelectBaseScene() {
+		foreach (Light light in roomLights) {
+			light.enabled = false;
+		}
 		baseLight1.enabled = true;
 		baseLight1.intensity = 0f;
 		baseLight2.enabled = true;
@@ -38,7 +47,7 @@ public class LightingManager : Singleton<LightingManager> {
 		StartCoroutine(EnableLightingSlowly (baseLight2));
 	}
 
-	public void SelectedBase() {
+	public void BuildScene() {
 		audioSource.Play ();
 		StopAllCoroutines ();
 		baseLight1.enabled = false;

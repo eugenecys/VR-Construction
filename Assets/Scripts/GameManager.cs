@@ -8,12 +8,14 @@ public class GameManager : Singleton<GameManager>
 
 	public bool debug = true;
 	public bool bigBang = true;
+
 	public enum GameState
 	{
 		Build,
 		Play,
 		Start,
 		SelectBase,
+		TutorialPlay,
 		End
 	}
 
@@ -23,7 +25,10 @@ public class GameManager : Singleton<GameManager>
 	private Robot robot;
 
 	public GameState state;
+
 	public GameObject city;
+	public GameObject tutorialCity;
+
 	public Transform trackingSpace;
 
 	public GameObject RobotBases;
@@ -40,6 +45,8 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.DeployRobot ();
 		TimeManager.Instance.StartDeployCountdown ();
 		PlayDialogue (soundManager.cityDialogue);
+		StopMusic ();
+		PlayMusic (soundManager.cityBGM);
 
 	}
 
@@ -74,26 +81,43 @@ public class GameManager : Singleton<GameManager>
 	{
 		PlayMusic (soundManager.buildBGM);
 		PlayDialogue (soundManager.startDialogue);
-		Invoke ("StartGame", 16f);
+		Invoke ("GoToTutorial", 16f);
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-		
+
 	}
 
-	public void StartGame ()
+	public void GoToTutorial ()
 	{
-		if (state == GameState.Start) {
-			state = GameState.SelectBase;
-			RobotBases.SetActive (true);
-			LightingManager.Instance.StartGame ();
+		
+		state = GameState.TutorialPlay;
+		tutorialCity.SetActive (true);
+		Deployer.Instance.cell.SetActive (false);
+		UIManager.Instance.StartTutorial ();
+		TimeManager.Instance.StartTutorialCountdown ();
+		LightingManager.Instance.TutorialScene ();
+		robot.ActivateTutorialRobot ();
+		//PlayDialogue (soundManager.cityDialogue);
+		StopMusic ();
+		PlayMusic (soundManager.cityBGM);
+	}
 
-			UIManager.Instance.StartGame ();
-			StopDialogue ();
-			PlayDialogue (soundManager.selectBaseDialogue);
-		}
+	public void GoToSelectBase ()
+	{	
+		tutorialCity.SetActive (false);
+		robot.DeactivateTutorialRobot ();
+		Deployer.Instance.cell.SetActive (true);
+		state = GameState.SelectBase;
+		RobotBases.SetActive (true);
+		LightingManager.Instance.SelectBaseScene();
+
+		UIManager.Instance.StartSelectingBase ();
+		PlayMusic (soundManager.buildBGM);
+		StopDialogue ();
+		PlayDialogue (soundManager.selectBaseDialogue);
 	}
 
 	public void SelectBase (int robotBase)
@@ -101,18 +125,31 @@ public class GameManager : Singleton<GameManager>
 		switch (robotBase) {
 		case(1):
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseOne;
+			SetWeaponPowerLevels (true);
 			break;
 		case(2):
 			selectedBase = RobotBases.GetComponent<SelectRobotBase> ().BaseTwo;
+			SetWeaponPowerLevels (false);
 			break;
 		}
 		SpawnRobotBase (selectedBase);
 		ShowRoom ();
-		LightingManager.Instance.SelectedBase ();
+		LightingManager.Instance.BuildScene();
 
 		StopDialogue ();
 		PlayDialogue (soundManager.constructionDialogue);
 		Invoke ("ReadyDeployButton", 20.0f);
+	}
+
+	private void SetWeaponPowerLevels (bool strongerBase)
+	{
+		if (strongerBase) {
+			robot.maxPowerLevel = robot.strongerPowerLevel;
+			robot.currentPowerLevel = robot.strongerPowerLevel;
+		} else {
+			robot.maxPowerLevel = robot.weakerPowerLevel;
+			robot.currentPowerLevel = robot.weakerPowerLevel;
+		}
 	}
 
 
@@ -146,7 +183,7 @@ public class GameManager : Singleton<GameManager>
 		Part robotPart = robotBase.GetComponent<Part> ();
 		if (robotPart) {
 			GameObject prefab = Resources.Load ("Prefabs/" + robotPart.name) as GameObject;
-			GameObject sObj = Object.Instantiate (prefab, new Vector3 (0f, robotBase.transform.localScale.y / 2f, 0f), robotBase.transform.rotation) as GameObject;
+			GameObject sObj = Object.Instantiate (prefab, new Vector3 (0.25f, robotBase.transform.localScale.y / 2f, 0f), robotBase.transform.rotation) as GameObject;
 
 			sObj.transform.parent = robot.transform;
 			Part spawnedPart = sObj.GetComponent<Part> ();
@@ -221,8 +258,9 @@ public class GameManager : Singleton<GameManager>
 		UIManager.Instance.deployText.enabled = true;
 	}
 
-	public void RestartGame() {
+	public void RestartGame ()
+	{
+		ScoreManager.Instance._score = 0;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 	}
 }
-

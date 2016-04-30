@@ -8,12 +8,13 @@ public class Weapon : MonoBehaviour, Controllable {
     protected ScoreManager scoreManager;
 
     public float coolDown;
-    public float fireInteval;
 	public int powerUsed = 0;
 
-    protected bool isInCD = false;
-    protected bool isFiring = false;
+    protected bool coolingDown = false;
+    protected bool triggerDown = false;
+	protected bool canfire = false;
     protected float fireCountDown;
+
 
     protected float multi = 1;
 
@@ -34,12 +35,12 @@ public class Weapon : MonoBehaviour, Controllable {
 
     public virtual void trigger()
     {
-        
+		
     }
 
     public virtual void triggerStop()
     {
-
+		
     }
 
     // Use this for initialization
@@ -49,7 +50,7 @@ public class Weapon : MonoBehaviour, Controllable {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
     protected void AddScore() {
@@ -58,21 +59,10 @@ public class Weapon : MonoBehaviour, Controllable {
         }
     }
 
-    protected IEnumerator CoolDown(float duration) {
-        isInCD = true;
-        Fire();
-        yield return new WaitForSeconds(duration);
-        isInCD = false;
-    }
-
-    protected void Inteval() {
-        if (fireCountDown >= fireInteval)
-        {
-            fireCountDown = 0;
-            if(!isInCD) StartCoroutine(CoolDown(coolDown));
-        }
-        fireCountDown += Time.deltaTime;
-    }
+	protected void cooldownWeapon() {
+		fireCountDown = Time.time;
+		coolingDown = true;
+	}
 
     protected virtual void Fire() {
 

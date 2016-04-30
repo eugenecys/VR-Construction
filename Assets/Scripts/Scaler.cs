@@ -14,7 +14,10 @@ public class Scaler : MonoBehaviour {
     private ScaleArrow scaleObject;
     private Vector3 initialScale;
     private float distMultiplier;
+
+	[SerializeField]
     private float initialDist;
+
     private bool scaling;
     private ScaleArrow[] scaleArrows;
     public bool uniformScale;
@@ -186,9 +189,17 @@ public class Scaler : MonoBehaviour {
             {
                 newLength = scaleObject.transform.localPosition.magnitude;
                 multi = newLength / initialDist;
-                if (initialScale.x * multi > maxX || initialScale.y * multi > maxY || initialScale.z * multi > maxZ) {
+                if (initialScale.x * multi > maxX || initialScale.y * multi > maxY || initialScale.z * multi > maxZ)
+                {
                     SetScale(maxX / initialScale.x);
-                    initialScale = new Vector3(maxX, maxY, maxZ);
+                    //initialScale = new Vector3(maxX, maxY, maxZ);
+                    target.transform.localScale = new Vector3(maxX, maxY, maxZ);
+                    return;
+                }
+                else if (initialScale.x * multi < minX || initialScale.y * multi < minY || initialScale.z * multi < minZ) {
+                    SetScale(minX / initialScale.x);
+                    //initialScale = new Vector3(maxX, maxY, maxZ);
+                    target.transform.localScale = new Vector3(minX, minY, minZ);
                     return;
                 }
                 target.transform.localScale = initialScale * newLength / initialDist;
@@ -202,7 +213,14 @@ public class Scaler : MonoBehaviour {
                         if (initialScale.x * multi > maxX)
                         {
                             SetScale(maxX / initialScale.x);
-                            initialScale = new Vector3(maxX, initialScale.y, initialScale.z);
+                            target.transform.localScale = new Vector3(maxX, initialScale.y, initialScale.z);
+                            return;
+                        }
+                        else if (initialScale.x * multi < minX)
+                        {
+                            SetScale(minX / initialScale.x);
+                            //initialScale = new Vector3(maxX, maxY, maxZ);
+                            target.transform.localScale = new Vector3(minX, initialScale.y, initialScale.z);
                             return;
                         }
                         target.transform.localScale = new Vector3(initialScale.x * newLength / initialDist, initialScale.y, initialScale.z);
@@ -211,9 +229,16 @@ public class Scaler : MonoBehaviour {
                         newLength = Mathf.Abs(scaleObject.transform.localPosition.y);
                         multi = newLength / initialDist;
                         if (initialScale.y * multi > maxY)
-                        {                     
+                        {
                             SetScale(maxY / initialScale.y);
-                            initialScale = new Vector3(initialScale.x, maxY, initialScale.z);
+                            target.transform.localScale = new Vector3(initialScale.x, maxY, initialScale.z);
+                            return;
+                        }
+                        else if (initialScale.y * multi < minY)
+                        {
+                            SetScale(minY / initialScale.y);
+                            //initialScale = new Vector3(maxX, maxY, maxZ);
+                            target.transform.localScale = new Vector3(initialScale.x, minY, initialScale.z);
                             return;
                         }
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y * newLength / initialDist, initialScale.z);
@@ -224,7 +249,14 @@ public class Scaler : MonoBehaviour {
                         if (initialScale.z * multi > maxZ)
                         {
                             SetScale(maxZ / initialScale.z);
-                            initialScale = new Vector3(initialScale.x, initialScale.y, maxZ);
+                            target.transform.localScale = new Vector3(initialScale.x, initialScale.y, maxZ);
+                            return;
+                        }
+                        else if (initialScale.z * multi < minZ)
+                        {
+                            SetScale(minZ / initialScale.z);
+                            //initialScale = new Vector3(maxX, maxY, maxZ);
+                            target.transform.localScale = new Vector3(initialScale.x, initialScale.y, minZ);
                             return;
                         }
                         target.transform.localScale = new Vector3(initialScale.x, initialScale.y, initialScale.z * newLength / initialDist);

@@ -40,6 +40,13 @@ public class Part : MonoBehaviour, Interactable
 		}
 	}
 
+	public bool placedInAir {
+		get {
+			return state.Equals (State.PlacedAir);
+		}
+	}
+
+
 	public bool connectable {
 		get {
 			return state.Equals (State.Connectable);
@@ -156,15 +163,17 @@ public class Part : MonoBehaviour, Interactable
 				}
 			}
 			deploy (isPartOfRobot);
-			audioSource.PlayOneShot (soundManager.attachSound);
 			if (isPartOfRobot) {
+				if (GetComponentInChildren<Weapon> ()) {
+					audioSource.PlayOneShot (soundManager.powerUpSound);
+				} else {
+					audioSource.PlayOneShot (soundManager.attachSound);
+				}
 				this.transform.parent = robot.transform;
 			}
 			resetPhysics ();
 		} else if (free) {
 			deploy (false);
-			//audioSource.PlayOneShot (soundManager.attachSound);
-			//this.transform.parent = robot.transform;
 			resetPhysics ();
 		}
 		robot.updateParts ();
@@ -176,8 +185,9 @@ public class Part : MonoBehaviour, Interactable
 			part.removeConnectedPart (this);
 		}
 		connectedParts = new List<Part> ();
-
+	
 		foreach (Segment segment in segments) {
+			
 			segment.disconnect ();
 		}
 	}
@@ -376,11 +386,21 @@ public class Part : MonoBehaviour, Interactable
 			activate ();
 		} else if (placed) {
 
+		} else if (placedInAir) {
+
 		} else {
+
+
 			if (partOfRobot && !canConnectWeapon()) {
 				setState (State.Unconnectable);
 				return;
 			}
+
+			if (insideBase) {
+				setState (State.Unconnectable);
+				return;
+			}
+
 			if (hasSegmentOverlap ()) {
 				setState (State.Unconnectable);
 				return;
@@ -407,6 +427,22 @@ public class Part : MonoBehaviour, Interactable
 		CheckIfPartNeedsToBeDestroyed ();
 	}
 
+	private bool insideBase = false;
+
+	void OnTriggerStay(Collider col) {
+		if (col.gameObject.layer == 10) {
+			// part touching base unconnectable layer 
+			insideBase = true;
+		}
+	}
+
+	void OnTriggerExit(Collider col) {
+		if (col.gameObject.layer == 10) {
+			// part exiting base unconnectable layer 
+			insideBase = false;
+		}
+	}
+		
 	public bool canConnectWeapon() {
 		// go through all connected parts and see if any weapon in there. 
 		int powerLevel = 0;

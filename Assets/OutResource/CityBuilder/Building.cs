@@ -34,7 +34,8 @@ public class Building : MonoBehaviour {
 		Transform[] ts = collapseClone.GetComponentsInChildren<Transform>();
 
         //temporary removement for correcting import error
-        //SoundManager.Instance.sfxPlay3D(SFXType.BUILDING_EXPLOSION, transform);
+        SoundManager sound = SoundManager.Instance;
+		sound.AudioPlay(Resources.Load("Sounds/SFX/Explosion0"+UnityEngine.Random.Range(1,5).ToString()) as AudioClip, transform);
 
 		float height = this.GetComponent<BoxCollider>().size.z;
 		

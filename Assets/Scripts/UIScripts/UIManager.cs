@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UIManager :  Singleton<UIManager> {
 
 	 
-
+	public RobotPowerUI robotPowerUi;
 	public GameObject StartUI;
 	public GameObject SelectBaseUI;
 	public GameObject BuildingUI;
@@ -19,15 +19,14 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject UIKeyboard; 
 	public GameObject RestartGame; 
 	public Text deployText;
-	public static bool pickedUpForFirstTime = false;
-	public static bool movedForFirstTime = false;
-	public static bool firedForFirstTime = false;
+	public bool pickedUpForFirstTime = false;
 
 	// Use this for initialization
 	void Awake () {
 		if (GameManager.Instance.state == GameManager.GameState.Start) {
 			StartUI.SetActive (true);
 			UpdateHighScores ();
+			HighScoreUI.transform.parent.GetComponent<RotateToLookAtCam> ().enabled = false;
 			HighScoreUI.gameObject.SetActive (true);
 		}
 	}
@@ -37,10 +36,19 @@ public class UIManager :  Singleton<UIManager> {
 		UpdateScore ();
 	}
 		
-	public void StartGame() {
+	public void StartTutorial() {
 		StartUI.SetActive (false);
-		SelectBaseUI.SetActive (true);
 		HighScoreUI.SetActive (false);
+		ShowWeaponsControls (true);
+		ShowMovementControls (true);
+		ShowTime (true);
+	}
+
+	public void StartSelectingBase() {
+		SelectBaseUI.SetActive (true);
+		ShowWeaponsControls (false);
+		ShowMovementControls (false);
+		ShowTime (false);
 	}
 
 	public void SelectBaseOne() {
@@ -48,6 +56,7 @@ public class UIManager :  Singleton<UIManager> {
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
 		ShowPickUpControls (true);
+		robotPowerUi.SetWeaponPowerPercentages (); 
 	}
 
 	public void SelectBaseTwo() {
@@ -55,6 +64,7 @@ public class UIManager :  Singleton<UIManager> {
 		SelectBaseUI.SetActive (false);
 		BuildingUI.SetActive (true);
 		ShowPickUpControls (true);
+		robotPowerUi.SetWeaponPowerPercentages ();  
 	}
 
 	public void DeployRobot() {
@@ -66,6 +76,8 @@ public class UIManager :  Singleton<UIManager> {
 
 	public void UndeployRobot() {
 		BuildingUI.SetActive (true);
+		ShowWeaponsControls (false);
+		ShowMovementControls (false);
 		ShowScore (false);
 		ShowTime (false);
 	}
@@ -96,10 +108,11 @@ public class UIManager :  Singleton<UIManager> {
 		
 
 	public void EndGame(int finalScore, bool updatedHighScores) {
+		
 		Vector3 newEndUIPos = Camera.main.transform.position + Camera.main.transform.forward.normalized * 2f;
 		newEndUIPos.y = EndScoreUI.transform.parent.position.y;
 		EndScoreUI.transform.parent.position = newEndUIPos;
-		EndScoreUI.transform.parent.Rotate(new Vector3(0f,90f,0f));
+		EndScoreUI.transform.parent.GetComponent<RotateToLookAtCam> ().enabled = true;
 
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();

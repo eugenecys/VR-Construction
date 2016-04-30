@@ -19,25 +19,32 @@ public class Cannon : Weapon {
         audioSource.clip = soundManager.cannonSound;
     }
     void Start () {
-        fireCountDown = fireInteval;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (isFiring) {
-            Inteval();
-        }
+
+
+		if (fireCountDown + coolDown < Time.time) {
+			coolingDown = false;
+		}
+
+		canfire = triggerDown && !coolingDown;
+		if (canfire) {
+			Fire ();
+		}
 	}
     
     public override void trigger()
     {
-        isFiring = true;
+        triggerDown = true;
         //throw new NotImplementedException();
     }
 
     public override void triggerStop()
     {
-        isFiring = false;
+		triggerDown = false;
     }
 
     public override void joystick(Vector2 coordinates)
@@ -47,6 +54,7 @@ public class Cannon : Weapon {
 
     protected override void Fire()
     {
+		cooldownWeapon ();
         audioSource.Play();
         GameObject sObj = Instantiate(ammo, dirCoordinator.transform.position, dirCoordinator.transform.rotation) as GameObject;
         sObj.transform.localScale *= multi;

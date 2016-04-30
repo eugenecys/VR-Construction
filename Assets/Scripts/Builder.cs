@@ -29,7 +29,7 @@ public class Builder : MonoBehaviour
 	public bool triggered = false;
 
 	private LaserPointer laser;
-
+	private OmniTool omniTool;
 
 	public enum ColliderState
 	{
@@ -63,9 +63,10 @@ public class Builder : MonoBehaviour
 		foreach (Part part in childParts) {
 			part.place ();
 			if (part.placed) {
+				omniTool.vibrate (1f);
 				part.transform.parent = robot.transform;
 				part.resetPhysics ();
-			} else {
+			} else if (part.placedInAir) {
 				part.transform.parent = null;
 				part.resetPhysics ();
 			}
@@ -105,6 +106,7 @@ public class Builder : MonoBehaviour
 		laser = this.GetComponent<LaserPointer> ();
 		audioSource = this.GetComponent<AudioSource> ();
 		soundManager = SoundManager.Instance;
+		omniTool = this.GetComponent<OmniTool> ();
 	}
 
 	// Use this for initialization
@@ -240,9 +242,18 @@ public class Builder : MonoBehaviour
 	public void MoveComponent (Part part)
 	{
 		part.disconnect ();
+		bool poweredDown = false;
+		if (part.transform.GetComponentInChildren<Weapon> () && part.transform == robot.transform) {
+			poweredDown = true;
+		}
+
 		part.transform.parent = this.transform;
 		part.unplace ();
-		audioSource.PlayOneShot (soundManager.pickupSound);
+		if (poweredDown) {
+			audioSource.PlayOneShot (soundManager.powerDownSound);
+		} else {
+			audioSource.PlayOneShot (soundManager.pickupSound);
+		}
 	}
 
 	public GameObject SpawnComponent (Part part)
@@ -288,9 +299,9 @@ public class Builder : MonoBehaviour
 		spawnedPart.evaluateState (false);
 		audioSource.PlayOneShot (soundManager.pickupSound);
 
-		if (!UIManager.pickedUpForFirstTime) {
+		if (!UIManager.Instance.pickedUpForFirstTime) {
 			UIManager.Instance.ShowPickUpControls (false);
-			UIManager.pickedUpForFirstTime = true;
+			UIManager.Instance.pickedUpForFirstTime = true;
 		}
 
 		return sObj;

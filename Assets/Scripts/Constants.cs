@@ -3,6 +3,9 @@ public static class Constants {
 
     public static string LAYER_COMPONENT = "Component";
     public static string LAYER_CONTROLLER = "Controller";
+
+	public static ushort HAPTIC_STRENGTH = 3500;
+
     public static class Wheel
     {
         public const float ANGULAR_VELOCITY = 800f;

@@ -25,31 +25,38 @@ public class MachineGun : Weapon {
     
     // Use this for initialization
     void Start () {
-        fireCountDown = fireInteval;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (isFiring) {
-            Inteval();
-        }
+
+		if (fireCountDown + coolDown < Time.time) {
+			coolingDown = false;
+		}
+
+		canfire = triggerDown && !coolingDown;
+		if (canfire) {
+			Fire ();
+		}
 	}
 
     public override void trigger()
     {
-        isFiring = true;
-		//PlayMachineGunSound ();
+		triggerDown = true;
+		PlayMachineGunSound ();
         //throw new NotImplementedException();
     }
 
     public override void triggerStop()
     {
-        isFiring = false;
-		//StopMachineGunSound ();
+		triggerDown = false;
+		StopMachineGunSound ();
     }
 
     protected override void Fire()
     {
+		cooldownWeapon ();
 		int radialAngle = rand.Next(0, 360);
         float dx = Mathf.Cos(1.0f * radialAngle * Mathf.PI / 180);
 		float dy = Mathf.Sin(1.0f * radialAngle * Mathf.PI / 180);
@@ -62,7 +69,7 @@ public class MachineGun : Weapon {
 			Mathf.Tan(scatterAngle * Mathf.PI / 180) * dy * transform.up + 
 			transform.forward;
 		rb.velocity = ammoVelocity * trajectory;
-		PlayMachineGunSound ();
+
     }
 
     protected override void AmmoScale(float scale)

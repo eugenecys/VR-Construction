@@ -25,14 +25,20 @@ public class LaserControl : Weapon {
     // Use this for initialization
     void Start () {
         //mesh.enabled = false;
-        fireCountDown = fireInteval;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (isFiring) {
-            Inteval();
-        }
+
+
+		if (fireCountDown + coolDown < Time.time) {
+			coolingDown = false;
+		}
+
+		canfire = triggerDown && !coolingDown;
+		if (canfire) {
+			Fire ();
+		}
 	}
     
     void FireLaser() {
@@ -41,13 +47,13 @@ public class LaserControl : Weapon {
 
     public override void trigger()
     {
-        isFiring = true;   
+		triggerDown = true;   
         //throw new NotImplementedException();
     }
 
     public override void triggerStop()
     {
-        isFiring = false;
+		triggerDown = false;
     }
 
     public override void joystick(Vector2 coordinates)
@@ -56,6 +62,7 @@ public class LaserControl : Weapon {
 
     protected override void Fire()
     {
+		cooldownWeapon ();
         var prefab = Instantiate(laser, transform.position, Quaternion.identity) as GameObject;
         var blast = prefab.GetComponent<SuperBlast>();
         prefab.transform.parent = transform;

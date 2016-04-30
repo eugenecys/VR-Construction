@@ -32,6 +32,7 @@ public class ScaleArrow : MonoBehaviour, Interactable {
     public void followDrag(Transform origin)
     {
         dragPoint = origin;
+		transform.position = origin.position;
         scaleParent.initScale(this);
         dragging = true;
     }

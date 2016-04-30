@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
+
 [RequireComponent (typeof(AudioSource))]
 
 public class Base : Segment, Controllable
@@ -23,6 +24,9 @@ public class Base : Segment, Controllable
 	public Type baseType;
 	private float baseSpeed;
 	private float baseForce;
+	public bool fast = false;
+	private float slowSpeed = 1f;
+	private float fastSpeed = 2.5f;
 
 	// Use this for initialization
 	void Awake ()
@@ -167,11 +171,21 @@ public class Base : Segment, Controllable
 		float leftForce = 0;
 		float rightForce = 0;
 		if (coordinates.x > 0) {
-			leftSpeed = magnitude * direction;
+			if (fast) {
+				leftSpeed = magnitude * direction * fastSpeed;
+			}
+			else {
+				leftSpeed = magnitude * direction * slowSpeed;
+			}
 			rightSpeed = coordinates.y;
 
 		} else {
-			rightSpeed = magnitude * direction;
+			if (fast) {
+				rightSpeed = magnitude * direction * fastSpeed;
+			}
+			else {
+				rightSpeed = magnitude * direction * slowSpeed;
+			}
 			leftSpeed = coordinates.y;
 		}
 		leftForce = 1;

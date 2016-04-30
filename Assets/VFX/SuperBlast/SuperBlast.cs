@@ -70,6 +70,7 @@ public class SuperBlast : MonoBehaviour
         if(!_fx.outerParticleSys.isPlaying)
             _fx.outerParticleSys.Play();
         float timer = 0f;
+		/*
         while (timer < dist / launchSpeed)
         {
             timer += Time.deltaTime;
@@ -77,7 +78,7 @@ public class SuperBlast : MonoBehaviour
                 Mathf.Clamp01(timer / (dist / launchSpeed)));
             yield return null;
         }
-
+        */
         //stage 1: wait
         yield return new WaitForSeconds(intervalTime);
 
@@ -107,6 +108,7 @@ public class SuperBlast : MonoBehaviour
         float radius = 0f;
         float kp = blastPID.x, ki = blastPID.y, kd = blastPID.z;
         timer = 0f;
+
         while (timer < blastTime)
         {
             float error = 0.1f * blastSize - radius;
@@ -167,6 +169,7 @@ public class SuperBlast : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.O))
             Launch(Vector3.forward * 100);
+        _fx.energyCylinder.transform.localPosition = new Vector3(0, 0, _fx.energyCylinder.transform.localPosition.z);//hard code..
     }
 
     private void GenerateContacts(Vector3 target)
@@ -184,17 +187,17 @@ public class SuperBlast : MonoBehaviour
         }
 
         //interact with building
-        hits = Physics.CapsuleCastAll(transform.position, target, blastSize, 
-            (target - transform.position).normalized, 
-            (target - transform.position).magnitude);
+        //hits = Physics.CapsuleCastAll(transform.position, target, blastSize, 
+        //    (target - transform.position).normalized, 
+        //    (target - transform.position).magnitude);
 		
-        foreach (var hit in hits)
-        {
-            if (hit.collider.gameObject.CompareTag("building"))
-            {
-                hit.collider.gameObject.SendMessage("GiveAttack");
-                scoreManager.AddScore();
-            }
-        }
+        //foreach (var hit in hits)
+        //{
+        //    if (hit.collider.gameObject.CompareTag("building"))
+        //    {
+        //        hit.collider.gameObject.SendMessage("GiveAttack");
+        //        scoreManager.AddScore();
+        //    }
+        //}
     }
 }

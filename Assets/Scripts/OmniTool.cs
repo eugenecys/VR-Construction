@@ -79,6 +79,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.End:
 			ui.triggerDown ();
 			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.triggerDown ();
+			break;
 		}
 	}
 
@@ -100,6 +103,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.End:
 			ui.triggerUp ();
 			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.triggerUp ();
+			break;
 		}
 	}
 
@@ -116,6 +122,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			break;
 		case GameManager.GameState.End:
+			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.touchPadDown (axis);
 			break;
 		}
 	}
@@ -134,6 +143,9 @@ public class OmniTool : MonoBehaviour
 		case GameManager.GameState.SelectBase:
 			break;
 		case GameManager.GameState.End:
+			break;
+		case GameManager.GameState.TutorialPlay:
+			playMode.touchPadUp();
 			break;
 		}
 	}
@@ -156,9 +168,21 @@ public class OmniTool : MonoBehaviour
 			break;
 		case GameManager.GameState.End:
 			break;
+		case GameManager.GameState.TutorialPlay:
+			break;
 		}
 	}
-    
+
+	public void vibrate(float strength)
+	{
+		if (side == Side.Left) {
+			SteamVR_Controller.Input (ViveInputManager.Instance.leftControllerIndex).TriggerHapticPulse ((ushort)(Constants.HAPTIC_STRENGTH * strength));
+		} else {
+			SteamVR_Controller.Input (ViveInputManager.Instance.rightControllerIndex).TriggerHapticPulse ((ushort)(Constants.HAPTIC_STRENGTH * strength));
+		}
+	}
+
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -172,21 +196,24 @@ public class OmniTool : MonoBehaviour
 	}
 
 	private void KeyControls() {
-		if (Input.GetKeyDown (KeyCode.R) && side == Side.Left) {
+		if (Input.GetKeyDown (KeyCode.W) && side == Side.Left) {
 			triggerDown ();
 		}
-		if (Input.GetKeyDown (KeyCode.E)  && side == Side.Left) {
+		if (Input.GetKeyDown (KeyCode.Q)  && side == Side.Left) {
 			triggerUp ();
 		}
-		if (Input.GetKeyDown (KeyCode.U)  && side == Side.Right) {
+		if (Input.GetKeyDown (KeyCode.R)  && side == Side.Right) {
 			triggerDown ();
 		}
-		if (Input.GetKeyDown (KeyCode.Y)  && side == Side.Right) {
+		if (Input.GetKeyDown (KeyCode.E)  && side == Side.Right) {
 			triggerUp ();
 		}
 
+		if (Input.GetKeyDown (KeyCode.U) && side == Side.Left) {
+			GameManager.Instance.GoToTutorial();
+		}
 		if (Input.GetKeyDown (KeyCode.I) && side == Side.Left) {
-			GameManager.Instance.StartGame ();
+			GameManager.Instance.GoToSelectBase();
 		}
 		if (Input.GetKeyDown (KeyCode.O) && side == Side.Left) {
 			UIManager.Instance.SelectBaseOne ();

@@ -22,6 +22,13 @@ public class Projectile : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 
+	void OnTriggerEnter(Collider col) {
+		if (col.transform.tag == "building") {
+			col.gameObject.SendMessage ("GiveAttack");
+			scoreManager.AddScore ();
+		}
+	}
+
     void OnCollisionEnter(Collision col) {
         if (col.transform.tag == "building") {
 			col.gameObject.SendMessage ("GiveAttack");
