@@ -25,7 +25,7 @@ public class UIManager :  Singleton<UIManager> {
 
 	// Use this for initialization
 	void Awake () {
-		if (GameManager.Instance.state == GameManager.GameState.Start) {
+		if (GameManager.Instance.state == GameManager.GameState.Start && !GameManager.restarted) {
 			StartUI.SetActive (true);
 			UpdateHighScores ();
 			HighScoreUI.transform.parent.GetComponent<RotateToLookAtCam> ().enabled = false;

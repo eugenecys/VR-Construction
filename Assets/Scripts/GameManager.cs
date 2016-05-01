@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
 
 	public bool debug = true;
 	public bool bigBang = true;
-
+	public static bool restarted = false;
 	public enum GameState
 	{
 		Build,
@@ -71,25 +71,30 @@ public class GameManager : Singleton<GameManager>
 	// Use this for initialization
 	void Awake ()
 	{
-		//state = GameState.Start;
-		AudioSource[] sources = this.GetComponents<AudioSource> ();
-		musicSource = sources [0];
-		dialogueSource = sources [1];
+			//state = GameState.Start;
+			AudioSource[] sources = this.GetComponents<AudioSource> ();
+			musicSource = sources [0];
+			dialogueSource = sources [1];
 
-		soundManager = SoundManager.Instance;
-		robot = Robot.Instance;
+			soundManager = SoundManager.Instance;
+			robot = Robot.Instance;
 
-		if (state == GameState.Start) {
-			HideRoom ();
-		}
+			if (state == GameState.Start) {
+				HideRoom ();
+			}
 	}
 
 	// sounds all go into start
 	void Start ()
 	{
-		PlayMusic (soundManager.buildBGM);
-		PlayDialogue (soundManager.startDialogue);
-		Invoke ("GoToTutorial", 20f);
+		if (!restarted) {
+			PlayMusic (soundManager.buildBGM);
+			PlayDialogue (soundManager.startDialogue);
+			Invoke ("GoToTutorial", 20f);
+		} else {
+			state = GameState.TutorialPlay;
+			GoToSelectBase ();
+		}
 	}
 
 	// Update is called once per frame
@@ -293,9 +298,8 @@ public class GameManager : Singleton<GameManager>
 
 	public void RestartGame ()
 	{
+		restarted = true;
 		ScoreManager.Instance._score = 0;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
-		state = GameState.TutorialPlay;
-		GoToSelectBase ();
 	}
 }
