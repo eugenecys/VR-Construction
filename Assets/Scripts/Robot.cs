@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 public class Robot : Singleton<Robot>, Controllable {
 
 	Part[] parts;
@@ -152,7 +154,11 @@ public class Robot : Singleton<Robot>, Controllable {
 	}
 
 	public void CreatePrefabFromRobot() {
+		#if UNITY_EDITOR
+
 		PrefabUtility.CreatePrefab ("Assets/Resources/WeakRobot.prefab", this.gameObject);
+
+		#endif
 	}
 
 	public void ActivateTutorialRobot() {
