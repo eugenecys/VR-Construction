@@ -285,7 +285,8 @@ public class Part : MonoBehaviour, Interactable
 			if (scalable) {
 				scaler.gameObject.SetActive (true);
 			}
-			setSegmentMaterials (assetManager.freeMaterial);
+			//setSegmentMaterials (assetManager.freeMaterial);
+			setSegmentMaterials (assetManager.highlightMaterial);
 			audioSource.loop = false;
 			audioSource.Stop ();
 			break;
@@ -309,7 +310,8 @@ public class Part : MonoBehaviour, Interactable
 			if (scalable) {
 				scaler.gameObject.SetActive (false);
 			}
-			setSegmentDefaultMaterials ();
+			//setSegmentDefaultMaterials ();
+			setSegmentMaterials (assetManager.unconnectableMaterial);
 			audioSource.loop = false;
 			audioSource.Stop ();
 			break;
@@ -333,7 +335,7 @@ public class Part : MonoBehaviour, Interactable
 	public void highlight ()
 	{
 		highlighted = true;
-		setSegmentMaterials (assetManager.freeMaterial);
+		setSegmentMaterials (assetManager.highlightMaterial);
 	}
 
 	public void online ()

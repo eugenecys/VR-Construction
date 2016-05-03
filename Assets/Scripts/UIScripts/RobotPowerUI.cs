@@ -28,7 +28,11 @@ public class RobotPowerUI : MonoBehaviour {
 	private void UpdatePowerLevel() {
 		float powerRatio = 1f - (robot.currentPowerLevel*1f) / (1f*robot.maxPowerLevel);
 		fill.fillAmount = powerRatio;
-		robotPower.text = ((int)(powerRatio * 100f)).ToString () + "%";
+		if (powerRatio < 0.99f) {
+			robotPower.text = ((int)(powerRatio * 100f)).ToString () + "%";
+		} else {
+			robotPower.text = "MAX";
+		}
 	}
 
 	public void SetWeaponPowerPercentages() {
