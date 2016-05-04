@@ -166,8 +166,9 @@ public class Base : Segment, Controllable
 
 	public void joystick (Vector2 coordinates)
 	{
+		
 		float direction = (coordinates.y / Mathf.Abs (coordinates.y));
-		if (Mathf.Abs (direction) < deadZoneLimit) {
+		if (Mathf.Abs (coordinates.y) < deadZoneLimit) {
 			direction = 0f;
 		}
 		float magnitude = coordinates.magnitude;

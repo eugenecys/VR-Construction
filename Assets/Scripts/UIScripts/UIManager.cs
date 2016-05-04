@@ -14,6 +14,8 @@ public class UIManager :  Singleton<UIManager> {
 	public GameObject WeaponsUI;
 	public Text ScoreUI; 
 	public Text TimeUI;
+
+	public GameObject EndScreen;
 	public GameObject HighScoreUI;
 	public GameObject EndScoreUI;
 	public GameObject UIKeyboard; 
@@ -121,6 +123,7 @@ public class UIManager :  Singleton<UIManager> {
 
 		EndScoreUI.SetActive (true);
 		EndScoreUI.GetComponent<Text>().text += finalScore.ToString();
+		EndScreen.SetActive (true);
 		ShowScore (false);
 		ShowTime (false);
 
