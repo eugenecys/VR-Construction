@@ -312,6 +312,7 @@ public class Part : MonoBehaviour, Interactable
 			}
 			//setSegmentDefaultMaterials ();
 			setSegmentMaterials (assetManager.unconnectableMaterial);
+			Debug.Log ("gets here 1");
 			audioSource.loop = false;
 			audioSource.Stop ();
 			break;
@@ -328,6 +329,7 @@ public class Part : MonoBehaviour, Interactable
 	public void setSegmentDefaultMaterials ()
 	{
 		foreach (MaterialHandler materialHandler in materialHandlers) {
+			Debug.Log ("gets here 2");
 			materialHandler.loadDefault ();
 		}
 	}

@@ -162,9 +162,14 @@ public class Base : Segment, Controllable
 
 	}
 
+	private float deadZoneLimit = 0.2f;
+
 	public void joystick (Vector2 coordinates)
 	{
-		int direction = (int)(coordinates.y / Mathf.Abs (coordinates.y));
+		float direction = (coordinates.y / Mathf.Abs (coordinates.y));
+		if (Mathf.Abs (direction) < deadZoneLimit) {
+			direction = 0f;
+		}
 		float magnitude = coordinates.magnitude;
 		float leftSpeed = 0;
 		float rightSpeed = 0;
