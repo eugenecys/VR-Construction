@@ -25,7 +25,7 @@ public class Base : Segment, Controllable
 	private float baseSpeed;
 	private float baseForce;
 	public bool fast = false;
-	private float slowSpeed = 1f;
+	private float slowSpeed = 1.5f;
 	private float fastSpeed = 2.5f;
 
 	// Use this for initialization
