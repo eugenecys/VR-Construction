@@ -329,7 +329,6 @@ public class Part : MonoBehaviour, Interactable
 	public void setSegmentDefaultMaterials ()
 	{
 		foreach (MaterialHandler materialHandler in materialHandlers) {
-			Debug.Log ("gets here 2");
 			materialHandler.loadDefault ();
 		}
 	}
@@ -355,7 +354,11 @@ public class Part : MonoBehaviour, Interactable
 	public void unhighlight ()
 	{
 		highlighted = false;
-		setSegmentDefaultMaterials ();
+		if (placedInAir)
+			setSegmentMaterials (assetManager.unconnectableMaterial);
+		else {
+			setSegmentDefaultMaterials ();
+		}
 	}
 
 	public void markForDelete ()
